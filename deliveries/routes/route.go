@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Path(e *echo.Echo, f handlers.HandlersFacility) {
+func Path(e *echo.Echo, f *handlers.HandlersFacility) {
 
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.Logger())
