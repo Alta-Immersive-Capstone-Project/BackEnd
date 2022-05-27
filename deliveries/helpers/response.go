@@ -1,6 +1,11 @@
 package helpers
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/go-playground/validator/v10"
+)
 
 func InternalServerError() map[string]interface{} {
 	return map[string]interface{}{
@@ -55,6 +60,21 @@ func ErrorAuthorize() map[string]interface{} {
 		"code":    http.StatusForbidden,
 		"message": "Access Denied",
 		"status":  false,
+	}
+}
+
+func StatusBadRequest(err error) map[string]interface{} {
+	var messages []string
+
+	for _, err := range err.(validator.ValidationErrors) {
+		message := fmt.Sprintf("error on field %s: %s (%s)", err.Field(), err.Tag(), err.Kind().String())
+		messages = append(messages, message)
+	}
+
+	return map[string]interface{}{
+		"code":    http.StatusBadRequest,
+		"message": messages,
+		"data":    nil,
 	}
 }
 
