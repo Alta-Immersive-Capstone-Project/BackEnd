@@ -28,12 +28,12 @@ func (handler AuthHandler) Login(c echo.Context) error {
 	}
 
 	// define link hateoas
-	links := map[string]string{"self": configs.Get().App.BaseURL + "/api/auth"}
+	links := map[string]string{"self": configs.Get().App.BaseURL + "/login"}
 
 	// call auth service login
 	authRes, err := handler.authService.Login(authReq)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err, links)
+		return helpers.WebErrorResponse(c, err)
 	}
 
 	// send response

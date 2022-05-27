@@ -66,3 +66,7 @@ func DeleteFromS3(filename string) error {
 	}
 	return nil
 }
+
+// upload()
+
+// DELETE

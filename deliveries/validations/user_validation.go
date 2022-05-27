@@ -53,10 +53,10 @@ var userFileExtRules = map[string]string{
  * Validasi user saat registrasi berdasarkan validate tag
  * yang ada pada user request dan file rules diatas
  */
-func ValidateCreateInternalRequest(validate *validator.Validate, userReq entities.CreateInternalRequest, userFiles map[string]*multipart.FileHeader) error {
+func ValidateCreateUserRequest(validate *validator.Validate, userReq entities.CreateUserRequest, userFiles map[string]*multipart.FileHeader) error {
 	errors := []web.ValidationErrorItem{}
-	validateInternalStruct(validate, userReq, &errors)
-	validateCustomerFiles(userFiles, &errors)
+	validateUserStruct(validate, userReq, &errors)
+	validateUserFiles(userFiles, &errors)
 
 	if len(errors) > 0 {
 		return web.ValidationError{
@@ -69,7 +69,23 @@ func ValidateCreateInternalRequest(validate *validator.Validate, userReq entitie
 	return nil
 }
 
-func validateInternalStruct(validate *validator.Validate, userReq entities.CreateInternalRequest, errors *[]web.ValidationErrorItem) {
+func ValidateUpdateUserRequest(userFiles map[string]*multipart.FileHeader) error {
+
+	errors := []web.ValidationErrorItem{}
+
+	validateUserFiles(userFiles, &errors)
+	if len(errors) > 0 {
+		return web.ValidationError{
+			Code:               400,
+			ProductionMessage:  "Bad Request",
+			DevelopmentMessage: "Validation error",
+			Errors:             errors,
+		}
+	}
+	return nil
+}
+
+func validateUserStruct(validate *validator.Validate, userReq entities.CreateUserRequest, errors *[]web.ValidationErrorItem) {
 	err := validate.Struct(userReq)
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
@@ -82,7 +98,7 @@ func validateInternalStruct(validate *validator.Validate, userReq entities.Creat
 	}
 }
 
-func validateCustomerFiles(userFiles map[string]*multipart.FileHeader, errors *[]web.ValidationErrorItem) {
+func validateUserFiles(userFiles map[string]*multipart.FileHeader, errors *[]web.ValidationErrorItem) {
 	// File validation
 	for field, file := range userFiles {
 

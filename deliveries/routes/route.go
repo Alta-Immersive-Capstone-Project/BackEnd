@@ -4,12 +4,25 @@ import (
 	"backend/be8/deliveries/handlers"
 
 	"github.com/labstack/echo/v4"
+
+	"backend/be8/deliveries/middlewares"
 )
 
-func RegisterInternalRoute(e *echo.Echo, i *handlers.InternalHandler) {
-	group := e.Group("/internal")
-	group.POST("", i.CreateInternal) // Registration customer
-	// group.PUT("", , middleware.JWTMiddleware())    // Edit customer profile
-	// group.DELETE("", , middleware.JWTMiddleware()) // delete customer
+func UserRoute(e *echo.Echo, u *handlers.UserHandler) {
+	internalGroup := e.Group("/internal")
+	internalGroup.POST("/user", u.CreateInternal, middlewares.JWTMiddleware())
+	internalGroup.DELETE("/user/:id", u.DeleteInternal, middlewares.JWTMiddleware())
+	internalGroup.PUT("/user/:id", u.UpdateInternal, middlewares.JWTMiddleware())
+
+	customerGroup := e.Group("/customer")
+
+	customerGroup.POST("", u.CreateCustomer)
+	customerGroup.PUT("/:id", u.UpdateCustomer, middlewares.JWTMiddleware())
+	customerGroup.DELETE("/:id", u.DeleteCustomer, middlewares.JWTMiddleware())
+
+}
+
+func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
+	e.POST("/login", l.Login)
 
 }
