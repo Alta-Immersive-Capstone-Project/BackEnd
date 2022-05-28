@@ -42,6 +42,22 @@ func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenit
 	amenities.PUT("/:id", a.UpdateAmenities(), middlewares.JWTMiddleware())
 	amenities.DELETE("/:id", a.DeleteAmenities(), middlewares.JWTMiddleware())
 }
+func RoomPath(e *echo.Echo, r *handlers.HandlersRoom) {
+	facility := e.Group("/room")
+	facility.POST("", r.CreateRoom(), middlewares.JWTMiddleware())
+	facility.GET("", r.GetAllRoom())
+	facility.GET("/:id", r.GetIDRoom())
+	facility.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
+	facility.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
+}
+func CityPath(e *echo.Echo, C *handlers.HandlersCity) {
+	facility := e.Group("/city")
+	facility.POST("", C.CreateCity(), middlewares.JWTMiddleware())
+	facility.GET("", C.GetAllCity())
+	facility.GET("/:id", C.GetIDCity())
+	facility.PUT("/:id", C.UpdateCity(), middlewares.JWTMiddleware())
+	facility.DELETE("/:id", C.DeleteCity(), middlewares.JWTMiddleware())
+}
 
 func ReviewsPath(e *echo.Echo, rh rh.ReviewHandler) {
 	// Customer

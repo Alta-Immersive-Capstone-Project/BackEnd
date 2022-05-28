@@ -7,7 +7,10 @@ import (
 	"kost/deliveries/routes"
 	"kost/deliveries/validations"
 	"kost/repositories/amenities"
+	"kost/repositories/city"
 	"kost/repositories/facility"
+	"kost/repositories/image"
+	"kost/repositories/room"
 	cAmenities "kost/services/amenities"
 	cFacility "kost/services/facility"
 
@@ -18,6 +21,8 @@ import (
 
 	storageProvider "kost/services/storage"
 
+	citesService "kost/services/city"
+	roomsService "kost/services/room"
 	userService "kost/services/user"
 
 	"kost/utils"
@@ -53,6 +58,9 @@ func main() {
 	amenitiesRepo := amenities.NewAmenitiesDB(DB)
 	reviewsRepo := reviewRepo.NewReviewModel(DB)
 	transactionsRepo := transactionRepo.NewTransactionModel(DB)
+	cityRepo := city.NewCityDB(DB)
+	roomRepo := room.NewRoomDB(DB)
+	imageRepo := image.NewImageDB(DB)
 
 	// Validation
 	validation := validations.NewValidation(validator.New())
@@ -65,6 +73,8 @@ func main() {
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
 	transactionsService := transactionService.NewTransactionService(transactionsRepo)
+	cityService := citesService.NewServiceCity(cityRepo)
+	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService)
@@ -73,6 +83,8 @@ func main() {
 	amenitiesHandler := handlers.NewHandlersAmenities(amenitiesService, validator.New())
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
+	cityHandler := handlers.NewHandlersCity(cityService, validator.New())
+	roomHandler := handlers.NewHandlersRoom(roomService, validator.New())
 
 	// Middlewares
 	middlewares.General(e)
@@ -83,6 +95,8 @@ func main() {
 	routes.Path(e, facilityHandler, amenitiesHandler)
 	routes.ReviewsPath(e, reviewsHandler)
 	routes.TransactionPath(e, transactionsHandler)
+	routes.CityPath(e, cityHandler)
+	routes.RoomPath(e, roomHandler)
 
 	e.Logger.Fatal(e.Start(":" + config.App.Port))
 }
