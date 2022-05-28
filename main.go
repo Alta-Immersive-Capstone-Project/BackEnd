@@ -1,12 +1,12 @@
 package main
 
 import (
-	cAmenities "kost/amenities/services"
 	"kost/configs"
 	"kost/deliveries/handlers"
 	"kost/deliveries/routes"
 	"kost/repositories/amenities"
 	"kost/repositories/facility"
+	cAmenities "kost/services/amenities"
 	cFacility "kost/services/facility"
 	"kost/utils/rds"
 
