@@ -38,13 +38,13 @@ func (m *reviewModel) GetByRoomID(room_id uint) ([]entities.Review, error) {
 	return reviews, nil
 }
 
-func (m *reviewModel) GetByUserID(user_id uint) (entities.Customer, error) {
-	var customer entities.Customer
+func (m *reviewModel) GetByUserID(user_id uint) (entities.User, error) {
+	var customer entities.User
 
 	record := m.db.Where("id = ?", user_id).Find(&customer)
 
 	if record.RowsAffected == 0 {
-		return entities.Customer{}, record.Error
+		return entities.User{}, record.Error
 	}
 
 	return customer, nil

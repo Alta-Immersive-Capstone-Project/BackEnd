@@ -41,6 +41,9 @@ func main() {
 	// Init DB
 	DB := utils.NewMysqlGorm(config)
 
+	// Migrate
+	utils.Migrate(DB)
+
 	// Initiate Echo
 	e := echo.New()
 

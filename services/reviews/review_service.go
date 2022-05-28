@@ -21,10 +21,10 @@ func (rs *reviewService) AddComment(customer_id uint, request *entities.ReviewRe
 	var response entities.ReviewResponse
 
 	review := entities.Review{
-		RoomID:     request.RoomID,
-		Comment:    request.Comment,
-		Rating:     request.Rating,
-		CustomerID: customer_id,
+		RoomID:  request.RoomID,
+		Comment: request.Comment,
+		Rating:  request.Rating,
+		UserID:  customer_id,
 	}
 
 	result, err := rs.rm.Create(&review)
@@ -48,7 +48,7 @@ func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse
 		var response entities.ReviewGetResponse
 		copier.Copy(&response, &r)
 
-		result, _ := rs.rm.GetByUserID(response.CustomerID)
+		result, _ := rs.rm.GetByUserID(response.UserID)
 		response.Name = result.Name
 
 		responses = append(responses, response)

@@ -57,7 +57,7 @@ func initConfig() *AppConfig {
 		config.App.ENV = ""
 
 		config.Database.Host = "localhost"
-		config.Database.Port = "3307"
+		config.Database.Port = "3306"
 		config.Database.Username = "root"
 		config.Database.Password = ""
 		config.Database.Name = "kost"

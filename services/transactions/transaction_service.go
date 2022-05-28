@@ -23,7 +23,7 @@ func (ts *transactionService) AddTransaction(customer_id uint, request *entities
 	var response entities.TransactionResponse
 
 	transaction := entities.Transaction{
-		CustomerID:    customer_id,
+		UserID:        customer_id,
 		RoomID:        request.RoomID,
 		CheckinDate:   time.Unix(0, request.CheckinDate*int64(time.Millisecond)),
 		RentDuration:  request.RentDuration,

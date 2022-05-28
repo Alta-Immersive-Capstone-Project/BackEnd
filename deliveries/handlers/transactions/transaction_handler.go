@@ -51,19 +51,24 @@ func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error 
 
 	response := th.ts.GetAllTransactionbyCustomer(customer_id, status)
 	if len(response) == 0 {
-		return c.JSON(http.StatusBadRequest, helpers.StatusNotFound("Data transaction not found"))
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyConsultant(c echo.Context) error {
-	var consultant_id uint = 1
+	consultant_id := uint(middlewares.ExtractTokenUserId(c))
+	role := middlewares.ExtractTokenRole(c)
 	status := c.QueryParam("status")
+
+	if role == "customer" {
+		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
+	}
 
 	response := th.ts.GetAllTransactionbyConsultant(consultant_id, status)
 	if len(response) == 0 {
-		return c.JSON(http.StatusBadRequest, helpers.StatusNotFound("Data transaction not found"))
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
@@ -71,8 +76,13 @@ func (th *transactionHandler) GetAllTransactionbyConsultant(c echo.Context) erro
 
 func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 	var request entities.TransactionUpdateRequest
-	var user_id uint = 1
+	user_id := uint(middlewares.ExtractTokenUserId(c))
+	role := middlewares.ExtractTokenRole(c)
 	booking_id := c.Param("booking_id")
+
+	if role == "customer" {
+		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
+	}
 
 	err := c.Bind(&request)
 	if err != nil {

@@ -26,8 +26,8 @@ func NewReviewHandler(rs services.ReviewService, v validation.Validation) *revie
 }
 
 func (rh *reviewHandler) InsertComment(c echo.Context) error {
-	user_id := uint(middlewares.ExtractTokenUserId(c))
 	var request entities.ReviewRequest
+	user_id := uint(middlewares.ExtractTokenUserId(c))
 
 	err := c.Bind(&request)
 	if err != nil {
@@ -50,9 +50,10 @@ func (rh *reviewHandler) InsertComment(c echo.Context) error {
 func (rh *reviewHandler) GetByRoomID(c echo.Context) error {
 	room_id, _ := strconv.Atoi(c.Param("room_id"))
 
-	response, err := rh.rs.GetByRoomID(uint(room_id))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.StatusNotFound("Comment Not Found"))
+	response, _ := rh.rs.GetByRoomID(uint(room_id))
+
+	if len(response) == 0 {
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Comment Not Found"))
 	}
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get By Room ID", response))

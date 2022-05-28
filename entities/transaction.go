@@ -6,32 +6,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type Customer struct {
-	gorm.Model
-	Name         string `gorm:"type:varchar(100);not null"`
-	Email        string `gorm:"type:varchar(100);not null"`
-	Phone        string `gorm:"type:varchar(100);not null"`
-	Gender       string
-	Role         string
-	Password     string
-	Rooms        []Room        `gorm:"foreingkey:CustomerID"`
-	Transactions []Transaction `gorm:"foreingkey:CustomerID"`
-	Reviews      []Review      `gorm:"foreingkey:CustomerID"`
-}
-
 type Room struct {
 	gorm.Model
 	Type                  string        `gorm:"type:varchar(100);not null"`
 	Price                 int           `gorm:"type:int;not null"`
 	AdditionalDescription string        `gorm:"type:varchar(100);not null"`
-	CustomerID            uint          `gorm:"type:int;not null"`
+	UserID                uint          `gorm:"type:int;not null"`
 	Transactions          []Transaction `gorm:"foreingkey:RoomID"`
 	Reviews               []Review      `gorm:"foreingkey:RoomID"`
 }
 
 type Transaction struct {
 	gorm.Model
-	CustomerID    uint      `gorm:"type:int;not null"`
+	UserID        uint      `gorm:"type:int;not null"`
 	ConsultantID  uint      `gorm:"type:int"`
 	RoomID        uint      `json:"room_id" gorm:"type:int;not null"`
 	CheckinDate   time.Time `json:"checkin_date" gorm:"type:date;not null"`
@@ -44,10 +31,10 @@ type Transaction struct {
 
 type Review struct {
 	gorm.Model
-	CustomerID uint   `gorm:"type:int;not null"`
-	RoomID     uint   `json:"room_id" gorm:"type:int;not null"`
-	Comment    string `json:"comment" gorm:"type:varchar(100);not null"`
-	Rating     int    `json:"rating" gorm:"type:int;not null"`
+	UserID  uint   `gorm:"type:int;not null"`
+	RoomID  uint   `json:"room_id" gorm:"type:int;not null"`
+	Comment string `json:"comment" gorm:"type:varchar(100);not null"`
+	Rating  int    `json:"rating" gorm:"type:int;not null"`
 }
 
 // Request
@@ -94,11 +81,11 @@ type ReviewResponse struct {
 }
 
 type ReviewGetResponse struct {
-	ID         uint      `json:"id"`
-	CustomerID uint      `json:"customer_id"`
-	Name       string    `json:"name"`
-	RoomID     uint      `json:"room_id"`
-	Comment    string    `json:"comment"`
-	Rating     int       `json:"rating"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID        uint      `json:"id"`
+	UserID    uint      `json:"user_id"`
+	Name      string    `json:"name"`
+	RoomID    uint      `json:"room_id"`
+	Comment   string    `json:"comment"`
+	Rating    int       `json:"rating"`
+	CreatedAt time.Time `json:"created_at"`
 }
