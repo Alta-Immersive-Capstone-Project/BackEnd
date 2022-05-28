@@ -8,11 +8,11 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-const secretJwt = "BACKENDBE8"
+const SECRET_JWT = "K05T"
 
 func JWTMiddleware() echo.MiddlewareFunc {
 	return middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey:    []byte(secretJwt),
+		SigningKey:    []byte(SECRET_JWT),
 		SigningMethod: jwt.SigningMethodHS256.Name,
 	})
 }
@@ -25,7 +25,7 @@ func CreateToken(id int, name string, role string) (string, error) {
 	claims["role"] = role
 	claims["exp"] = time.Now().Add(time.Hour * 48).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(secretJwt))
+	return token.SignedString([]byte(SECRET_JWT))
 }
 
 func ReadToken(token interface{}) (int, string, error) {
@@ -40,7 +40,7 @@ func ExtractTokenUserId(e echo.Context) float64 {
 	user := e.Get("user").(*jwt.Token)
 	if user.Valid {
 		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["userId"].(float64)
+		userId := claims["id"].(float64)
 		return userId
 	}
 	return 0

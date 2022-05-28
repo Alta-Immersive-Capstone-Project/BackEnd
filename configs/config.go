@@ -3,7 +3,7 @@ package configs
 import (
 	"os"
 
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 )
 
 type AppConfig struct {
@@ -50,32 +50,32 @@ func initConfig() *AppConfig {
 	config := AppConfig{}
 
 	// Load .env file, set default if fail
-	err := godotenv.Load()
-	if err != nil {
-		config.App.Port = "8000"
-		config.App.BaseURL = "localhost:" + config.App.Port
-		config.App.ENV = ""
+// 	err := godotenv.Load()
+// 	if err != nil {
+// 		config.App.Port = "8000"
+// 		config.App.BaseURL = "localhost:" + config.App.Port
+// 		config.App.ENV = ""
 
-		config.Database.Host = "localhost"
-		config.Database.Port = "3306"
-		config.Database.Username = "root"
-		config.Database.Password = "root"
-		config.Database.Name = "bringeee"
+// 		config.Database.Host = "localhost"
+// 		config.Database.Port = "3306"
+// 		config.Database.Username = "root"
+// 		config.Database.Password = ""
+// 		config.Database.Name = "kost"
 
-		config.AwsS3.Bucket = ""
-		config.AwsS3.Region = ""
-		config.AwsS3.AccessKey = ""
-		config.AwsS3.SecretKey = ""
+// 		config.AwsS3.Bucket = ""
+// 		config.AwsS3.Region = ""
+// 		config.AwsS3.AccessKey = ""
+// 		config.AwsS3.SecretKey = ""
 
-		config.Payment.MidtransBaseURLDevelopment = ""
-		config.Payment.MidtransBaseURLProduction = ""
-		config.Payment.MidtransServerKey = ""
+// 		config.Payment.MidtransBaseURLDevelopment = ""
+// 		config.Payment.MidtransBaseURLProduction = ""
+// 		config.Payment.MidtransServerKey = ""
 
-		config.DistanceMatrix.DistanceMatrixAPIKey = ""
-		config.DistanceMatrix.DistanceMatrixBaseURL = ""
+// 		config.DistanceMatrix.DistanceMatrixAPIKey = ""
+// 		config.DistanceMatrix.DistanceMatrixBaseURL = ""
 
-		return &config
-	}
+// 		return &config
+// 	}
 
 	// set config based on .env
 	config.App.Port = os.Getenv("APP_PORT")

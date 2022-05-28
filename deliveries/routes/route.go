@@ -2,10 +2,11 @@ package routes
 
 import (
 	"kost/deliveries/handlers"
+	rh "kost/deliveries/handlers/reviews"
+	th "kost/deliveries/handlers/transactions"
 	"kost/deliveries/middlewares"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func UserRoute(e *echo.Echo, u *handlers.UserHandler) {
@@ -27,22 +28,35 @@ func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 }
 
 func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenities) {
-
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.Logger())
-	e.Use(middleware.CORS())
-
-	facility := e.Group("/facility")
-	facility.POST("", f.CreateFacility(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
+	facility := e.Group("/facilities")
+	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
 	facility.GET("", f.GetAllFacility())
 	facility.GET("/:id", f.GetFacilityID())
-	facility.PUT("/:id", f.UpdateFacility(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
-	facility.DELETE("/:id", f.DeleteFacility(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
+	facility.PUT("/:id", f.UpdateFacility(), middlewares.JWTMiddleware())
+	facility.DELETE("/:id", f.DeleteFacility(), middlewares.JWTMiddleware())
 
 	amenities := e.Group("/amenities")
-	amenities.POST("", a.CreateAmenities(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
+	amenities.POST("", a.CreateAmenities(), middlewares.JWTMiddleware())
 	amenities.GET("", a.GetAllAmenities())
 	amenities.GET("/:id", a.GetAmenitiesID())
-	amenities.PUT("/:id", a.UpdateAmenities(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
-	amenities.DELETE("/:id", a.DeleteAmenities(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
+	amenities.PUT("/:id", a.UpdateAmenities(), middlewares.JWTMiddleware())
+	amenities.DELETE("/:id", a.DeleteAmenities(), middlewares.JWTMiddleware())
+}
+
+func ReviewsPath(e *echo.Echo, rh rh.ReviewHandler) {
+	// Customer
+	e.POST("/reviews", rh.InsertComment, middlewares.JWTMiddleware())
+	e.GET("/reviews/:room_id", rh.GetByRoomID)
+}
+
+func TransactionPath(e *echo.Echo, th th.TransactionHandler) {
+	jwt := e.Group("", middlewares.JWTMiddleware())
+
+	// Customer
+	jwt.POST("/transactions", th.InsertTransaction)
+	jwt.GET("/transactions", th.GetAllTransactionbyCustomer)
+
+	// Admin
+	jwt.GET("/admin/transactions", th.GetAllTransactionbyConsultant)
+	jwt.PUT("/admin/transactions/:booking_id", th.UpdateTransaction)
 }
