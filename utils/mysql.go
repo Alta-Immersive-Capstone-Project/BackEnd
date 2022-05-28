@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"backend/be8/configs"
 	"fmt"
+	"kost/configs"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -10,12 +10,12 @@ import (
 
 func NewMysqlGorm(config *configs.AppConfig) *gorm.DB {
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=Local",
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Host,
-		config.Database.Port,
-		config.Database.Name,
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=true&loc=Local",
+		config.Username,
+		config.Password,
+		config.Address,
+		config.Port,
+		config.Name,
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})

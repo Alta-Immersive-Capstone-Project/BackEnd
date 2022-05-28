@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"backend/be8/entities"
+	"kost/entities"
 
 	"gorm.io/gorm"
 )

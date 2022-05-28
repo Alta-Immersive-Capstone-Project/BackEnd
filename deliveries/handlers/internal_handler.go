@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"backend/be8/configs"
-	"backend/be8/deliveries/helpers"
+	"kost/configs"
+	"kost/deliveries/helpers"
 
-	"backend/be8/entities"
-	"backend/be8/entities/web"
-	storageProvider "backend/be8/services/storage"
-	userService "backend/be8/services/user"
+	"kost/entities"
+	"kost/entities/web"
+	storageProvider "kost/services/storage"
+	userService "kost/services/user"
 	"mime/multipart"
 	"net/http"
 

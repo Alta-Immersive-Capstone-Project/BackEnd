@@ -1,8 +1,8 @@
 package user
 
 import (
-	"backend/be8/entities"
-	storageProvider "backend/be8/services/storage"
+	"kost/entities"
+	storageProvider "kost/services/storage"
 	"mime/multipart"
 )
 
