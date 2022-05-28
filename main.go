@@ -24,6 +24,12 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	districtRepo "kost/repositories/district"
+
+	districtServices "kost/services/district"
+
+	districtHandlers "kost/deliveries/handlers/district"
+
 	reviewRepo "kost/repositories/reviews"
 	transactionRepo "kost/repositories/transactions"
 
@@ -53,6 +59,7 @@ func main() {
 	amenitiesRepo := amenities.NewAmenitiesDB(DB)
 	reviewsRepo := reviewRepo.NewReviewModel(DB)
 	transactionsRepo := transactionRepo.NewTransactionModel(DB)
+	districtRepo := districtRepo.NewDisttrictRepo(DB)
 
 	// Validation
 	validation := validations.NewValidation(validator.New())
@@ -65,7 +72,7 @@ func main() {
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
 	transactionsService := transactionService.NewTransactionService(transactionsRepo)
-
+	districtService := districtServices.NewDistService(districtRepo)
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService)
 	userHandler := handlers.NewUserHandler(userService, s3)
@@ -73,14 +80,14 @@ func main() {
 	amenitiesHandler := handlers.NewHandlersAmenities(amenitiesService, validator.New())
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
-
+	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	// Middlewares
 	middlewares.General(e)
 
 	// Routes
 	routes.AuthRoute(e, authHandler)
 	routes.UserRoute(e, userHandler)
-	routes.Path(e, facilityHandler, amenitiesHandler)
+	routes.Path(e, facilityHandler, amenitiesHandler, districtHandler)
 	routes.ReviewsPath(e, reviewsHandler)
 	routes.TransactionPath(e, transactionsHandler)
 

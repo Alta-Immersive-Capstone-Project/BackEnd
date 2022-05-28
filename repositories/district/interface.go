@@ -7,5 +7,5 @@ type RepoDistrict interface {
 	UpdateDistrict(id uint, update entities.District) (entities.District, error)
 	DeleteDistrict(id uint) error
 	GetDistrictID(id uint) (entities.District, error)
-	GetAllDistrict(id uint) ([]entities.District, error)
+	GetAllDistrict(cid uint) ([]entities.District, error)
 }
