@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"backend/be8/entities/web"
+	"kost/entities/web"
 
 	"golang.org/x/crypto/bcrypt"
 )

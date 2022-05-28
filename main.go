@@ -7,7 +7,7 @@ import (
 	"kost/repositories/facility"
 	cFacility "kost/services/facility"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 
 	userRepository "kost/repositories/user"
 	authService "kost/services/auth"
@@ -34,8 +34,6 @@ func main() {
 	e := echo.New()
 	// Connect To Route
 	routes.Path(e, facilityHandler)
-
-	e.Logger.Fatal(e.Start(":8000"))
 	// utils.Migrate(DB)
 
 	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"backend/be8/configs"
 	"context"
+	"kost/configs"
 	"mime/multipart"
 
 	"github.com/aws/aws-sdk-go-v2/aws"

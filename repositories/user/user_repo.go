@@ -1,9 +1,8 @@
 package user
-<<<<<<< HEAD
 
 import (
-	"backend/be8/entities"
-	"backend/be8/entities/web"
+	"kost/entities"
+	"kost/entities/web"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
@@ -79,5 +78,3 @@ func (ur *UserRepository) DeleteUser(id int) error {
 	}
 	return nil
 }
-=======
->>>>>>> c4ca72a1ed7c4b21751f758877248c248310c2f9

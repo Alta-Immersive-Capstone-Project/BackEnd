@@ -2,11 +2,12 @@ package helpers
 
 import (
 	"fmt"
+	"kost/entities/web"
 	"net/http"
 	"reflect"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func WebErrorResponse(c echo.Context, err error) error {

@@ -1,9 +1,9 @@
 package storage
 
 import (
-	"backend/be8/configs"
-	"backend/be8/entities/web"
 	"context"
+	"kost/configs"
+	"kost/entities/web"
 	"mime/multipart"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
