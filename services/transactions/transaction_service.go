@@ -68,10 +68,10 @@ func (ts *transactionService) GetAllTransactionbyCustomer(customer_id uint, stat
 	return response
 }
 
-func (ts *transactionService) GetAllTransactionbyConsultant(consultant_id uint, status string) []entities.TransactionResponse {
+func (ts *transactionService) GetAllTransactionbyConsultant() []entities.TransactionResponse {
 	var response []entities.TransactionResponse
 
-	results := ts.tm.GetAllbyConsultant(consultant_id, status)
+	results := ts.tm.GetAllbyConsultant()
 
 	for _, r := range results {
 		var transaction entities.TransactionResponse

@@ -41,15 +41,15 @@ func (m *transactionModel) Get(booking_id string) (entities.Transaction, error) 
 func (m *transactionModel) GetAllbyCustomer(customer_id uint, status string) []entities.Transaction {
 	var transactions []entities.Transaction
 
-	m.db.Where("customer_id = ? AND status LIKE ?", customer_id, "%"+status+"%").Find(&transactions)
+	m.db.Where("user_id = ? OR consultant_id = ? AND status LIKE ?", customer_id, customer_id, "%"+status+"%").Find(&transactions)
 
 	return transactions
 }
 
-func (m *transactionModel) GetAllbyConsultant(consultant_id uint, status string) []entities.Transaction {
+func (m *transactionModel) GetAllbyConsultant() []entities.Transaction {
 	var transactions []entities.Transaction
 
-	m.db.Where("consultant_id = ? AND status LIKE ?", consultant_id, "%"+status+"%").Find(&transactions)
+	m.db.Where("consultant_id = ?", 0).Find(&transactions)
 
 	return transactions
 }

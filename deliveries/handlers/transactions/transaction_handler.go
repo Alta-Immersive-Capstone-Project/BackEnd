@@ -58,15 +58,13 @@ func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error 
 }
 
 func (th *transactionHandler) GetAllTransactionbyConsultant(c echo.Context) error {
-	consultant_id := uint(middlewares.ExtractTokenUserId(c))
 	role := middlewares.ExtractTokenRole(c)
-	status := c.QueryParam("status")
 
 	if role == "customer" {
 		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
 	}
 
-	response := th.ts.GetAllTransactionbyConsultant(consultant_id, status)
+	response := th.ts.GetAllTransactionbyConsultant()
 	if len(response) == 0 {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
