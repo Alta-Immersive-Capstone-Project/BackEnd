@@ -1,6 +1,5 @@
 FROM golang:1.18
 
-RUN apk add git
 #create app folder
 RUN mkdir /app
 
