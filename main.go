@@ -4,7 +4,9 @@ import (
 	"kost/configs"
 	"kost/deliveries/handlers"
 	"kost/deliveries/routes"
+	"kost/repositories/amenities"
 	"kost/repositories/facility"
+	cAmenities "kost/services/amenities"
 	cFacility "kost/services/facility"
 
 	"github.com/go-playground/validator/v10"
@@ -30,17 +32,16 @@ func main() {
 	facilityRepo := facility.NewFacilityDB(DB)
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	facilityHandler := handlers.NewHandlersFacility(facilityService, validator.New())
+
+	// Init Amenities Service
+	amenitiesRepo := amenities.NewAmenitiesDB(DB)
+	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
+	amenitiesHandler := handlers.NewHandlersAmenities(amenitiesService, validator.New())
 	// Initiate Echo
 	e := echo.New()
 	// Connect To Route
-	routes.Path(e, facilityHandler)
+	routes.Path(e, facilityHandler, amenitiesHandler)
 	// utils.Migrate(DB)
-
-	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-	// 	AllowOrigins: []string{"*"},
-	// 	AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
-	// 	AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE, echo.PATCH, echo.OPTIONS},
-	// }))
 
 	userRepository := userRepository.NewUserRepository(DB)
 

@@ -4,7 +4,7 @@ import (
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
 	"kost/entities"
-	"kost/services/facility"
+	"kost/services/amenities"
 	"net/http"
 	"strconv"
 
@@ -13,20 +13,20 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-type HandlersFacility struct {
-	service facility.FacilityControl
+type HandlersAmenities struct {
+	service amenities.AmenitiesControl
 	valid   *validator.Validate
 }
 
-func NewHandlersFacility(Service facility.FacilityControl, Valid *validator.Validate) *HandlersFacility {
-	return &HandlersFacility{
+func NewHandlersAmenities(Service amenities.AmenitiesControl, Valid *validator.Validate) *HandlersAmenities {
+	return &HandlersAmenities{
 		service: Service,
 		valid:   Valid,
 	}
 }
 
-// Respond Create Facility
-func (h *HandlersFacility) CreateFacility() echo.HandlerFunc {
+// Respond Create Amenities
+func (h *HandlersAmenities) CreateAmenities() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		Role := middlewares.ExtractTokenRole(c)
@@ -34,7 +34,7 @@ func (h *HandlersFacility) CreateFacility() echo.HandlerFunc {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
 
-		var Insert entities.AddNewFacility
+		var Insert entities.AddAmenities
 		err := c.Bind(&Insert)
 		if err != nil {
 			log.Warn(err)
@@ -47,54 +47,54 @@ func (h *HandlersFacility) CreateFacility() echo.HandlerFunc {
 			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
 		}
 
-		result, err := h.service.CreateFacility(Insert)
+		result, err := h.service.CreateAmenities(Insert)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Facility", result))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Amenities", result))
 	}
 }
 
-// Respond Get All Facility
-func (h *HandlersFacility) GetAllFacility() echo.HandlerFunc {
+// Respond Get All Amenities
+func (h *HandlersAmenities) GetAllAmenities() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.QueryParam("house_id")
-		HouseID, err := strconv.Atoi(id)
+		RoomID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
 		}
-		result, err := h.service.GetAllFacility(uint(HouseID))
+		result, err := h.service.GetAllAmenities(uint(RoomID))
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Amenities", result))
 	}
 }
 
-// Respond Get Facility ID
-func (h *HandlersFacility) GetFacilityID() echo.HandlerFunc {
+// Respond Get Amenities ID
+func (h *HandlersAmenities) GetAmenitiesID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		id := c.Param("id")
-		facilityID, err := strconv.Atoi(id)
+		amenitiesID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
 		}
-		result, err := h.service.GetFacilityID(uint(facilityID))
+		result, err := h.service.GetAmenitiesID(uint(amenitiesID))
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data Amenities", result))
 	}
 }
 
-// Respond Update Facility
-func (h *HandlersFacility) UpdateFacility() echo.HandlerFunc {
+// Respond Update Amenities
+func (h *HandlersAmenities) UpdateAmenities() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		Role := middlewares.ExtractTokenRole(c)
 		if Role != "admin" && Role != "supervisor" {
@@ -102,27 +102,27 @@ func (h *HandlersFacility) UpdateFacility() echo.HandlerFunc {
 		}
 
 		id := c.Param("id")
-		facilityID, err := strconv.Atoi(id)
+		amenitiesID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
 		}
-		var update entities.UpdateFacility
+		var update entities.UpdateAmenities
 		if err := c.Bind(&update); err != nil {
 			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
 		}
 
-		result, err := h.service.UpdateFacility(uint(facilityID), update)
+		result, err := h.service.UpdateAmenities(uint(amenitiesID), update)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
 		}
-		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Amenities", result))
 	}
 }
 
-// Respond Delete Facility
-func (h *HandlersFacility) DeleteFacility() echo.HandlerFunc {
+// Respond Delete Amenities
+func (h *HandlersAmenities) DeleteAmenities() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		Role := middlewares.ExtractTokenRole(c)
 		if Role != "admin" && Role != "supervisor" {
@@ -130,14 +130,14 @@ func (h *HandlersFacility) DeleteFacility() echo.HandlerFunc {
 		}
 
 		id := c.Param("id")
-		facilityID, err := strconv.Atoi(id)
+		amenitiesID, err := strconv.Atoi(id)
 
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
 		}
 
-		errDelete := h.service.DeleteFacility(uint(facilityID))
+		errDelete := h.service.DeleteAmenities(uint(amenitiesID))
 		if errDelete != nil {
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}

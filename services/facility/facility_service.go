@@ -4,6 +4,7 @@ import (
 	"kost/entities"
 	"kost/repositories/facility"
 
+	"github.com/jinzhu/copier"
 	"github.com/labstack/gommon/log"
 )
 
@@ -20,26 +21,17 @@ func NewServiceFacility(Repo facility.RepoFacility) *ServiceFacility {
 // Create Facility
 func (s *ServiceFacility) CreateFacility(Insert entities.AddNewFacility) (entities.RespondFacility, error) {
 
-	NewAdd := entities.Facility{
-		Name:      Insert.Name,
-		Longitude: Insert.Longitude,
-		Latitude:  Insert.Latitude,
-		HouseID:   Insert.HouseID,
-	}
-
-	res, err := s.repo.CreateFacility(NewAdd)
+	var Add entities.Facility
+	copier.Copy(&Add, &Insert)
+	res, err := s.repo.CreateFacility(Add)
 	if err != nil {
 		log.Warn(err)
 		return entities.RespondFacility{}, err
 	}
 
-	result := entities.RespondFacility{
-		ID:        res.HouseID,
-		Name:      res.Name,
-		Longitude: res.Longitude,
-		Latitude:  res.Latitude,
-		HouseID:   res.HouseID,
-	}
+	var result entities.RespondFacility
+
+	copier.Copy(&result, &res)
 
 	return result, nil
 }
@@ -53,16 +45,8 @@ func (s *ServiceFacility) GetAllFacility(HouseID uint) ([]entities.RespondFacili
 		return []entities.RespondFacility{}, err
 	}
 	var result []entities.RespondFacility
-	for _, v := range res {
-		facility := entities.RespondFacility{
-			ID:        v.HouseID,
-			Name:      v.Name,
-			Longitude: v.Longitude,
-			Latitude:  v.Latitude,
-			HouseID:   v.HouseID,
-		}
-		result = append(result, facility)
-	}
+
+	copier.Copy(&result, &res)
 	return result, nil
 }
 
@@ -75,38 +59,26 @@ func (s *ServiceFacility) GetFacilityID(id uint) (entities.RespondFacility, erro
 		return entities.RespondFacility{}, err
 	}
 
-	result := entities.RespondFacility{
-		ID:        res.HouseID,
-		Name:      res.Name,
-		Longitude: res.Longitude,
-		Latitude:  res.Latitude,
-		HouseID:   res.HouseID,
-	}
+	var result entities.RespondFacility
+
+	copier.Copy(&result, &res)
 	return result, nil
 }
 
 // Update Facility By ID
 func (s *ServiceFacility) UpdateFacility(id uint, update entities.UpdateFacility) (entities.RespondFacility, error) {
 
-	UpdateFacility := entities.Facility{
-		Name:      update.Name,
-		Longitude: update.Longitude,
-		Latitude:  update.Latitude,
-	}
-
+	var UpdateFacility entities.Facility
+	copier.Copy(&UpdateFacility, &update)
 	res, err := s.repo.UpdateFacility(id, UpdateFacility)
 	if err != nil {
 		log.Warn(err)
 		return entities.RespondFacility{}, err
 	}
 
-	result := entities.RespondFacility{
-		ID:        res.HouseID,
-		Name:      res.Name,
-		Longitude: res.Longitude,
-		Latitude:  res.Latitude,
-		HouseID:   res.HouseID,
-	}
+	var result entities.RespondFacility
+
+	copier.Copy(&result, &res)
 	return result, nil
 }
 

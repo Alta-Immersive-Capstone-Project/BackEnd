@@ -25,6 +25,7 @@ func InitDB(config *configs.AppConfig) *gorm.DB {
 	}
 	return db
 }
+
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate()
 }
