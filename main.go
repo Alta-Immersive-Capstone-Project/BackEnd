@@ -59,7 +59,7 @@ func main() {
 	amenitiesRepo := amenities.NewAmenitiesDB(DB)
 	reviewsRepo := reviewRepo.NewReviewModel(DB)
 	transactionsRepo := transactionRepo.NewTransactionModel(DB)
-	districtRepo := districtRepo.NewDisttrictRepo(DB)
+	districtRepo := districtRepo.NewDistrictRepo(DB)
 
 	// Validation
 	validation := validations.NewValidation(validator.New())

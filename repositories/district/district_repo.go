@@ -11,7 +11,7 @@ type DistrictRepo struct {
 	Db *gorm.DB
 }
 
-func NewDisttrictRepo(db *gorm.DB) *DistrictRepo {
+func NewDistrictRepo(db *gorm.DB) *DistrictRepo {
 	return &DistrictRepo{
 		Db: db,
 	}
