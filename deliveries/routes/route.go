@@ -2,6 +2,8 @@ package routes
 
 import (
 	"kost/deliveries/handlers"
+	rh "kost/deliveries/handlers/reviews"
+	th "kost/deliveries/handlers/transactions"
 	"kost/deliveries/middlewares"
 
 	"github.com/labstack/echo/v4"
@@ -45,4 +47,16 @@ func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenit
 	amenities.GET("/:id", a.GetAmenitiesID())
 	amenities.PUT("/:id", a.UpdateAmenities(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
 	amenities.DELETE("/:id", a.DeleteAmenities(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("K05T")}))
+}
+
+func ReviewsPath(e *echo.Echo, rh rh.ReviewHandler) {
+	e.POST("/reviews", rh.InsertComment)
+	e.GET("/reviews/:room_id", rh.GetByRoomID)
+}
+
+func TransactionPath(e *echo.Echo, th th.TransactionHandler) {
+	e.GET("/transactions", th.GetAllTransactionbyCustomer)
+	e.GET("/admin/transactions", th.GetAllTransactionbyConsultant)
+	e.POST("/transactions", th.InsertTransaction)
+	e.PUT("/transactions/:booking_id", th.UpdateTransaction)
 }
