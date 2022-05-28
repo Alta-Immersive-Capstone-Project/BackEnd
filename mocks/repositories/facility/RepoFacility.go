@@ -127,4 +127,3 @@ func NewRepoFacility(t NewRepoFacilityT) *RepoFacility {
 
 	return mock
 }
-
