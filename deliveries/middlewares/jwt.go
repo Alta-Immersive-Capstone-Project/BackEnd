@@ -1,37 +1,50 @@
-package middleware
+package middlewares
 
 import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
-const secretJwt = "BACKENDBE8"
-
-func JWTMiddleware() echo.MiddlewareFunc {
-	return middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey:    []byte(secretJwt),
-		SigningMethod: jwt.SigningMethodHS256.Name,
-	})
-}
-
-func CreateToken(id int, name string, role string) (string, error) {
+func CreateToken(userId float64, role, email string) (string, error) {
 	claims := jwt.MapClaims{}
-	claims["authorized"] = true
-	claims["id"] = id
-	claims["name"] = name
+
+	claims["userId"] = userId
 	claims["role"] = role
-	claims["exp"] = time.Now().Add(time.Hour * 48).Unix()
+	claims["email"] = email
+
+	claims["expired"] = time.Now().Add(time.Hour * 3).Unix() //Token expires after 1 hour
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(secretJwt))
+	return token.SignedString([]byte("K05T"))
 }
 
-func ReadToken(token interface{}) (int, string, error) {
-	tokenID := token.(*jwt.Token)
-	claims := tokenID.Claims.(jwt.MapClaims)
-	id := int(claims["id"].(float64))
-	role := claims["role"].(string)
-	return id, role, nil
+func ExtractTokenUserId(e echo.Context) float64 {
+	user := e.Get("user").(*jwt.Token)
+	if user.Valid {
+		claims := user.Claims.(jwt.MapClaims)
+		userId := claims["userId"].(float64)
+		return userId
+	}
+	return 0
+}
+
+func ExtractTokenRole(e echo.Context) string {
+	role := e.Get("user").(*jwt.Token)
+	if role.Valid {
+		claims := role.Claims.(jwt.MapClaims)
+		role := claims["role"].(string)
+		return role
+	}
+	return ""
+}
+
+func ExtractTokenEmail(e echo.Context) string {
+	email := e.Get("user").(*jwt.Token)
+	if email.Valid {
+		claims := email.Claims.(jwt.MapClaims)
+		email := claims["email"].(string)
+		return email
+	}
+	return ""
 }

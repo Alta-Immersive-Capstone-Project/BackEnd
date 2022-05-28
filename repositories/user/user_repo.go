@@ -1,4 +1,5 @@
 package user
+<<<<<<< HEAD
 
 import (
 	"backend/be8/entities"
@@ -71,3 +72,5 @@ func (ur *UserRepository) DeleteUser(ID int) (entities.User, error) {
 	return res, nil
 
 }
+=======
+>>>>>>> c4ca72a1ed7c4b21751f758877248c248310c2f9

@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"backend/be8/configs"
-	"backend/be8/deliveries/helpers"
-	"backend/be8/entities"
-	"backend/be8/entities/web"
-	authService "backend/be8/services/auth"
+	"kost/configs"
+	"kost/deliveries/helpers"
+	"kost/entities"
+	"kost/entities/web"
+	authService "kost/services/auth"
 
 	"github.com/labstack/echo/v4"
 )

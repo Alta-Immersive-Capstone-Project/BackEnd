@@ -1,13 +1,13 @@
 package user
 
 import (
-	"backend/be8/deliveries/helpers"
-	_middleware "backend/be8/deliveries/middlewares"
-	"backend/be8/deliveries/validations"
-	"backend/be8/entities"
-	web "backend/be8/entities/web"
-	userRepository "backend/be8/repositories/user"
-	storageProvider "backend/be8/services/storage"
+	"kost/deliveries/helpers"
+	_middleware "kost/deliveries/middlewares"
+	"kost/deliveries/validations"
+	"kost/entities"
+	web "kost/entities/web"
+	userRepository "kost/repositories/user"
+	storageProvider "kost/services/storage"
 	"mime/multipart"
 
 	"github.com/go-playground/validator/v10"
@@ -20,10 +20,10 @@ type UserService struct {
 	validate *validator.Validate
 }
 
-func NewUserService(repository userRepository.UserRepositoryInterface) *UserService {
+func NewUserService(repository userRepository.UserRepositoryInterface, valid *validator.Validate) *UserService {
 	return &UserService{
 		userRepo: repository,
-		validate: validator.New(),
+		validate: valid,
 	}
 }
 
