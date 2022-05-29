@@ -27,21 +27,10 @@ func (f *AmenitiesDB) CreateAmenities(New entities.Amenities) (entities.Amenitie
 	return New, nil
 }
 
-// Get All Amenities
-func (f *AmenitiesDB) GetAllAmenities(RoomID uint) ([]entities.Amenities, error) {
-	var facilities []entities.Amenities
-	err := f.Db.Where("room_id = ?", RoomID).Find(&facilities).Error
-	if err != nil {
-		log.Warn("Error Get Data", err)
-		return facilities, err
-	}
-	return facilities, nil
-}
-
 // Get Amenities By ID
-func (f *AmenitiesDB) GetAmenitiesID(id uint) (entities.Amenities, error) {
+func (f *AmenitiesDB) GetAmenitiesID(RoomID uint) (entities.Amenities, error) {
 	var facility entities.Amenities
-	err := f.Db.Where("id= ?", id).First(&facility).Error
+	err := f.Db.Where("room_id= ?", RoomID).First(&facility).Error
 	if err != nil {
 		log.Warn("Error Get By ID", err)
 		return facility, err
@@ -50,10 +39,10 @@ func (f *AmenitiesDB) GetAmenitiesID(id uint) (entities.Amenities, error) {
 }
 
 // Update Amenities By ID
-func (f *AmenitiesDB) UpdateAmenities(id uint, UpdateAmenities entities.Amenities) (entities.Amenities, error) {
+func (f *AmenitiesDB) UpdateAmenities(RoomID uint, UpdateAmenities entities.Amenities) (entities.Amenities, error) {
 	var facility entities.Amenities
 
-	err := f.Db.Where("id =?", id).First(&facility).Updates(&UpdateAmenities).Find(&facility).Error
+	err := f.Db.Where("RoomID =?", RoomID).First(&facility).Updates(&UpdateAmenities).Find(&facility).Error
 	if err != nil {
 		log.Warn("Update Error", err)
 		return facility, err
@@ -63,10 +52,10 @@ func (f *AmenitiesDB) UpdateAmenities(id uint, UpdateAmenities entities.Amenitie
 }
 
 // Delete Amenities By ID
-func (f *AmenitiesDB) DeleteAmenities(id uint) error {
+func (f *AmenitiesDB) DeleteAmenities(RoomID uint) error {
 	var delete entities.Amenities
 
-	err := f.Db.Where("id = ?", id).First(&delete).Delete(&delete).Error
+	err := f.Db.Where("RoomID = ?", RoomID).First(&delete).Delete(&delete).Error
 	if err != nil {
 		log.Warn("Delete Error", err)
 		return err

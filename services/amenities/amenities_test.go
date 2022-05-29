@@ -73,28 +73,6 @@ func TestCreateAmenities(t *testing.T) {
 	})
 }
 
-// TEST GET ALL FACILITY SERVICES
-func TestGetAllAmenities(t *testing.T) {
-	t.Run("Success Get All Amenities", func(t *testing.T) {
-		AmenitiesRepo := mocks.NewRepoAmenities(t)
-		AmenitiesRepo.On("GetAllAmenities", uint(1)).Return(MockAmenities, nil).Once()
-		AmenitiesService := NewServiceAmenities(AmenitiesRepo)
-		result, err := AmenitiesService.GetAllAmenities(1)
-		assert.NoError(t, err)
-		assert.NotNil(t, result)
-
-		AmenitiesRepo.AssertExpectations(t)
-	})
-	t.Run("Error Access Database", func(t *testing.T) {
-		AmenitiesRepo := mocks.NewRepoAmenities(t)
-		AmenitiesRepo.On("GetAllAmenities", uint(1)).Return(nil, errors.New("Error Access Database")).Once()
-		AmenitiesService := NewServiceAmenities(AmenitiesRepo)
-		_, err := AmenitiesService.GetAllAmenities(1)
-		assert.Error(t, err)
-		AmenitiesRepo.AssertExpectations(t)
-	})
-}
-
 // TEST GET FACILITY BY ID SERVICES
 func TestGetAmenitiesID(t *testing.T) {
 	t.Run("Success Get Amenities ID", func(t *testing.T) {

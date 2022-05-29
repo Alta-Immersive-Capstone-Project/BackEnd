@@ -34,8 +34,8 @@ type UpdateInternalRequest struct {
 	Password string `form:"password"`
 	Name     string `form:"name"`
 	Gender   string `form:"gender"`
-	Phone    string `form:"phone" validate:"required"`
-	Role     string `form:"role" validate:"required"`
+	Phone    string `form:"phone"`
+	Role     string `form:"role"`
 }
 
 type UpdateCustomerRequest struct {

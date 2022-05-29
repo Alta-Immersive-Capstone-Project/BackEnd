@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type District struct {
 	gorm.Model
-	Name      string `gorm:"type:varchar(50)"`
+	Name      string `gorm:"type:varchar(50);unique"`
 	Longitude float64
 	Latitude  float64
 	CityID    uint
