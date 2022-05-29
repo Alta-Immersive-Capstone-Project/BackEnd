@@ -14,18 +14,18 @@ type IHouseService struct {
 }
 
 // CreateHouse provides a mock function with given fields: Insert
-func (_m *IHouseService) CreateHouse(Insert entities.HouseRequest) (entities.HouseResponse, error) {
+func (_m *IHouseService) CreateHouse(Insert entities.AddHouse) (entities.HouseResponse, error) {
 	ret := _m.Called(Insert)
 
 	var r0 entities.HouseResponse
-	if rf, ok := ret.Get(0).(func(entities.HouseRequest) entities.HouseResponse); ok {
+	if rf, ok := ret.Get(0).(func(entities.AddHouse) entities.HouseResponse); ok {
 		r0 = rf(Insert)
 	} else {
 		r0 = ret.Get(0).(entities.HouseResponse)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(entities.HouseRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(entities.AddHouse) error); ok {
 		r1 = rf(Insert)
 	} else {
 		r1 = ret.Error(1)
@@ -93,18 +93,18 @@ func (_m *IHouseService) GetHouseID(id uint) (entities.HouseResponse, error) {
 }
 
 // UpdateHouse provides a mock function with given fields: id, update
-func (_m *IHouseService) UpdateHouse(id uint, update entities.HouseRequest) (entities.HouseResponse, error) {
+func (_m *IHouseService) UpdateHouse(id uint, update entities.UpdateHouse) (entities.HouseResponse, error) {
 	ret := _m.Called(id, update)
 
 	var r0 entities.HouseResponse
-	if rf, ok := ret.Get(0).(func(uint, entities.HouseRequest) entities.HouseResponse); ok {
+	if rf, ok := ret.Get(0).(func(uint, entities.UpdateHouse) entities.HouseResponse); ok {
 		r0 = rf(id, update)
 	} else {
 		r0 = ret.Get(0).(entities.HouseResponse)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uint, entities.HouseRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(uint, entities.UpdateHouse) error); ok {
 		r1 = rf(id, update)
 	} else {
 		r1 = ret.Error(1)

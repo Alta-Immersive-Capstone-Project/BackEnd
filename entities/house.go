@@ -21,16 +21,16 @@ type House struct {
 }
 
 type AddHouse struct {
-	DistrictID uint    `json:"district_id"`
-	Title      string  `json:"title"`
-	Brief      string  `json:"brief"`
-	OwnerName  string  `json:"owner_name"`
-	OwnerPhone string  `json:"owner_phone"`
-	Address    string  `json:"address"`
-	SlotRoom   int     `json:"slot_room"`
-	Available  int     `json:"available"`
-	Latitude   float64 `json:"latitude"`
-	Longitude  float64 `json:"longitude"`
+	DistrictID uint    `json:"district_id" validate:"required"`
+	Title      string  `json:"title" validate:"required"`
+	Brief      string  `json:"brief" validate:"required"`
+	OwnerName  string  `json:"owner_name" validate:"required"`
+	OwnerPhone string  `json:"owner_phone" validate:"required"`
+	Address    string  `json:"address" validate:"required"`
+	SlotRoom   int     `json:"slot_room" validate:"required"`
+	Available  int     `json:"available" validate:"required"`
+	Latitude   float64 `json:"latitude" validate:"required"`
+	Longitude  float64 `json:"longitude" validate:"required"`
 }
 
 type UpdateHouse struct {
