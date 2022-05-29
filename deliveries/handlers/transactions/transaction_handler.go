@@ -42,7 +42,7 @@ func (th *transactionHandler) InsertTransaction(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	return c.JSON(http.StatusCreated, helpers.StatusCreated("Success Created Transaction", response))
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {

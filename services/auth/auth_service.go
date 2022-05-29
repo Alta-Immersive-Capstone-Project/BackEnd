@@ -4,7 +4,6 @@ import (
 	"kost/deliveries/helpers"
 	middleware "kost/deliveries/middlewares"
 	"kost/entities"
-	web "kost/entities/web"
 	userRepository "kost/repositories/user"
 
 	"github.com/jinzhu/copier"
@@ -30,12 +29,12 @@ func (as AuthService) Login(authReq entities.AuthRequest) (interface{}, error) {
 	// Get user by username via repository
 	user, err := as.userRepo.FindByUser("email", authReq.Email)
 	if err != nil {
-		return entities.CustomerAuthResponse{}, web.WebError{Code: 401, Message: "Invalid Credential"}
+		return entities.CustomerAuthResponse{}, err
 	}
 
 	// Verify password
 	if !helpers.CheckPasswordHash(authReq.Password, user.Password) {
-		return entities.CustomerAuthResponse{}, web.WebError{Code: 401, Message: "Invalid password"}
+		return entities.CustomerAuthResponse{}, err
 	}
 
 	if user.Role != "customer" {
@@ -46,13 +45,10 @@ func (as AuthService) Login(authReq entities.AuthRequest) (interface{}, error) {
 		// Create token
 		token, err := middleware.CreateToken(int(userRes.ID), userRes.Name, userRes.Role)
 		if err != nil {
-			return entities.InternalAuthResponse{}, web.WebError{Code: 500, Message: "Error create token"}
+			return entities.InternalAuthResponse{}, err
 		}
 
-		return entities.InternalAuthResponse{
-			Token: token,
-			User:  userRes,
-		}, nil
+		return token, nil
 	}
 
 	// Konversi menjadi customer response
@@ -62,11 +58,8 @@ func (as AuthService) Login(authReq entities.AuthRequest) (interface{}, error) {
 	// Create token
 	token, err := middleware.CreateToken(int(userRes.ID), userRes.Name, "customer")
 	if err != nil {
-		return entities.CustomerAuthResponse{}, web.WebError{Code: 500, Message: "Error create token"}
+		return entities.CustomerAuthResponse{}, err
 	}
 
-	return entities.CustomerAuthResponse{
-		Token: token,
-		User:  userRes,
-	}, nil
+	return token, nil
 }

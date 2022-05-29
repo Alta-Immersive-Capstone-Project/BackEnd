@@ -1,8 +1,8 @@
 package entities
 
 type AuthRequest struct {
-	Email    string `form:"email"`
-	Password string `form:"password"`
+	Email    string `form:"email" json:"email" validate:"required"`
+	Password string `form:"password" json:"password" validate:"required"`
 }
 
 type CustomerAuthResponse struct {

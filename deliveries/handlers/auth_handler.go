@@ -1,11 +1,10 @@
 package handlers
 
 import (
-	"kost/configs"
 	"kost/deliveries/helpers"
 	"kost/entities"
-	"kost/entities/web"
 	authService "kost/services/auth"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
@@ -28,20 +27,12 @@ func (handler AuthHandler) Login(c echo.Context) error {
 	}
 
 	// define link hateoas
-	links := map[string]string{"self": configs.Get().App.BaseURL + "/login"}
-
 	// call auth service login
 	authRes, err := handler.authService.Login(authReq)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// send response
-	return c.JSON(200, web.SuccessResponse{
-		Status: "OK",
-		Code:   200,
-		Error:  nil,
-		Links:  links,
-		Data:   authRes,
-	})
+	return c.JSON(http.StatusOK, helpers.LoginOK(authRes))
 }

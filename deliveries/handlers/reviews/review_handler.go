@@ -44,7 +44,7 @@ func (rh *reviewHandler) InsertComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	return c.JSON(http.StatusCreated, helpers.StatusCreated("Success Created Comment", response))
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Comment", response))
 }
 
 func (rh *reviewHandler) GetByRoomID(c echo.Context) error {
