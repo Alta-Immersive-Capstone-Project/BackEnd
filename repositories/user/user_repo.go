@@ -41,9 +41,9 @@ func (ur *UserRepository) GetUserID(id int) (entities.User, error) {
 	log.Info()
 	return arrUser[0], nil
 }
-func (ur *UserRepository) FindByUser(field string, value string) (entities.User, error) {
+func (ur *UserRepository) FindByUser(value string) (entities.User, error) {
 	user := entities.User{}
-	tx := ur.Db.Where(field+" = ?", value).Find(&user)
+	tx := ur.Db.Where("email = ?", value).First(&user)
 	if tx.Error != nil {
 		return entities.User{}, tx.Error
 	}

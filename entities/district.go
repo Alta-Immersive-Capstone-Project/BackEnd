@@ -8,13 +8,14 @@ type District struct {
 	Longitude float64
 	Latitude  float64
 	CityID    uint
+	House     []House `gorm:"foreingkey:DistrictID"`
 }
 
 type AddDistrict struct {
-	Name      string  `json:"name"`
-	Longitude float64 `json:"longitude"`
-	Latitude  float64 `json:"latitude"`
-	CityID    uint    `json:"city_id"`
+	Name      string  `json:"name" validate:"required"`
+	Longitude float64 `json:"longitude" validate:"required"`
+	Latitude  float64 `json:"latitude" validate:"required"`
+	CityID    uint    `json:"city_id" validate:"required"`
 }
 
 type UpdateDistrict struct {
