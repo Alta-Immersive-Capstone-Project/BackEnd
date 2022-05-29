@@ -51,6 +51,7 @@ type TransactionResponse struct {
 	RentDuration  int       `json:"rent_duration"`
 	TotalBill     int       `json:"total_bill"`
 	PaymentMethod string    `json:"payment_method"`
+	Status        string    `json:"status"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 

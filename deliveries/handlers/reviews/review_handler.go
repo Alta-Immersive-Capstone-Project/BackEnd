@@ -56,5 +56,7 @@ func (rh *reviewHandler) GetByRoomID(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Comment Not Found"))
 	}
 
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get By Room ID", response))
+	total := rh.rs.GetRating(uint(room_id))
+
+	return c.JSON(http.StatusOK, helpers.StatusOKReview("Success Get By Room ID", response, total))
 }
