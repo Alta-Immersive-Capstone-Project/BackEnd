@@ -30,6 +30,7 @@ func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 }
 
 func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenities, d dh.IDistrictHandler, h hh.IHouseHandler) {
+
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
 	facility.GET("", f.GetAllFacility())
