@@ -9,7 +9,6 @@ import (
 	"kost/deliveries/middlewares"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func UserRoute(e *echo.Echo, u *handlers.UserHandler) {
@@ -31,8 +30,6 @@ func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 }
 
 func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenities, d dh.IDistrictHandler, h hh.IHouseHandler) {
-	e.Use(middleware.CORS())
-
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
 	facility.GET("", f.GetAllFacility())
