@@ -29,6 +29,15 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	districtRepo "kost/repositories/district"
+	houseRepo "kost/repositories/house"
+
+	districtServices "kost/services/district"
+	houseServices "kost/services/house"
+
+	districtHandlers "kost/deliveries/handlers/district"
+	houseHandlers "kost/deliveries/handlers/house"
+
 	reviewRepo "kost/repositories/reviews"
 	transactionRepo "kost/repositories/transactions"
 
@@ -61,6 +70,8 @@ func main() {
 	cityRepo := city.NewCityDB(DB)
 	roomRepo := room.NewRoomDB(DB)
 	imageRepo := image.NewImageDB(DB)
+	districtRepo := districtRepo.NewDistrictRepo(DB)
+	houseRepo := houseRepo.NewHouseRepo(DB)
 
 	// Validation
 	validation := validations.NewValidation(validator.New())
@@ -75,6 +86,8 @@ func main() {
 	transactionsService := transactionService.NewTransactionService(transactionsRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
+	districtService := districtServices.NewDistService(districtRepo)
+	houseService := houseServices.NewHouseService(houseRepo)
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService)
@@ -85,6 +98,8 @@ func main() {
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
 	cityHandler := handlers.NewHandlersCity(cityService, validator.New())
 	roomHandler := handlers.NewHandlersRoom(roomService, validator.New())
+	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
+	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
 
 	// Middlewares
 	middlewares.General(e)
@@ -92,7 +107,7 @@ func main() {
 	// Routes
 	routes.AuthRoute(e, authHandler)
 	routes.UserRoute(e, userHandler)
-	routes.Path(e, facilityHandler, amenitiesHandler)
+	routes.Path(e, facilityHandler, amenitiesHandler, districtHandler, houseHandler)
 	routes.ReviewsPath(e, reviewsHandler)
 	routes.TransactionPath(e, transactionsHandler)
 	routes.CityPath(e, cityHandler)
