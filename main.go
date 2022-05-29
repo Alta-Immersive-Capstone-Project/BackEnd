@@ -24,6 +24,15 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	districtRepo "kost/repositories/district"
+	houseRepo "kost/repositories/house"
+
+	districtServices "kost/services/district"
+	houseServices "kost/services/house"
+
+	districtHandlers "kost/deliveries/handlers/district"
+	houseHandlers "kost/deliveries/handlers/house"
+
 	reviewRepo "kost/repositories/reviews"
 	transactionRepo "kost/repositories/transactions"
 
@@ -53,6 +62,8 @@ func main() {
 	amenitiesRepo := amenities.NewAmenitiesDB(DB)
 	reviewsRepo := reviewRepo.NewReviewModel(DB)
 	transactionsRepo := transactionRepo.NewTransactionModel(DB)
+	districtRepo := districtRepo.NewDistrictRepo(DB)
+	houseRepo := houseRepo.NewHouseRepo(DB)
 
 	// Validation
 	validation := validations.NewValidation(validator.New())
@@ -65,6 +76,8 @@ func main() {
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
 	transactionsService := transactionService.NewTransactionService(transactionsRepo)
+	districtService := districtServices.NewDistService(districtRepo)
+	houseService := houseServices.NewHouseService(houseRepo)
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService)
@@ -73,6 +86,8 @@ func main() {
 	amenitiesHandler := handlers.NewHandlersAmenities(amenitiesService, validator.New())
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
+	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
+	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
 
 	// Middlewares
 	middlewares.General(e)
@@ -80,7 +95,7 @@ func main() {
 	// Routes
 	routes.AuthRoute(e, authHandler)
 	routes.UserRoute(e, userHandler)
-	routes.Path(e, facilityHandler, amenitiesHandler)
+	routes.Path(e, facilityHandler, amenitiesHandler, districtHandler, houseHandler)
 	routes.ReviewsPath(e, reviewsHandler)
 	routes.TransactionPath(e, transactionsHandler)
 
