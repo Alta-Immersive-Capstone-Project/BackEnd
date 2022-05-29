@@ -87,7 +87,7 @@ func TestUpdateDistrict(t *testing.T) {
 	t.Run("Success Update District", func(t *testing.T) {
 		DistrictRepo := mocks.NewRepoDistrict(t)
 
-		DistrictRepo.On("UpdateDistrict", uint(1), mock.Anything)
+		DistrictRepo.On("UpdateDistrict", uint(1), mock.Anything).Return(response, nil).Once()
 
 		DistrictService := NewDistService(DistrictRepo)
 		result, err := DistrictService.UpdateDist(uint(1), UpdateDistrict)
@@ -177,7 +177,7 @@ func TestGetDistrictID(t *testing.T) {
 		DistrictService := NewDistService(DistrictRepo)
 
 		result, err := DistrictService.GetDistID(uint(1))
-		assert.NoError(t, err)
+		assert.Error(t, err)
 		assert.NotEqual(t, MockDistrict[0].Name, result.Name)
 
 		DistrictRepo.AssertExpectations(t)
