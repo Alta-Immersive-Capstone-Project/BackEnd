@@ -12,10 +12,10 @@ type Room struct {
 	Transactions           []Transaction `gorm:"foreingkey:RoomID"`
 	Reviews                []Review      `gorm:"foreingkey:RoomID"`
 	Images                 []Image       `gorm:"foreingkey:RoomID"`
+	Amenities              Amenities     `gorm:"foreingkey:RoomID"`
 }
 
 type AddRoom struct {
-	gorm.Model
 	HouseID                uint   `json:"house_id" validate:"required" form:"house_id"`
 	Type                   string `gorm:"type:varchar(100);not null" json:"type" validate:"required" form:"type"`
 	Price                  int32  `gorm:"type:int;not null" json:"price" validate:"required" form:"price"`

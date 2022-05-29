@@ -1,7 +1,10 @@
 package entities
 
+import "gorm.io/gorm"
+
 type City struct {
-	City string `json:"city_name"`
+	gorm.Model
+	City string `json:"city_name" gorm:"unique"`
 }
 type CityResponse struct {
 	ID   uint   `json:"id"`

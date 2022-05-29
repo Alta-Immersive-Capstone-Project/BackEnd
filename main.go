@@ -25,7 +25,7 @@ import (
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
-	"kost/utils"
+	utils "kost/utils/rds"
 
 	"github.com/labstack/echo/v4"
 
@@ -46,6 +46,12 @@ import (
 
 	reviewHandlers "kost/deliveries/handlers/reviews"
 	transactionHandlers "kost/deliveries/handlers/transactions"
+
+	amenitiesHandlers "kost/deliveries/handlers/amenities"
+	cityHandlers "kost/deliveries/handlers/city"
+	facilityHandlers "kost/deliveries/handlers/facility"
+	roomHandlers "kost/deliveries/handlers/room"
+	userHandlers "kost/deliveries/handlers/user"
 )
 
 func main() {
@@ -91,13 +97,13 @@ func main() {
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService)
-	userHandler := handlers.NewUserHandler(userService, s3)
-	facilityHandler := handlers.NewHandlersFacility(facilityService, validator.New())
-	amenitiesHandler := handlers.NewHandlersAmenities(amenitiesService, validator.New())
+	userHandler := userHandlers.NewUserHandler(userService, s3)
+	facilityHandler := facilityHandlers.NewHandlersFacility(facilityService, validator.New())
+	amenitiesHandler := amenitiesHandlers.NewHandlersAmenities(amenitiesService, validator.New())
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
-	cityHandler := handlers.NewHandlersCity(cityService, validator.New())
-	roomHandler := handlers.NewHandlersRoom(roomService, validator.New())
+	cityHandler := cityHandlers.NewHandlersCity(cityService, validator.New())
+	roomHandler := roomHandlers.NewHandlersRoom(roomService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
 

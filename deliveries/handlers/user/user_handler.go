@@ -16,11 +16,11 @@ import (
 )
 
 type UserHandler struct {
-	userService     *userService.UserService
+	userService     userService.UserServiceInterface
 	storageProvider storageProvider.StorageInterface
 }
 
-func NewUserHandler(service *userService.UserService, storageProvider storageProvider.StorageInterface) *UserHandler {
+func NewUserHandler(service userService.UserServiceInterface, storageProvider storageProvider.StorageInterface) *UserHandler {
 	return &UserHandler{
 		userService:     service,
 		storageProvider: storageProvider,
@@ -33,7 +33,7 @@ func NewUserHandler(service *userService.UserService, storageProvider storagePro
  * Registrasi User kedalam sistem dan
  * mengembalikan token
  */
-func (handler UserHandler) CreateInternal(c echo.Context) error {
+func (handler *UserHandler) CreateInternal(c echo.Context) error {
 
 	// Bind request ke user request
 	userReq := entities.CreateUserRequest{}
@@ -72,7 +72,7 @@ func (handler UserHandler) CreateInternal(c echo.Context) error {
 	})
 }
 
-func (handler UserHandler) CreateCustomer(c echo.Context) error {
+func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 
 	// Bind request ke user request
 	userReq := entities.CreateUserRequest{}
@@ -100,7 +100,7 @@ func (handler UserHandler) CreateCustomer(c echo.Context) error {
 	})
 }
 
-func (handler UserHandler) UpdateInternal(c echo.Context) error {
+func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 
 	// Bind request to user request
 	userReq := entities.UpdateInternalRequest{}
@@ -140,7 +140,7 @@ func (handler UserHandler) UpdateInternal(c echo.Context) error {
 	})
 }
 
-func (handler UserHandler) UpdateCustomer(c echo.Context) error {
+func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
 
 	// Bind request to user request
 
@@ -181,7 +181,7 @@ func (handler UserHandler) UpdateCustomer(c echo.Context) error {
 	})
 }
 
-func (handler UserHandler) DeleteInternal(c echo.Context) error {
+func (handler *UserHandler) DeleteInternal(c echo.Context) error {
 
 	token := c.Get("user")
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -213,7 +213,7 @@ func (handler UserHandler) DeleteInternal(c echo.Context) error {
 	})
 }
 
-func (handler UserHandler) DeleteCustomer(c echo.Context) error {
+func (handler *UserHandler) DeleteCustomer(c echo.Context) error {
 
 	token := c.Get("user")
 	id, _ := strconv.Atoi(c.Param("id"))

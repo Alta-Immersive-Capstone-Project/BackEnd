@@ -11,6 +11,7 @@ type UserServiceInterface interface {
 	GetCustomer(id int) (entities.CustomerResponse, error)
 	GetInternal(id int) (entities.InternalResponse, error)
 	UpdateInternal(customerRequest entities.UpdateInternalRequest, id int, files map[string]*multipart.FileHeader, storageProvider storageProvider.StorageInterface) (entities.InternalResponse, error)
+	UpdateCustomer(customerRequest entities.UpdateCustomerRequest, id int, files map[string]*multipart.FileHeader, storage storageProvider.StorageInterface) (entities.CustomerResponse, error)
 	DeleteInternal(id int, storage storageProvider.StorageInterface) error
 	DeleteCustomer(id int, storage storageProvider.StorageInterface) error
 }
