@@ -48,13 +48,13 @@ func (_m *RepoDistrict) DeleteDistrict(id uint) error {
 	return r0
 }
 
-// GetAllDistrict provides a mock function with given fields: id
-func (_m *RepoDistrict) GetAllDistrict(id uint) ([]entities.District, error) {
-	ret := _m.Called(id)
+// GetAllDistrict provides a mock function with given fields: cid
+func (_m *RepoDistrict) GetAllDistrict(cid uint) ([]entities.District, error) {
+	ret := _m.Called(cid)
 
 	var r0 []entities.District
 	if rf, ok := ret.Get(0).(func(uint) []entities.District); ok {
-		r0 = rf(id)
+		r0 = rf(cid)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.District)
@@ -63,7 +63,7 @@ func (_m *RepoDistrict) GetAllDistrict(id uint) ([]entities.District, error) {
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(id)
+		r1 = rf(cid)
 	} else {
 		r1 = ret.Error(1)
 	}
