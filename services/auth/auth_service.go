@@ -5,8 +5,6 @@ import (
 	middleware "kost/deliveries/middlewares"
 	"kost/entities"
 	userRepository "kost/repositories/user"
-
-	"github.com/jinzhu/copier"
 )
 
 type AuthService struct {
@@ -27,7 +25,7 @@ func NewAuthService(userRepo userRepository.UserRepositoryInterface) *AuthServic
 func (as AuthService) Login(authReq entities.AuthRequest) (string, error) {
 
 	// Get user by username via repository
-	user, err := as.userRepo.FindByUser("email", authReq.Email)
+	user, err := as.userRepo.FindByUser(authReq.Email)
 	if err != nil {
 		return "", err
 	}
@@ -39,23 +37,16 @@ func (as AuthService) Login(authReq entities.AuthRequest) (string, error) {
 
 	if user.Role != "customer" {
 
-		userRes := entities.InternalResponse{}
-		copier.Copy(&userRes, &user)
-
 		// Create token
-		token, err := middleware.CreateToken(int(userRes.ID), userRes.Name, userRes.Role)
+		token, err := middleware.CreateToken(int(user.ID), user.Name, user.Role)
 		if err != nil {
 			return "", err
 		}
 		return token, nil
 	}
 
-	// Konversi menjadi customer response
-	userRes := entities.CustomerResponse{}
-	copier.Copy(&userRes, &user)
-
 	// Create token
-	token, err := middleware.CreateToken(int(userRes.ID), userRes.Name, "customer")
+	token, err := middleware.CreateToken(int(user.ID), user.Name, "customer")
 	if err != nil {
 		return "", err
 	}
