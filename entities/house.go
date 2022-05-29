@@ -1,8 +1,6 @@
 package entities
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -20,7 +18,20 @@ type House struct {
 	Longitude  float64 `json:"longitude" gorm:"not null"`
 }
 
-type HouseRequest struct {
+type AddHouse struct {
+	DistrictID uint    `json:"district_id"`
+	Title      string  `json:"title"`
+	Brief      string  `json:"brief"`
+	OwnerName  string  `json:"owner_name"`
+	OwnerPhone string  `json:"owner_phone"`
+	Address    string  `json:"address"`
+	SlotRoom   int     `json:"slot_room"`
+	Available  int     `json:"available"`
+	Latitude   float64 `json:"latitude"`
+	Longitude  float64 `json:"longitude"`
+}
+
+type UpdateHouse struct {
 	DistrictID uint    `json:"district_id"`
 	Title      string  `json:"title"`
 	Brief      string  `json:"brief"`
@@ -34,17 +45,15 @@ type HouseRequest struct {
 }
 
 type HouseResponse struct {
-	ID         uint      `json:"house_id"`
-	Title      string    `json:"title"`
-	Brief      string    `json:"brief"`
-	OwnerName  string    `json:"owner_name"`
-	OwnerPhone string    `json:"owner_phone"`
-	Address    string    `json:"address"`
-	SlotRoom   int       `json:"slot_room"`
-	Available  int       `json:"available"`
-	Latitude   float64   `json:"latitude"`
-	Longitude  float64   `json:"longitude"`
-	DistrictID uint      `json:"district_id"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID         uint    `json:"house_id"`
+	Title      string  `json:"title"`
+	Brief      string  `json:"brief"`
+	OwnerName  string  `json:"owner_name"`
+	OwnerPhone string  `json:"owner_phone"`
+	Address    string  `json:"address"`
+	SlotRoom   int     `json:"slot_room"`
+	Available  int     `json:"available"`
+	Latitude   float64 `json:"latitude"`
+	Longitude  float64 `json:"longitude"`
+	DistrictID uint    `json:"district_id"`
 }
