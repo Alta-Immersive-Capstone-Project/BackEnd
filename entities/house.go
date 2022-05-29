@@ -7,7 +7,7 @@ import (
 type House struct {
 	gorm.Model
 	DistrictID uint       `gorm:"not null json:district_id"`
-	Title      string     `json:"title" gorm:"type:varchar(161);not null"`
+	Title      string     `json:"title" gorm:"type:varchar(161);not null;unique"`
 	Brief      string     `json:"brief" gorm:"type:text;not null"`
 	OwnerName  string     `json:"owner_name" gorm:"type:varchar(255);not null"`
 	OwnerPhone string     `json:"owner_phone" gorm:"type:varchar(15);not null"`

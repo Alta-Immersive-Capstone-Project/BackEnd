@@ -6,7 +6,7 @@ type Room struct {
 	gorm.Model
 	HouseID                uint          `json:"house_id"`
 	Type                   string        `json:"type"`
-	UserID                 uint          `json:"userid"`
+	UserID                 uint          `json:"user_id"`
 	Price                  int32         `json:"price"`
 	Additional_description string        `json:"additional_description"`
 	Transactions           []Transaction `gorm:"foreingkey:RoomID"`

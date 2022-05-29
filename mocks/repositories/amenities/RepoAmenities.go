@@ -34,13 +34,13 @@ func (_m *RepoAmenities) CreateAmenities(New entities.Amenities) (entities.Ameni
 	return r0, r1
 }
 
-// DeleteAmenities provides a mock function with given fields: id
-func (_m *RepoAmenities) DeleteAmenities(id uint) error {
-	ret := _m.Called(id)
+// DeleteAmenities provides a mock function with given fields: RoomID
+func (_m *RepoAmenities) DeleteAmenities(RoomID uint) error {
+	ret := _m.Called(RoomID)
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(uint) error); ok {
-		r0 = rf(id)
+		r0 = rf(RoomID)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -48,17 +48,15 @@ func (_m *RepoAmenities) DeleteAmenities(id uint) error {
 	return r0
 }
 
-// GetAllAmenities provides a mock function with given fields: RoomID
-func (_m *RepoAmenities) GetAllAmenities(RoomID uint) ([]entities.Amenities, error) {
+// GetAmenitiesID provides a mock function with given fields: RoomID
+func (_m *RepoAmenities) GetAmenitiesID(RoomID uint) (entities.Amenities, error) {
 	ret := _m.Called(RoomID)
 
-	var r0 []entities.Amenities
-	if rf, ok := ret.Get(0).(func(uint) []entities.Amenities); ok {
+	var r0 entities.Amenities
+	if rf, ok := ret.Get(0).(func(uint) entities.Amenities); ok {
 		r0 = rf(RoomID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]entities.Amenities)
-		}
+		r0 = ret.Get(0).(entities.Amenities)
 	}
 
 	var r1 error
@@ -71,41 +69,20 @@ func (_m *RepoAmenities) GetAllAmenities(RoomID uint) ([]entities.Amenities, err
 	return r0, r1
 }
 
-// GetAmenitiesID provides a mock function with given fields: id
-func (_m *RepoAmenities) GetAmenitiesID(id uint) (entities.Amenities, error) {
-	ret := _m.Called(id)
-
-	var r0 entities.Amenities
-	if rf, ok := ret.Get(0).(func(uint) entities.Amenities); ok {
-		r0 = rf(id)
-	} else {
-		r0 = ret.Get(0).(entities.Amenities)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateAmenities provides a mock function with given fields: id, UpdateAmenities
-func (_m *RepoAmenities) UpdateAmenities(id uint, UpdateAmenities entities.Amenities) (entities.Amenities, error) {
-	ret := _m.Called(id, UpdateAmenities)
+// UpdateAmenities provides a mock function with given fields: RoomID, UpdateAmenities
+func (_m *RepoAmenities) UpdateAmenities(RoomID uint, UpdateAmenities entities.Amenities) (entities.Amenities, error) {
+	ret := _m.Called(RoomID, UpdateAmenities)
 
 	var r0 entities.Amenities
 	if rf, ok := ret.Get(0).(func(uint, entities.Amenities) entities.Amenities); ok {
-		r0 = rf(id, UpdateAmenities)
+		r0 = rf(RoomID, UpdateAmenities)
 	} else {
 		r0 = ret.Get(0).(entities.Amenities)
 	}
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(uint, entities.Amenities) error); ok {
-		r1 = rf(id, UpdateAmenities)
+		r1 = rf(RoomID, UpdateAmenities)
 	} else {
 		r1 = ret.Error(1)
 	}

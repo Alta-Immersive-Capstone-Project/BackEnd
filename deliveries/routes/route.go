@@ -43,12 +43,11 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 	facility.PUT("/:id", f.UpdateFacility(), middlewares.JWTMiddleware())
 	facility.DELETE("/:id", f.DeleteFacility(), middlewares.JWTMiddleware())
 
-	amenities := e.Group("/amenities")
+	amenities := e.Group("/room/:id/amenities")
 	amenities.POST("", a.CreateAmenities(), middlewares.JWTMiddleware())
-	amenities.GET("", a.GetAllAmenities())
-	amenities.GET("/:id", a.GetAmenitiesID())
-	amenities.PUT("/:id", a.UpdateAmenities(), middlewares.JWTMiddleware())
-	amenities.DELETE("/:id", a.DeleteAmenities(), middlewares.JWTMiddleware())
+	amenities.GET("", a.GetAmenitiesID())
+	amenities.PUT("", a.UpdateAmenities(), middlewares.JWTMiddleware())
+	amenities.DELETE("", a.DeleteAmenities(), middlewares.JWTMiddleware())
 
 	district := e.Group("/districts")
 	district.POST("", d.Store(), middlewares.JWTMiddleware())

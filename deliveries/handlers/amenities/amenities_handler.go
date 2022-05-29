@@ -33,14 +33,20 @@ func (h *HandlersAmenities) CreateAmenities() echo.HandlerFunc {
 		if Role == "consultant" || Role == "customer" {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
+		id := c.Param("id")
+		RoomID, err := strconv.Atoi(id)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+		}
 
 		var Insert entities.AddAmenities
-		err := c.Bind(&Insert)
+		err = c.Bind(&Insert)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
-
+		Insert.RoomID = uint(RoomID)
 		err = h.valid.Validation(&Insert)
 		if err != nil {
 			log.Warn(err)
@@ -56,35 +62,17 @@ func (h *HandlersAmenities) CreateAmenities() echo.HandlerFunc {
 	}
 }
 
-// Respond Get All Amenities
-func (h *HandlersAmenities) GetAllAmenities() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		id := c.QueryParam("house_id")
-		RoomID, err := strconv.Atoi(id)
-		if err != nil {
-			log.Warn(err)
-			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
-		}
-		result, err := h.service.GetAllAmenities(uint(RoomID))
-		if err != nil {
-			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
-		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Amenities", result))
-	}
-}
-
 // Respond Get Amenities ID
 func (h *HandlersAmenities) GetAmenitiesID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		id := c.Param("id")
-		amenitiesID, err := strconv.Atoi(id)
+		RoomID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
-		result, err := h.service.GetAmenitiesID(uint(amenitiesID))
+		result, err := h.service.GetAmenitiesID(uint(RoomID))
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
@@ -102,7 +90,7 @@ func (h *HandlersAmenities) UpdateAmenities() echo.HandlerFunc {
 		}
 
 		id := c.Param("id")
-		amenitiesID, err := strconv.Atoi(id)
+		RoomID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
@@ -112,7 +100,7 @@ func (h *HandlersAmenities) UpdateAmenities() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
-		result, err := h.service.UpdateAmenities(uint(amenitiesID), update)
+		result, err := h.service.UpdateAmenities(uint(RoomID), update)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
@@ -130,14 +118,14 @@ func (h *HandlersAmenities) DeleteAmenities() echo.HandlerFunc {
 		}
 
 		id := c.Param("id")
-		amenitiesID, err := strconv.Atoi(id)
+		RoomID, err := strconv.Atoi(id)
 
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
-		errDelete := h.service.DeleteAmenities(uint(amenitiesID))
+		errDelete := h.service.DeleteAmenities(uint(RoomID))
 		if errDelete != nil {
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
