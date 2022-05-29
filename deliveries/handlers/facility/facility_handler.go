@@ -3,22 +3,22 @@ package handlers
 import (
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
+	validation "kost/deliveries/validations"
 	"kost/entities"
 	"kost/services/facility"
 	"net/http"
 	"strconv"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
 
 type HandlersFacility struct {
 	service facility.FacilityControl
-	valid   *validator.Validate
+	valid   validation.Validation
 }
 
-func NewHandlersFacility(Service facility.FacilityControl, Valid *validator.Validate) *HandlersFacility {
+func NewHandlersFacility(Service facility.FacilityControl, Valid validation.Validation) *HandlersFacility {
 	return &HandlersFacility{
 		service: Service,
 		valid:   Valid,
@@ -38,13 +38,13 @@ func (h *HandlersFacility) CreateFacility() echo.HandlerFunc {
 		err := c.Bind(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
-		err = h.valid.Struct(&Insert)
+		err = h.valid.Validation(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		result, err := h.service.CreateFacility(Insert)
@@ -63,7 +63,7 @@ func (h *HandlersFacility) GetAllFacility() echo.HandlerFunc {
 		HouseID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := h.service.GetAllFacility(uint(HouseID))
 		if err != nil {
@@ -82,7 +82,7 @@ func (h *HandlersFacility) GetFacilityID() echo.HandlerFunc {
 		facilityID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := h.service.GetFacilityID(uint(facilityID))
 		if err != nil {
@@ -105,11 +105,11 @@ func (h *HandlersFacility) UpdateFacility() echo.HandlerFunc {
 		facilityID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		var update entities.UpdateFacility
 		if err := c.Bind(&update); err != nil {
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		result, err := h.service.UpdateFacility(uint(facilityID), update)
@@ -134,7 +134,7 @@ func (h *HandlersFacility) DeleteFacility() echo.HandlerFunc {
 
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		errDelete := h.service.DeleteFacility(uint(facilityID))

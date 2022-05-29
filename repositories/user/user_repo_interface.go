@@ -7,5 +7,5 @@ type UserRepositoryInterface interface {
 	GetUserID(id int) (entities.User, error)
 	UpdateUser(id int, user entities.User) (entities.User, error)
 	DeleteUser(id int) error
-	FindByUser(field string, value string) (entities.User, error)
+	FindByUser(value string) (entities.User, error)
 }

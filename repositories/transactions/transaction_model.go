@@ -16,11 +16,11 @@ func NewTransactionModel(db *gorm.DB) *transactionModel {
 	}
 }
 
-func (m *transactionModel) Create(transaction *entities.Transaction) (*entities.Transaction, error) {
+func (m *transactionModel) Create(transaction entities.Transaction) (entities.Transaction, error) {
 	record := m.db.Create(&transaction)
 
 	if record.RowsAffected == 0 {
-		return &entities.Transaction{}, record.Error
+		return entities.Transaction{}, record.Error
 	}
 
 	return transaction, nil
@@ -54,11 +54,11 @@ func (m *transactionModel) GetAllbyConsultant() []entities.Transaction {
 	return transactions
 }
 
-func (m *transactionModel) Update(booking_id string, transaction *entities.Transaction) (*entities.Transaction, error) {
+func (m *transactionModel) Update(booking_id string, transaction entities.Transaction) (entities.Transaction, error) {
 	record := m.db.Where("booking_id = ?", booking_id).Updates(&transaction)
 
 	if record.RowsAffected == 0 {
-		return &entities.Transaction{}, record.Error
+		return entities.Transaction{}, record.Error
 	}
 
 	return transaction, nil

@@ -2,28 +2,31 @@ package handlers
 
 import (
 	"kost/deliveries/helpers"
+	validation "kost/deliveries/validations"
 	"strconv"
 
 	middleware "kost/deliveries/middlewares"
 	"kost/entities"
-	"kost/entities/web"
 	storageProvider "kost/services/storage"
 	userService "kost/services/user"
 	"mime/multipart"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type UserHandler struct {
 	userService     userService.UserServiceInterface
 	storageProvider storageProvider.StorageInterface
+	valid           validation.Validation
 }
 
-func NewUserHandler(service userService.UserServiceInterface, storageProvider storageProvider.StorageInterface) *UserHandler {
+func NewUserHandler(service userService.UserServiceInterface, storageProvider storageProvider.StorageInterface, Valid validation.Validation) *UserHandler {
 	return &UserHandler{
 		userService:     service,
 		storageProvider: storageProvider,
+		valid:           Valid,
 	}
 }
 
@@ -36,18 +39,23 @@ func NewUserHandler(service userService.UserServiceInterface, storageProvider st
 func (handler *UserHandler) CreateInternal(c echo.Context) error {
 
 	// Bind request ke user request
-	userReq := entities.CreateUserRequest{}
-	c.Bind(&userReq)
+	var userReq entities.CreateUserRequest
+	err := c.Bind(&userReq)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+	}
 
+	err = handler.valid.Validation(userReq)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+	}
 	token := c.Get("user")
 	_, role, err := middleware.ReadToken(token)
 
 	if err != nil || role != "admin" {
-		return c.JSON(http.StatusUnauthorized, web.ErrorResponse{
-			Code:   http.StatusUnauthorized,
-			Status: "ERROR",
-			Error:  "unauthorized",
-		})
+		return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 	}
 
 	// Read files
@@ -60,23 +68,28 @@ func (handler *UserHandler) CreateInternal(c echo.Context) error {
 	// registrasi user via call user service
 	userRes, err := handler.userService.CreateUser(userReq, files, handler.storageProvider)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// response
-	return c.JSON(http.StatusCreated, web.SuccessResponse{
-		Status: "OK",
-		Code:   http.StatusCreated,
-		Error:  nil,
-		Data:   userRes,
-	})
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+userRes.User.Role, userRes))
 }
 
 func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 
 	// Bind request ke user request
-	userReq := entities.CreateUserRequest{}
-	c.Bind(&userReq)
+	var userReq entities.CreateUserRequest
+	err := c.Bind(&userReq)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+	}
+
+	err = handler.valid.Validation(userReq)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+	}
 
 	// Read files
 	files := map[string]*multipart.FileHeader{}
@@ -88,16 +101,11 @@ func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 	// registrasi user via call user service
 	userRes, err := handler.userService.CreateUser(userReq, files, handler.storageProvider)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// response
-	return c.JSON(http.StatusCreated, web.SuccessResponse{
-		Status: "OK",
-		Code:   http.StatusCreated,
-		Error:  nil,
-		Data:   userRes,
-	})
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+userRes.User.Role, userRes))
 }
 
 func (handler *UserHandler) UpdateInternal(c echo.Context) error {
@@ -112,11 +120,7 @@ func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 	_, role, err := middleware.ReadToken(token)
 
 	if err != nil || role != "admin" {
-		return c.JSON(http.StatusUnauthorized, web.ErrorResponse{
-			Code:   http.StatusUnauthorized,
-			Status: "ERROR",
-			Error:  "unauthorized",
-		})
+		return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 	}
 
 	files := map[string]*multipart.FileHeader{}
@@ -128,16 +132,11 @@ func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 	// Update via user service call
 	userRes, err := handler.userService.UpdateInternal(userReq, id, files, handler.storageProvider)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// response
-	return c.JSON(200, web.SuccessResponse{
-		Status: "OK",
-		Code:   200,
-		Error:  nil,
-		Data:   userRes,
-	})
+	return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update "+userRes.Role, userRes))
 }
 
 func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
@@ -153,11 +152,7 @@ func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
 	idToken, role, err := middleware.ReadToken(token)
 
 	if id != idToken || role != "customer" || err != nil {
-		return c.JSON(http.StatusUnauthorized, web.ErrorResponse{
-			Code:   http.StatusUnauthorized,
-			Status: "ERROR",
-			Error:  "unauthorized",
-		})
+		return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 	}
 
 	files := map[string]*multipart.FileHeader{}
@@ -169,16 +164,11 @@ func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
 	// Update via user service call
 	userRes, err := handler.userService.UpdateCustomer(userReq, id, files, handler.storageProvider)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// response
-	return c.JSON(200, web.SuccessResponse{
-		Status: "OK",
-		Code:   200,
-		Error:  nil,
-		Data:   userRes,
-	})
+	return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Customer", userRes))
 }
 
 func (handler *UserHandler) DeleteInternal(c echo.Context) error {
@@ -188,29 +178,17 @@ func (handler *UserHandler) DeleteInternal(c echo.Context) error {
 	_, role, err := middleware.ReadToken(token)
 
 	if err != nil || role != "admin" {
-		return c.JSON(http.StatusUnauthorized, web.ErrorResponse{
-			Code:   http.StatusUnauthorized,
-			Status: "ERROR",
-			Error:  "unauthorized",
-		})
+		return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 	}
 
 	// call delete service
 	err = handler.userService.DeleteInternal(id, handler.storageProvider)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// response
-	return c.JSON(200, web.SuccessResponse{
-		Status: "OK",
-		Code:   200,
-		Error:  nil,
-
-		Data: map[string]interface{}{
-			"id": id,
-		},
-	})
+	return c.JSON(http.StatusOK, helpers.StatusDelete())
 }
 
 func (handler *UserHandler) DeleteCustomer(c echo.Context) error {
@@ -219,27 +197,16 @@ func (handler *UserHandler) DeleteCustomer(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	idToken, role, err := middleware.ReadToken(token)
 	if id != idToken || role != "customer" || err != nil {
-		return c.JSON(http.StatusUnauthorized, web.ErrorResponse{
-			Code:   http.StatusUnauthorized,
-			Status: "ERROR",
-			Error:  "unauthorized",
-		})
+		return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 	}
 
 	// call delete service
 	err = handler.userService.DeleteCustomer(id, handler.storageProvider)
 	if err != nil {
-		return helpers.WebErrorResponse(c, err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	// response
-	return c.JSON(200, web.SuccessResponse{
-		Status: "OK",
-		Code:   200,
-		Error:  nil,
+	return c.JSON(http.StatusOK, helpers.StatusDelete())
 
-		Data: map[string]interface{}{
-			"id": id,
-		},
-	})
 }

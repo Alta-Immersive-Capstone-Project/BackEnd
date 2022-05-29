@@ -96,10 +96,10 @@ func main() {
 	houseService := houseServices.NewHouseService(houseRepo)
 
 	// Handlers
-	authHandler := handlers.NewAuthHandler(authService)
-	userHandler := userHandlers.NewUserHandler(userService, s3)
-	facilityHandler := facilityHandlers.NewHandlersFacility(facilityService, validator.New())
-	amenitiesHandler := amenitiesHandlers.NewHandlersAmenities(amenitiesService, validator.New())
+	authHandler := handlers.NewAuthHandler(authService, validation)
+	userHandler := userHandlers.NewUserHandler(userService, s3, validation)
+	facilityHandler := facilityHandlers.NewHandlersFacility(facilityService, validation)
+	amenitiesHandler := amenitiesHandlers.NewHandlersAmenities(amenitiesService, validation)
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
 	cityHandler := cityHandlers.NewHandlersCity(cityService, validator.New())

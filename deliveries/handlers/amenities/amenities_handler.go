@@ -3,22 +3,22 @@ package handlers
 import (
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
+	validation "kost/deliveries/validations"
 	"kost/entities"
 	"kost/services/amenities"
 	"net/http"
 	"strconv"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
 
 type HandlersAmenities struct {
 	service amenities.AmenitiesControl
-	valid   *validator.Validate
+	valid   validation.Validation
 }
 
-func NewHandlersAmenities(Service amenities.AmenitiesControl, Valid *validator.Validate) *HandlersAmenities {
+func NewHandlersAmenities(Service amenities.AmenitiesControl, Valid validation.Validation) *HandlersAmenities {
 	return &HandlersAmenities{
 		service: Service,
 		valid:   Valid,
@@ -38,13 +38,13 @@ func (h *HandlersAmenities) CreateAmenities() echo.HandlerFunc {
 		err := c.Bind(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
-		err = h.valid.Struct(&Insert)
+		err = h.valid.Validation(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		result, err := h.service.CreateAmenities(Insert)
@@ -63,7 +63,7 @@ func (h *HandlersAmenities) GetAllAmenities() echo.HandlerFunc {
 		RoomID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := h.service.GetAllAmenities(uint(RoomID))
 		if err != nil {
@@ -82,7 +82,7 @@ func (h *HandlersAmenities) GetAmenitiesID() echo.HandlerFunc {
 		amenitiesID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := h.service.GetAmenitiesID(uint(amenitiesID))
 		if err != nil {
@@ -105,11 +105,11 @@ func (h *HandlersAmenities) UpdateAmenities() echo.HandlerFunc {
 		amenitiesID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		var update entities.UpdateAmenities
 		if err := c.Bind(&update); err != nil {
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		result, err := h.service.UpdateAmenities(uint(amenitiesID), update)
@@ -134,7 +134,7 @@ func (h *HandlersAmenities) DeleteAmenities() echo.HandlerFunc {
 
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		errDelete := h.service.DeleteAmenities(uint(amenitiesID))

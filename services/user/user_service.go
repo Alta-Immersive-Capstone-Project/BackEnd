@@ -3,9 +3,7 @@ package user
 import (
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
-	"kost/deliveries/validations"
 	"kost/entities"
-	web "kost/entities/web"
 	userRepository "kost/repositories/user"
 	storageProvider "kost/services/storage"
 	"mime/multipart"
@@ -31,12 +29,6 @@ func NewUserService(repository userRepository.UserRepositoryInterface, valid *va
 
 func (us *UserService) CreateUser(internalRequest entities.CreateUserRequest, files map[string]*multipart.FileHeader, storageProvider storageProvider.StorageInterface) (entities.InternalAuthResponse, error) {
 
-	// Validation
-	err := validations.ValidateCreateUserRequest(us.validate, internalRequest, files)
-	if err != nil {
-		return entities.InternalAuthResponse{}, err
-	}
-
 	// Konversi user request menjadi domain untuk diteruskan ke repository
 	user := entities.User{}
 	copier.Copy(&user, &internalRequest)
@@ -52,7 +44,7 @@ func (us *UserService) CreateUser(internalRequest entities.CreateUserRequest, fi
 			filename := uuid.New().String() + file.Filename
 			fileURL, err := storageProvider.UploadFromRequest("users/avatar/"+filename, file)
 			if err != nil {
-				return entities.InternalAuthResponse{}, web.WebError{Code: 500, ProductionMessage: "server error", DevelopmentMessage: "Cannot upload file image"}
+				return entities.InternalAuthResponse{}, err
 			}
 			user.Avatar = fileURL
 		}
@@ -62,7 +54,7 @@ func (us *UserService) CreateUser(internalRequest entities.CreateUserRequest, fi
 		user.Role = "customer"
 	}
 	// Insert ke sistem melewati repository
-	user, err = us.userRepo.InsertUser(user)
+	user, err := us.userRepo.InsertUser(user)
 	if err != nil {
 		return entities.InternalAuthResponse{}, err
 	}
@@ -114,16 +106,10 @@ func (us *UserService) GetInternal(id int) (entities.InternalResponse, error) {
 
 func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalRequest, id int, files map[string]*multipart.FileHeader, storageProvider storageProvider.StorageInterface) (entities.InternalResponse, error) {
 
-	// validation
-	err := validations.ValidateUpdateUserRequest(files)
-	if err != nil {
-		return entities.InternalResponse{}, err
-	}
-
 	// Get user by ID via repository
 	user, err := us.userRepo.GetUserID(id)
 	if err != nil {
-		return entities.InternalResponse{}, web.WebError{Code: 400, ProductionMessage: "server error", DevelopmentMessage: "The requested ID doesn't match with any record"}
+		return entities.InternalResponse{}, err
 	}
 	// Avatar
 	for field, file := range files {
@@ -140,7 +126,7 @@ func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalReq
 			filename := uuid.New().String() + file.Filename
 			fileURL, err := storageProvider.UploadFromRequest("users/avatar/"+filename, file)
 			if err != nil {
-				return entities.InternalResponse{}, web.WebError{Code: 500, ProductionMessage: "server error", DevelopmentMessage: err.Error()}
+				return entities.InternalResponse{}, err
 			}
 			user.Avatar = fileURL
 		}
@@ -166,16 +152,10 @@ func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalReq
 
 func (us *UserService) UpdateCustomer(customerRequest entities.UpdateCustomerRequest, id int, files map[string]*multipart.FileHeader, storage storageProvider.StorageInterface) (entities.CustomerResponse, error) {
 
-	// validation
-	err := validations.ValidateUpdateUserRequest(files)
-	if err != nil {
-		return entities.CustomerResponse{}, err
-	}
-
 	// Get user by ID via repository
 	user, err := us.userRepo.GetUserID(id)
 	if err != nil || user.Role != "customer" {
-		return entities.CustomerResponse{}, web.WebError{Code: 400, ProductionMessage: "server error", DevelopmentMessage: "The requested ID doesn't match with any record"}
+		return entities.CustomerResponse{}, err
 	}
 	// Avatar
 	for field, file := range files {
@@ -192,7 +172,7 @@ func (us *UserService) UpdateCustomer(customerRequest entities.UpdateCustomerReq
 			filename := uuid.New().String() + file.Filename
 			fileURL, err := storage.UploadFromRequest("users/avatar/"+filename, file)
 			if err != nil {
-				return entities.CustomerResponse{}, web.WebError{Code: 500, ProductionMessage: "server error", DevelopmentMessage: err.Error()}
+				return entities.CustomerResponse{}, err
 			}
 			user.Avatar = fileURL
 		}
@@ -221,7 +201,7 @@ func (us *UserService) DeleteInternal(id int, storage storageProvider.StorageInt
 	// Cari user berdasarkan ID via repo
 	user, err := us.userRepo.GetUserID(id)
 	if err != nil || user.Role == "customer" {
-		return web.WebError{Code: 400, ProductionMessage: "bad request", DevelopmentMessage: "The request ID has been deleted or not exist"}
+		return err
 	}
 
 	// Delete avatar lama jika ada yang baru
@@ -242,7 +222,7 @@ func (us *UserService) DeleteCustomer(id int, storage storageProvider.StorageInt
 	// Cari user berdasarkan ID via repo
 	user, err := us.userRepo.GetUserID(id)
 	if err != nil || user.Role != "customer" {
-		return web.WebError{Code: 400, ProductionMessage: "bad request", DevelopmentMessage: "The request ID has been deleted or not exist"}
+		return err
 	}
 
 	// Delete avatar lama jika ada yang baru

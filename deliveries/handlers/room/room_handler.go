@@ -38,13 +38,13 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 		err := c.Bind(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		err = h.valid.Struct(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		result, err := h.service.CreateRoom(uint(id), Insert)
@@ -71,7 +71,7 @@ func (h *HandlersRoom) GetIDRoom() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		result, err := h.service.GetIDRoom(uint(id))
@@ -94,11 +94,11 @@ func (h *HandlersRoom) UpdateRoom() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		var update entities.UpdateRoom
 		if err := c.Bind(&update); err != nil {
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		result, err := h.service.UpdateRoom(uint(id), update)
@@ -121,7 +121,7 @@ func (h *HandlersRoom) DeleteRoom() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		err = h.service.DeleteRoom(uint(id))

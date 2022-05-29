@@ -17,10 +17,10 @@ import (
 )
 
 func UserRoute(e *echo.Echo, u user.HandleUser) {
-	internalGroup := e.Group("/internal")
-	internalGroup.POST("/user", u.CreateInternal, middlewares.JWTMiddleware())
-	internalGroup.DELETE("/user/:id", u.DeleteInternal, middlewares.JWTMiddleware())
-	internalGroup.PUT("/user/:id", u.UpdateInternal, middlewares.JWTMiddleware())
+	internalGroup := e.Group("/admin")
+	internalGroup.POST("", u.CreateInternal, middlewares.JWTMiddleware())
+	internalGroup.DELETE("/:id", u.DeleteInternal, middlewares.JWTMiddleware())
+	internalGroup.PUT("/:id", u.UpdateInternal, middlewares.JWTMiddleware())
 
 	customerGroup := e.Group("/customer")
 
@@ -38,7 +38,7 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
-	facility.GET("", f.GetAllFacility())
+	e.GET("/houses/:id/facilities", f.GetAllFacility())
 	facility.GET("/:id", f.GetFacilityID())
 	facility.PUT("/:id", f.UpdateFacility(), middlewares.JWTMiddleware())
 	facility.DELETE("/:id", f.DeleteFacility(), middlewares.JWTMiddleware())
@@ -73,7 +73,7 @@ func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
 	facility.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
 }
 func CityPath(e *echo.Echo, C *city.HandlersCity) {
-	facility := e.Group("/city")
+	facility := e.Group("/cities")
 	facility.POST("", C.CreateCity(), middlewares.JWTMiddleware())
 	facility.GET("", C.GetAllCity())
 	facility.GET("/:id", C.GetIDCity())
