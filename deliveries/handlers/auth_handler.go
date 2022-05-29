@@ -2,33 +2,45 @@ package handlers
 
 import (
 	"kost/deliveries/helpers"
+	validation "kost/deliveries/validations"
 	"kost/entities"
 	authService "kost/services/auth"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type AuthHandler struct {
 	authService *authService.AuthService
+	valid       validation.Validation
 }
 
-func NewAuthHandler(service *authService.AuthService) *AuthHandler {
+func NewAuthHandler(service *authService.AuthService, Valid validation.Validation) *AuthHandler {
 	return &AuthHandler{
 		authService: service,
+		valid:       Valid,
 	}
 }
 
 func (handler AuthHandler) Login(c echo.Context) error {
 	// Populate request input
-	authReq := entities.AuthRequest{
-		Email:    c.FormValue("email"),
-		Password: c.FormValue("password"),
+	var userReq entities.AuthRequest
+	err := c.Bind(&userReq)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+	}
+
+	err = handler.valid.Validation(userReq)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
 	// define link hateoas
 	// call auth service login
-	authRes, err := handler.authService.Login(authReq)
+	authRes, err := handler.authService.Login(userReq)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}

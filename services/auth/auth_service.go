@@ -24,17 +24,17 @@ func NewAuthService(userRepo userRepository.UserRepositoryInterface) *AuthServic
  * -------------------------------
  * Mencari user berdasarkan ID
  */
-func (as AuthService) Login(authReq entities.AuthRequest) (interface{}, error) {
+func (as AuthService) Login(authReq entities.AuthRequest) (string, error) {
 
 	// Get user by username via repository
 	user, err := as.userRepo.FindByUser("email", authReq.Email)
 	if err != nil {
-		return entities.CustomerAuthResponse{}, err
+		return "", err
 	}
 
 	// Verify password
 	if !helpers.CheckPasswordHash(authReq.Password, user.Password) {
-		return entities.CustomerAuthResponse{}, err
+		return "", err
 	}
 
 	if user.Role != "customer" {
@@ -45,9 +45,8 @@ func (as AuthService) Login(authReq entities.AuthRequest) (interface{}, error) {
 		// Create token
 		token, err := middleware.CreateToken(int(userRes.ID), userRes.Name, userRes.Role)
 		if err != nil {
-			return entities.InternalAuthResponse{}, err
+			return "", err
 		}
-
 		return token, nil
 	}
 
@@ -58,7 +57,7 @@ func (as AuthService) Login(authReq entities.AuthRequest) (interface{}, error) {
 	// Create token
 	token, err := middleware.CreateToken(int(userRes.ID), userRes.Name, "customer")
 	if err != nil {
-		return entities.CustomerAuthResponse{}, err
+		return "", err
 	}
 
 	return token, nil

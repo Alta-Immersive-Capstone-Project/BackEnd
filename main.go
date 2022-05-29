@@ -96,7 +96,7 @@ func main() {
 	houseService := houseServices.NewHouseService(houseRepo)
 
 	// Handlers
-	authHandler := handlers.NewAuthHandler(authService)
+	authHandler := handlers.NewAuthHandler(authService, validation)
 	userHandler := userHandlers.NewUserHandler(userService, s3, validation)
 	facilityHandler := facilityHandlers.NewHandlersFacility(facilityService, validation)
 	amenitiesHandler := amenitiesHandlers.NewHandlersAmenities(amenitiesService, validation)
