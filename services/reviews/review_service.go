@@ -17,7 +17,7 @@ func NewReviewService(rm repo.ReviewModel) *reviewService {
 	}
 }
 
-func (rs *reviewService) AddComment(customer_id uint, request *entities.ReviewRequest) (entities.ReviewResponse, error) {
+func (rs *reviewService) AddComment(customer_id uint, request entities.ReviewRequest) (entities.ReviewResponse, error) {
 	var response entities.ReviewResponse
 
 	review := entities.Review{
@@ -27,7 +27,7 @@ func (rs *reviewService) AddComment(customer_id uint, request *entities.ReviewRe
 		UserID:  customer_id,
 	}
 
-	result, err := rs.rm.Create(&review)
+	result, err := rs.rm.Create(review)
 	if err != nil {
 		return entities.ReviewResponse{}, err
 	}

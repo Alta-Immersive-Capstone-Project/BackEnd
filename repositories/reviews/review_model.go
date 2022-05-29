@@ -16,11 +16,11 @@ func NewReviewModel(db *gorm.DB) *reviewModel {
 	}
 }
 
-func (m *reviewModel) Create(review *entities.Review) (*entities.Review, error) {
+func (m *reviewModel) Create(review entities.Review) (entities.Review, error) {
 	record := m.db.Create(&review)
 
 	if record.RowsAffected == 0 {
-		return &entities.Review{}, record.Error
+		return entities.Review{}, record.Error
 	}
 
 	return review, nil

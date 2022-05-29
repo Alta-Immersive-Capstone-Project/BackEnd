@@ -39,9 +39,9 @@ func (rh *reviewHandler) InsertComment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	response, err := rh.rs.AddComment(user_id, &request)
+	response, err := rh.rs.AddComment(user_id, request)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 
 	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Comment", response))
