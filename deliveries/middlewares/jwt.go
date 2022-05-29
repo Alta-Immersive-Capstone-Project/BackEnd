@@ -55,6 +55,16 @@ func ExtractTokenRole(e echo.Context) string {
 	}
 	return ""
 }
+func ExtractTokenRoleID(e echo.Context) (float64, string) {
+	role := e.Get("user").(*jwt.Token)
+	if role.Valid {
+		claims := role.Claims.(jwt.MapClaims)
+		userId := claims["id"].(float64)
+		role := claims["role"].(string)
+		return userId, role
+	}
+	return 0, ""
+}
 
 func ExtractTokenName(e echo.Context) string {
 	name := e.Get("user").(*jwt.Token)

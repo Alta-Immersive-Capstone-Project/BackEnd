@@ -1,7 +1,13 @@
 package validations
 
 import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -31,5 +37,24 @@ func (v *validation) Validation(request interface{}) error {
 		return err
 	}
 
+	return nil
+}
+func validationImage(files []*multipart.FileHeader) error {
+	for i, file := range files {
+		if file.Size >= 1000*1000 {
+			return errors.New("max file image 1 MB")
+		}
+		fmt.Println(file.Size)
+		src, err := file.Open()
+		defer src.Close()
+		if err != nil {
+			return err
+		}
+		fileByte, _ := ioutil.ReadAll(src)
+		fileType := http.DetectContentType(fileByte)
+		if fileType != "image/png" {
+			return errors.New("file image " + strconv.Itoa(i+1) + " type not PNG")
+		}
+	}
 	return nil
 }
