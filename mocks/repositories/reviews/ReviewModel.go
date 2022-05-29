@@ -14,20 +14,18 @@ type ReviewModel struct {
 }
 
 // Create provides a mock function with given fields: review
-func (_m *ReviewModel) Create(review *entities.Review) (*entities.Review, error) {
+func (_m *ReviewModel) Create(review entities.Review) (entities.Review, error) {
 	ret := _m.Called(review)
 
-	var r0 *entities.Review
-	if rf, ok := ret.Get(0).(func(*entities.Review) *entities.Review); ok {
+	var r0 entities.Review
+	if rf, ok := ret.Get(0).(func(entities.Review) entities.Review); ok {
 		r0 = rf(review)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.Review)
-		}
+		r0 = ret.Get(0).(entities.Review)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*entities.Review) error); ok {
+	if rf, ok := ret.Get(1).(func(entities.Review) error); ok {
 		r1 = rf(review)
 	} else {
 		r1 = ret.Error(1)

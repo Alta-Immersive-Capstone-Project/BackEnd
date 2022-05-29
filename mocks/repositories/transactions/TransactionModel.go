@@ -14,20 +14,18 @@ type TransactionModel struct {
 }
 
 // Create provides a mock function with given fields: transaction
-func (_m *TransactionModel) Create(transaction *entities.Transaction) (*entities.Transaction, error) {
+func (_m *TransactionModel) Create(transaction entities.Transaction) (entities.Transaction, error) {
 	ret := _m.Called(transaction)
 
-	var r0 *entities.Transaction
-	if rf, ok := ret.Get(0).(func(*entities.Transaction) *entities.Transaction); ok {
+	var r0 entities.Transaction
+	if rf, ok := ret.Get(0).(func(entities.Transaction) entities.Transaction); ok {
 		r0 = rf(transaction)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.Transaction)
-		}
+		r0 = ret.Get(0).(entities.Transaction)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*entities.Transaction) error); ok {
+	if rf, ok := ret.Get(1).(func(entities.Transaction) error); ok {
 		r1 = rf(transaction)
 	} else {
 		r1 = ret.Error(1)
@@ -90,20 +88,18 @@ func (_m *TransactionModel) GetAllbyCustomer(customer_id uint, status string) []
 }
 
 // Update provides a mock function with given fields: booking_id, transaction
-func (_m *TransactionModel) Update(booking_id string, transaction *entities.Transaction) (*entities.Transaction, error) {
+func (_m *TransactionModel) Update(booking_id string, transaction entities.Transaction) (entities.Transaction, error) {
 	ret := _m.Called(booking_id, transaction)
 
-	var r0 *entities.Transaction
-	if rf, ok := ret.Get(0).(func(string, *entities.Transaction) *entities.Transaction); ok {
+	var r0 entities.Transaction
+	if rf, ok := ret.Get(0).(func(string, entities.Transaction) entities.Transaction); ok {
 		r0 = rf(booking_id, transaction)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entities.Transaction)
-		}
+		r0 = ret.Get(0).(entities.Transaction)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, *entities.Transaction) error); ok {
+	if rf, ok := ret.Get(1).(func(string, entities.Transaction) error); ok {
 		r1 = rf(booking_id, transaction)
 	} else {
 		r1 = ret.Error(1)

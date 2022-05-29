@@ -14,18 +14,18 @@ type ReviewService struct {
 }
 
 // AddComment provides a mock function with given fields: customer_id, request
-func (_m *ReviewService) AddComment(customer_id uint, request *entities.ReviewRequest) (entities.ReviewResponse, error) {
+func (_m *ReviewService) AddComment(customer_id uint, request entities.ReviewRequest) (entities.ReviewResponse, error) {
 	ret := _m.Called(customer_id, request)
 
 	var r0 entities.ReviewResponse
-	if rf, ok := ret.Get(0).(func(uint, *entities.ReviewRequest) entities.ReviewResponse); ok {
+	if rf, ok := ret.Get(0).(func(uint, entities.ReviewRequest) entities.ReviewResponse); ok {
 		r0 = rf(customer_id, request)
 	} else {
 		r0 = ret.Get(0).(entities.ReviewResponse)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uint, *entities.ReviewRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(uint, entities.ReviewRequest) error); ok {
 		r1 = rf(customer_id, request)
 	} else {
 		r1 = ret.Error(1)

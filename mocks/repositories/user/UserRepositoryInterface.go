@@ -27,20 +27,20 @@ func (_m *UserRepositoryInterface) DeleteUser(id int) error {
 	return r0
 }
 
-// FindByUser provides a mock function with given fields: field, value
-func (_m *UserRepositoryInterface) FindByUser(field string, value string) (entities.User, error) {
-	ret := _m.Called(field, value)
+// FindByUser provides a mock function with given fields: value
+func (_m *UserRepositoryInterface) FindByUser(value string) (entities.User, error) {
+	ret := _m.Called(value)
 
 	var r0 entities.User
-	if rf, ok := ret.Get(0).(func(string, string) entities.User); ok {
-		r0 = rf(field, value)
+	if rf, ok := ret.Get(0).(func(string) entities.User); ok {
+		r0 = rf(value)
 	} else {
 		r0 = ret.Get(0).(entities.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, string) error); ok {
-		r1 = rf(field, value)
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(value)
 	} else {
 		r1 = ret.Error(1)
 	}
