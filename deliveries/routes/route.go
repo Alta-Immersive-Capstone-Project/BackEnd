@@ -2,10 +2,13 @@ package routes
 
 import (
 	"kost/deliveries/handlers"
+	dh "kost/deliveries/handlers/district"
+	hh "kost/deliveries/handlers/house"
+	rh "kost/deliveries/handlers/reviews"
+	th "kost/deliveries/handlers/transactions"
 	"kost/deliveries/middlewares"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func UserRoute(e *echo.Echo, u *handlers.UserHandler) {
@@ -26,13 +29,9 @@ func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 
 }
 
-func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenities) {
+func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenities, d dh.IDistrictHandler, h hh.IHouseHandler) {
 
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.Logger())
-	e.Use(middleware.CORS())
-
-	facility := e.Group("/facility")
+	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
 	facility.GET("", f.GetAllFacility())
 	facility.GET("/:id", f.GetFacilityID())
@@ -45,4 +44,36 @@ func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenit
 	amenities.GET("/:id", a.GetAmenitiesID())
 	amenities.PUT("/:id", a.UpdateAmenities(), middlewares.JWTMiddleware())
 	amenities.DELETE("/:id", a.DeleteAmenities(), middlewares.JWTMiddleware())
+
+	district := e.Group("/districts")
+	district.POST("", d.Store(), middlewares.JWTMiddleware())
+	district.GET("/:id", d.Show())
+	e.GET("/cities/:id/districts", d.GetAllByCity())
+	district.PUT("/:id", d.Update(), middlewares.JWTMiddleware())
+	district.DELETE("/:id", d.Delete(), middlewares.JWTMiddleware())
+
+	house := e.Group("/houses")
+	house.POST("", h.Store(), middlewares.JWTMiddleware())
+	house.GET("/:id", h.Show())
+	e.GET("/districts/:id/houses", h.GetAllByDist())
+	house.PUT("/:id", h.Update(), middlewares.JWTMiddleware())
+	house.DELETE("/:id", h.Delete(), middlewares.JWTMiddleware())
+}
+
+func ReviewsPath(e *echo.Echo, rh rh.ReviewHandler) {
+	// Customer
+	e.POST("/reviews", rh.InsertComment, middlewares.JWTMiddleware())
+	e.GET("/reviews/:room_id", rh.GetByRoomID)
+}
+
+func TransactionPath(e *echo.Echo, th th.TransactionHandler) {
+	jwt := e.Group("", middlewares.JWTMiddleware())
+
+	// Customer
+	jwt.POST("/transactions", th.InsertTransaction)
+	jwt.GET("/transactions", th.GetAllTransactionbyCustomer)
+
+	// Admin
+	jwt.GET("/admin/transactions", th.GetAllTransactionbyConsultant)
+	jwt.PUT("/admin/transactions/:booking_id", th.UpdateTransaction)
 }

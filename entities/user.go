@@ -8,13 +8,16 @@ import (
 
 type User struct {
 	gorm.Model
-	Email    string `gorm:"unique"`
-	Name     string
-	Password string
-	Gender   string
-	Phone    string
-	Avatar   string
-	Role     string
+	Email        string `gorm:"unique"`
+	Name         string
+	Password     string
+	Gender       string
+	Phone        string
+	Avatar       string
+	Role         string
+	Rooms        []Room        `gorm:"foreingkey:UserID"`
+	Transactions []Transaction `gorm:"foreingkey:UserID"`
+	Reviews      []Review      `gorm:"foreingkey:UserID"`
 }
 
 type CreateUserRequest struct {
