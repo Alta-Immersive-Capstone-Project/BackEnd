@@ -38,13 +38,13 @@ func (h *HandlersCity) CreateCity() echo.HandlerFunc {
 		err := c.Bind(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		err = h.valid.Struct(&Insert)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		result, err := h.service.CreateCity(Insert)
@@ -71,7 +71,7 @@ func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		result, err := h.service.GetIDCity(uint(id))
@@ -93,11 +93,11 @@ func (h *HandlersCity) UpdateCity() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		var update entities.City
 		if err := c.Bind(&update); err != nil {
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		result, err := h.service.UpdateCity(uint(id), update)
@@ -120,7 +120,7 @@ func (h *HandlersCity) DeleteCity() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		err = h.service.DeleteCity(uint(id))

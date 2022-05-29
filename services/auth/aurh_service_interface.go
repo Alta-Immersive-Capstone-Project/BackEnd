@@ -5,5 +5,5 @@ import (
 )
 
 type AuthServiceInterface interface {
-	Login(AuthReq entities.AuthRequest) (interface{}, error)
+	Login(AuthReq entities.AuthRequest) (string, error)
 }

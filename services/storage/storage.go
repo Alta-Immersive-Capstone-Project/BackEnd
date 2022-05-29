@@ -3,7 +3,6 @@ package storage
 import (
 	"context"
 	"kost/configs"
-	"kost/entities/web"
 	"mime/multipart"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -49,7 +48,7 @@ func NewS3() *S3 {
 func (storage S3) UploadFromRequest(fileNamePath string, file *multipart.FileHeader) (string, error) {
 	fileFile, err := file.Open()
 	if err != nil {
-		return "", web.WebError{Code: 500, Message: "Cannot process the requested file"}
+		return "", err
 	}
 	defer fileFile.Close()
 

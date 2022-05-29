@@ -6,8 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
-
 type Transaction struct {
 	gorm.Model
 	UserID        uint      `gorm:"type:int;not null"`

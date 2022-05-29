@@ -19,7 +19,7 @@ func NewTransactionService(tm repo.TransactionModel) *transactionService {
 	}
 }
 
-func (ts *transactionService) AddTransaction(customer_id uint, request *entities.TransactionRequest) (*entities.TransactionResponse, error) {
+func (ts *transactionService) AddTransaction(customer_id uint, request entities.TransactionRequest) (entities.TransactionResponse, error) {
 	var response entities.TransactionResponse
 
 	transaction := entities.Transaction{
@@ -33,25 +33,25 @@ func (ts *transactionService) AddTransaction(customer_id uint, request *entities
 		Status:        "pending",
 	}
 
-	result, err := ts.tm.Create(&transaction)
+	result, err := ts.tm.Create(transaction)
 	if err != nil {
-		return &entities.TransactionResponse{}, err
+		return entities.TransactionResponse{}, err
 	}
 
 	copier.Copy(&response, &result)
-	return &response, nil
+	return response, nil
 }
 
-func (ts *transactionService) GetTransaction(booking_id string) (*entities.TransactionResponse, error) {
+func (ts *transactionService) GetTransaction(booking_id string) (entities.TransactionResponse, error) {
 	var response entities.TransactionResponse
 
 	result, err := ts.tm.Get(booking_id)
 	if err != nil {
-		return &entities.TransactionResponse{}, err
+		return entities.TransactionResponse{}, err
 	}
 
 	copier.Copy(&response, &result)
-	return &response, nil
+	return response, nil
 }
 
 func (ts *transactionService) GetAllTransactionbyCustomer(customer_id uint, status string) []entities.TransactionResponse {
@@ -82,7 +82,7 @@ func (ts *transactionService) GetAllTransactionbyConsultant() []entities.Transac
 	return response
 }
 
-func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request *entities.TransactionUpdateRequest) (*entities.TransactionUpdateResponse, error) {
+func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
 	var response entities.TransactionUpdateResponse
 
 	transaction := entities.Transaction{
@@ -90,11 +90,11 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 		TotalBill:    request.TotalBill,
 	}
 
-	result, err := ts.tm.Update(booking_id, &transaction)
+	result, err := ts.tm.Update(booking_id, transaction)
 	if err != nil {
-		return &entities.TransactionUpdateResponse{}, err
+		return entities.TransactionUpdateResponse{}, err
 	}
 
 	copier.Copy(&response, &result)
-	return &response, nil
+	return response, nil
 }

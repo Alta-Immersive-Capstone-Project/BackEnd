@@ -38,13 +38,13 @@ func (dh *DistrictHandler) Store() echo.HandlerFunc {
 		err := c.Bind(&request)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		err = dh.Valid.Validation(request)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		result, err := dh.Service.CreateDist(request)
@@ -67,11 +67,11 @@ func (dh *DistrictHandler) Update() echo.HandlerFunc {
 		districtID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		var update entities.UpdateDistrict
 		if err := c.Bind(&update); err != nil {
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		result, err := dh.Service.UpdateDist(uint(districtID), update)
@@ -94,7 +94,7 @@ func (dh *DistrictHandler) Delete() echo.HandlerFunc {
 
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		errDelete := dh.Service.DeleteDist(uint(districtID))
@@ -110,7 +110,7 @@ func (dh *DistrictHandler) GetAllByCity() echo.HandlerFunc {
 		CityID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := dh.Service.GetAllDist(uint(CityID))
 		if err != nil {
@@ -128,7 +128,7 @@ func (dh *DistrictHandler) Show() echo.HandlerFunc {
 		districtID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := dh.Service.GetDistID(uint(districtID))
 		if err != nil {

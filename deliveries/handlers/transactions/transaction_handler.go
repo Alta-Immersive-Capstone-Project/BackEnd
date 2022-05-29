@@ -37,12 +37,12 @@ func (th *transactionHandler) InsertTransaction(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	response, err := th.ts.AddTransaction(user_id, &request)
+	response, err := th.ts.AddTransaction(user_id, request)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	return c.JSON(http.StatusCreated, helpers.StatusCreated("Success Created Transaction", response))
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
@@ -97,7 +97,7 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("Your are not allowed to access this resource"))
 	}
 
-	response, err := th.ts.UpdateTransaction(user_id, booking_id, &request)
+	response, err := th.ts.UpdateTransaction(user_id, booking_id, request)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}

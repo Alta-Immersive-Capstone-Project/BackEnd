@@ -37,13 +37,13 @@ func (hh *HouseHandler) Store() echo.HandlerFunc {
 		err := c.Bind(&request)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		err = hh.Valid.Validation(request)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorValidate())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
 		result, err := hh.Service.CreateHouse(request)
@@ -66,11 +66,11 @@ func (hh *HouseHandler) Update() echo.HandlerFunc {
 		houseID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		var update entities.HouseRequest
 		if err := c.Bind(&update); err != nil {
-			return c.JSON(http.StatusUnsupportedMediaType, helpers.ErrorBindData())
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
 		result, err := hh.Service.UpdateHouse(uint(houseID), update)
@@ -93,7 +93,7 @@ func (hh *HouseHandler) Delete() echo.HandlerFunc {
 
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 
 		errDelete := hh.Service.DeleteHouse(uint(houseID))
@@ -109,7 +109,7 @@ func (hh *HouseHandler) GetAllByDist() echo.HandlerFunc {
 		DistrictID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := hh.Service.GetAllHouseByDist(uint(DistrictID))
 		if err != nil {
@@ -126,7 +126,7 @@ func (hh *HouseHandler) Show() echo.HandlerFunc {
 		houseID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
 		result, err := hh.Service.GetHouseID(uint(houseID))
 		if err != nil {
