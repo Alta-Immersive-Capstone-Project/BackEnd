@@ -18,7 +18,7 @@ func NewHouseService(Repo house.IRepoHouse) *HouseService {
 	}
 }
 
-func (hs *HouseService) CreateHouse(Insert entities.HouseRequest) (entities.HouseResponse, error) {
+func (hs *HouseService) CreateHouse(Insert entities.AddHouse) (entities.HouseResponse, error) {
 	var house entities.House
 	copier.Copy(&house, &Insert)
 	res, err := hs.repo.CreateHouse(house)
@@ -31,7 +31,7 @@ func (hs *HouseService) CreateHouse(Insert entities.HouseRequest) (entities.Hous
 	return result, nil
 }
 
-func (hs *HouseService) UpdateHouse(id uint, update entities.HouseRequest) (entities.HouseResponse, error) {
+func (hs *HouseService) UpdateHouse(id uint, update entities.UpdateHouse) (entities.HouseResponse, error) {
 	var UpdateHouse entities.House
 	copier.Copy(&UpdateHouse, &update)
 	res, err := hs.repo.UpdateHouse(id, UpdateHouse)

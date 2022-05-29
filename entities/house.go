@@ -20,7 +20,20 @@ type House struct {
 	Room       []Room     `gorm:"foreingkey:HouseID"`
 }
 
-type HouseRequest struct {
+type AddHouse struct {
+	DistrictID uint    `json:"district_id" validate:"required"`
+	Title      string  `json:"title" validate:"required"`
+	Brief      string  `json:"brief" validate:"required"`
+	OwnerName  string  `json:"owner_name" validate:"required"`
+	OwnerPhone string  `json:"owner_phone" validate:"required"`
+	Address    string  `json:"address" validate:"required"`
+	SlotRoom   int     `json:"slot_room" validate:"required"`
+	Available  int     `json:"available" validate:"required"`
+	Latitude   float64 `json:"latitude" validate:"required"`
+	Longitude  float64 `json:"longitude" validate:"required"`
+}
+
+type UpdateHouse struct {
 	DistrictID uint    `json:"district_id"`
 	Title      string  `json:"title"`
 	Brief      string  `json:"brief"`

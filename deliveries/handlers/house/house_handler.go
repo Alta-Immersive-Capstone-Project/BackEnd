@@ -33,7 +33,7 @@ func (hh *HouseHandler) Store() echo.HandlerFunc {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
 
-		var request entities.HouseRequest
+		var request entities.AddHouse
 		err := c.Bind(&request)
 		if err != nil {
 			log.Warn(err)
@@ -68,7 +68,7 @@ func (hh *HouseHandler) Update() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
-		var update entities.HouseRequest
+		var update entities.UpdateHouse
 		if err := c.Bind(&update); err != nil {
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
