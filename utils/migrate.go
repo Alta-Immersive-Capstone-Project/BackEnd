@@ -8,6 +8,6 @@ import (
 
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(
-		&entities.User{},
+		&entities.User{}, &entities.Amenities{}, &entities.Facility{},
 	)
 }

@@ -28,6 +28,7 @@ func main() {
 	config := configs.Get()
 	// Init DB
 	DB := utils.NewMysqlGorm(config)
+	// utils.Migrate(DB)
 	// Init Facility Service
 	facilityRepo := facility.NewFacilityDB(DB)
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
@@ -56,5 +57,6 @@ func main() {
 	routes.AuthRoute(e, authHandler)
 	routes.UserRoute(e, userHandler)
 
-	e.Logger.Fatal(e.Start(":" + config.App.Port))
+	// e.Logger.Fatal(e.Start(":" + config.App.Port))
+	e.Logger.Fatal(e.Start(":8000"))
 }

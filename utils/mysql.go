@@ -16,7 +16,7 @@ func NewMysqlGorm(config *configs.AppConfig) *gorm.DB {
 	// 	config.Database.Port,
 	// 	config.Database.Name,
 	// )
-	dsn := "root@tcp(localhost:3306)/capstone?charset=utf8mb4&parseTime=true&loc=Local"
+	dsn := "root@tcp(localhost:3306)/Sewa?charset=utf8mb4&parseTime=true&loc=Local"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

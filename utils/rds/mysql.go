@@ -1,7 +1,6 @@
 package rds
 
 import (
-	"fmt"
 	"kost/configs"
 
 	"github.com/labstack/gommon/log"
@@ -11,13 +10,14 @@ import (
 
 func InitDB(config *configs.AppConfig) *gorm.DB {
 
-	conString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Host,
-		config.Database.Port,
-		config.Database.Name,
-	)
+	// conString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
+	// 	config.Database.Username,
+	// 	config.Database.Password,
+	// 	config.Database.Host,
+	// 	config.Database.Port,
+	// 	config.Database.Name,
+	// )
+	conString := "root@tcp(localhost:3306)/Sewa?charset=utf8mb4&parseTime=True"
 
 	db, err := gorm.Open(mysql.Open(conString), &gorm.Config{})
 	if err != nil {
