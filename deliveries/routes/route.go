@@ -2,16 +2,21 @@ package routes
 
 import (
 	"kost/deliveries/handlers"
-	dh "kost/deliveries/handlers/district"
-	hh "kost/deliveries/handlers/house"
-	rh "kost/deliveries/handlers/reviews"
-	th "kost/deliveries/handlers/transactions"
+	amenities "kost/deliveries/handlers/amenities"
+	city "kost/deliveries/handlers/city"
+	district "kost/deliveries/handlers/district"
+	facility "kost/deliveries/handlers/facility"
+	house "kost/deliveries/handlers/house"
+	review "kost/deliveries/handlers/reviews"
+	room "kost/deliveries/handlers/room"
+	transaction "kost/deliveries/handlers/transactions"
+	user "kost/deliveries/handlers/user"
 	"kost/deliveries/middlewares"
 
 	"github.com/labstack/echo/v4"
 )
 
-func UserRoute(e *echo.Echo, u *handlers.UserHandler) {
+func UserRoute(e *echo.Echo, u user.HandleUser) {
 	internalGroup := e.Group("/internal")
 	internalGroup.POST("/user", u.CreateInternal, middlewares.JWTMiddleware())
 	internalGroup.DELETE("/user/:id", u.DeleteInternal, middlewares.JWTMiddleware())
@@ -29,7 +34,7 @@ func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 
 }
 
-func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenities, d dh.IDistrictHandler, h hh.IHouseHandler) {
+func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmenities, d district.IDistrictHandler, h house.IHouseHandler) {
 
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
@@ -59,21 +64,37 @@ func Path(e *echo.Echo, f *handlers.HandlersFacility, a *handlers.HandlersAmenit
 	house.PUT("/:id", h.Update(), middlewares.JWTMiddleware())
 	house.DELETE("/:id", h.Delete(), middlewares.JWTMiddleware())
 }
-
-func ReviewsPath(e *echo.Echo, rh rh.ReviewHandler) {
-	// Customer
-	e.POST("/reviews", rh.InsertComment, middlewares.JWTMiddleware())
-	e.GET("/reviews/:room_id", rh.GetByRoomID)
+func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
+	facility := e.Group("/room")
+	facility.POST("", r.CreateRoom(), middlewares.JWTMiddleware())
+	facility.GET("", r.GetAllRoom())
+	facility.GET("/:id", r.GetIDRoom())
+	facility.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
+	facility.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
+}
+func CityPath(e *echo.Echo, C *city.HandlersCity) {
+	facility := e.Group("/city")
+	facility.POST("", C.CreateCity(), middlewares.JWTMiddleware())
+	facility.GET("", C.GetAllCity())
+	facility.GET("/:id", C.GetIDCity())
+	facility.PUT("/:id", C.UpdateCity(), middlewares.JWTMiddleware())
+	facility.DELETE("/:id", C.DeleteCity(), middlewares.JWTMiddleware())
 }
 
-func TransactionPath(e *echo.Echo, th th.TransactionHandler) {
+func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
+	// Customer
+	e.POST("/reviews", review.InsertComment, middlewares.JWTMiddleware())
+	e.GET("/reviews/:room_id", review.GetByRoomID)
+}
+
+func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
 	jwt := e.Group("", middlewares.JWTMiddleware())
 
 	// Customer
-	jwt.POST("/transactions", th.InsertTransaction)
-	jwt.GET("/transactions", th.GetAllTransactionbyCustomer)
+	jwt.POST("/transactions", transaction.InsertTransaction)
+	jwt.GET("/transactions", transaction.GetAllTransactionbyCustomer)
 
 	// Admin
-	jwt.GET("/admin/transactions", th.GetAllTransactionbyConsultant)
-	jwt.PUT("/admin/transactions/:booking_id", th.UpdateTransaction)
+	jwt.GET("/admin/transactions", transaction.GetAllTransactionbyConsultant)
+	jwt.PUT("/admin/transactions/:booking_id", transaction.UpdateTransaction)
 }

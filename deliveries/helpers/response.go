@@ -123,6 +123,15 @@ func StatusOK(message string, data interface{}) map[string]interface{} {
 	}
 }
 
+func StatusOKReview(message string, data ...interface{}) map[string]interface{} {
+	return map[string]interface{}{
+		"code":         http.StatusOK,
+		"message":      message,
+		"data":         data[0],
+		"total_rating": data[1],
+	}
+}
+
 func StatusCreated(message string, data interface{}) map[string]interface{} {
 	return map[string]interface{}{
 		"code":    http.StatusCreated,

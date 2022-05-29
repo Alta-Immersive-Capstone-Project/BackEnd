@@ -6,15 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Room struct {
-	gorm.Model
-	Type                  string        `gorm:"type:varchar(100);not null"`
-	Price                 int           `gorm:"type:int;not null"`
-	AdditionalDescription string        `gorm:"type:varchar(100);not null"`
-	UserID                uint          `gorm:"type:int;not null"`
-	Transactions          []Transaction `gorm:"foreingkey:RoomID"`
-	Reviews               []Review      `gorm:"foreingkey:RoomID"`
-}
+
 
 type Transaction struct {
 	gorm.Model
@@ -51,6 +43,7 @@ type TransactionResponse struct {
 	RentDuration  int       `json:"rent_duration"`
 	TotalBill     int       `json:"total_bill"`
 	PaymentMethod string    `json:"payment_method"`
+	Status        string    `json:"status"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 

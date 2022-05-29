@@ -107,6 +107,27 @@ func (_m *UserServiceInterface) GetInternal(id int) (entities.InternalResponse, 
 	return r0, r1
 }
 
+// UpdateCustomer provides a mock function with given fields: customerRequest, id, files, _a3
+func (_m *UserServiceInterface) UpdateCustomer(customerRequest entities.UpdateCustomerRequest, id int, files map[string]*multipart.FileHeader, _a3 storage.StorageInterface) (entities.CustomerResponse, error) {
+	ret := _m.Called(customerRequest, id, files, _a3)
+
+	var r0 entities.CustomerResponse
+	if rf, ok := ret.Get(0).(func(entities.UpdateCustomerRequest, int, map[string]*multipart.FileHeader, storage.StorageInterface) entities.CustomerResponse); ok {
+		r0 = rf(customerRequest, id, files, _a3)
+	} else {
+		r0 = ret.Get(0).(entities.CustomerResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(entities.UpdateCustomerRequest, int, map[string]*multipart.FileHeader, storage.StorageInterface) error); ok {
+		r1 = rf(customerRequest, id, files, _a3)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateInternal provides a mock function with given fields: customerRequest, id, files, storageProvider
 func (_m *UserServiceInterface) UpdateInternal(customerRequest entities.UpdateInternalRequest, id int, files map[string]*multipart.FileHeader, storageProvider storage.StorageInterface) (entities.InternalResponse, error) {
 	ret := _m.Called(customerRequest, id, files, storageProvider)

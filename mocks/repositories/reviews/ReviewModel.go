@@ -80,6 +80,27 @@ func (_m *ReviewModel) GetByUserID(user_id uint) (entities.User, error) {
 	return r0, r1
 }
 
+// GetRating provides a mock function with given fields: room_id
+func (_m *ReviewModel) GetRating(room_id uint) (float32, error) {
+	ret := _m.Called(room_id)
+
+	var r0 float32
+	if rf, ok := ret.Get(0).(func(uint) float32); ok {
+		r0 = rf(room_id)
+	} else {
+		r0 = ret.Get(0).(float32)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(room_id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type NewReviewModelT interface {
 	mock.TestingT
 	Cleanup(func())

@@ -57,6 +57,20 @@ func (_m *ReviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse
 	return r0, r1
 }
 
+// GetRating provides a mock function with given fields: room_id
+func (_m *ReviewService) GetRating(room_id uint) float32 {
+	ret := _m.Called(room_id)
+
+	var r0 float32
+	if rf, ok := ret.Get(0).(func(uint) float32); ok {
+		r0 = rf(room_id)
+	} else {
+		r0 = ret.Get(0).(float32)
+	}
+
+	return r0
+}
+
 type NewReviewServiceT interface {
 	mock.TestingT
 	Cleanup(func())
