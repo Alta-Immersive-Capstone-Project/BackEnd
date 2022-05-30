@@ -68,11 +68,15 @@ func StatusOK(message string, data interface{}) map[string]interface{} {
 }
 
 func StatusOKReview(message string, data ...interface{}) map[string]interface{} {
+	value := data[1].([]int)
+	rating := map[string]interface{}{"one": value[0], "two": value[1], "three": value[2], "four": value[3], "five": value[4]}
+
 	return map[string]interface{}{
 		"code":         http.StatusOK,
 		"message":      message,
 		"data":         data[0],
-		"total_rating": data[1],
+		"rating":       rating,
+		"total_rating": data[2],
 	}
 }
 

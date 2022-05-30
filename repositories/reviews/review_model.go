@@ -50,19 +50,36 @@ func (m *reviewModel) GetByUserID(user_id uint) (entities.User, error) {
 	return customer, nil
 }
 
-func (m *reviewModel) GetRating(room_id uint) (float32, error) {
+func (m *reviewModel) GetRating(room_id uint) ([]int, float32, error) {
 	var reviews []entities.Review
-
+	var count []int
 	record := m.db.Where("room_id = ?", room_id).Find(&reviews)
 
 	if record.RowsAffected == 0 {
-		return 0, record.Error
+		return count, 0, record.Error
 	}
 
 	var sum float32
+	var one, two, three, four, five int
 	for _, review := range reviews {
+		switch review.Rating {
+		case 1:
+			one++
+		case 2:
+			two++
+		case 3:
+			three++
+		case 4:
+			four++
+		case 5:
+			five++
+		}
+
 		sum += review.Rating
 	}
 
-	return sum / float32(len(reviews)), nil
+	count = []int{one, two, three, four, five}
+	total := sum / float32(len(reviews))
+
+	return count, total, nil
 }

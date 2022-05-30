@@ -85,7 +85,7 @@ func TestGetRating(t *testing.T) {
 		repo.On("GetRating", uint(1)).Return(returnData, nil).Once()
 		srv := review.NewReviewService(repo)
 
-		res := srv.GetRating(uint(1))
+		res, _ := srv.GetRating(uint(1))
 		assert.Equal(t, returnData, res)
 		repo.AssertExpectations(t)
 	})
@@ -94,7 +94,7 @@ func TestGetRating(t *testing.T) {
 		repo.On("GetRating", uint(1)).Return(float32(0), errors.New("data not found")).Once()
 		srv := review.NewReviewService(repo)
 
-		res := srv.GetRating(uint(1))
+		res, _ := srv.GetRating(uint(1))
 		assert.Equal(t, float32(0), res)
 		repo.AssertExpectations(t)
 	})

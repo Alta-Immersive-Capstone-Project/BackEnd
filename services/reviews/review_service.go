@@ -57,11 +57,11 @@ func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse
 	return responses, nil
 }
 
-func (rs *reviewService) GetRating(room_id uint) float32 {
-	result, err := rs.rm.GetRating(room_id)
+func (rs *reviewService) GetRating(room_id uint) ([]int, float32) {
+	count, total, err := rs.rm.GetRating(room_id)
 	if err != nil {
-		return 0
+		return []int{}, 0
 	}
 
-	return result
+	return count, total
 }
