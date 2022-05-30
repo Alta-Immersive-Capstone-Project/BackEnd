@@ -7,7 +7,7 @@ import (
 type House struct {
 	gorm.Model
 	DistrictID uint       `gorm:"not null json:district_id"`
-	Title      string     `json:"title" gorm:"type:varchar(161);not null;unique"`
+	Title      string     `json:"title" gorm:"type:varchar(161);not null"`
 	Brief      string     `json:"brief" gorm:"type:text;not null"`
 	OwnerName  string     `json:"owner_name" gorm:"type:varchar(255);not null"`
 	OwnerPhone string     `json:"owner_phone" gorm:"type:varchar(15);not null"`
@@ -58,4 +58,12 @@ type HouseResponse struct {
 	Latitude   float64 `json:"latitude"`
 	Longitude  float64 `json:"longitude"`
 	DistrictID uint    `json:"district_id"`
+}
+
+type HouseResponseJoin struct {
+	Title   string  `json:"title"`
+	Address string  `json:"address"`
+	Rating  float32 `json:"rating"`
+	Price   int32   `json:"price"`
+	Type    string  `json:"type"`
 }
