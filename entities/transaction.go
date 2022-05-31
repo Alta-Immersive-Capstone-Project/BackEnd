@@ -46,7 +46,6 @@ type TransactionResponse struct {
 }
 
 type TransactionJoin struct {
-	ID           uint      `json:"id"`
 	BookingID    string    `json:"booking_id"`
 	CheckinDate  time.Time `json:"checkin_date"`
 	RentDuration int       `json:"rent_duration"`
@@ -54,6 +53,15 @@ type TransactionJoin struct {
 	Status       string    `json:"status"`
 	Url          string    `json:"url"`
 	Title        string    `json:"title"`
+}
+
+type TransactionKost struct {
+	BookingID    string    `json:"booking_id"`
+	Name         string    `json:"name"`
+	RentDuration int       `json:"rent_duration"`
+	TotalBill    int       `json:"total_bill"`
+	Status       string    `json:"status"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type TransactionUpdateResponse struct {

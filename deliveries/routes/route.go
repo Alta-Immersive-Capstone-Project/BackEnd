@@ -103,4 +103,5 @@ func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
 	// Admin
 	jwt.GET("/admin/transactions", transaction.GetAllTransactionbyConsultant)
 	jwt.PUT("/admin/transactions/:booking_id", transaction.UpdateTransaction)
+	jwt.GET("/admin/transactions/kost", transaction.GetAllTransactionbyKost)
 }

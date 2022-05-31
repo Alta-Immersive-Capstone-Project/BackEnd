@@ -89,3 +89,8 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	copier.Copy(&response, &result)
 	return response, nil
 }
+
+func (ts *transactionService) GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost {
+	response := ts.tm.GetAllbyKost(duration, status, name)
+	return response
+}
