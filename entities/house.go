@@ -72,6 +72,7 @@ type HouseResponseJoin struct {
 	Type       string  `json:"type"`
 	ReviewID   uint    `json:"review_id"`
 	Rating     float32 `json:"rating"`
-	ImagesUrl  string  `json:"images_url"`
 	DistrictID uint    `json:"district_id"`
+	District   string  `json:"district"`
+	ImagesUrl  string  `json:"images_url"`
 }
