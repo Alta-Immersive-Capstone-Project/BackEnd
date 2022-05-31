@@ -66,7 +66,7 @@ func (s *ServiceCity) UpdateCity(id uint, update entities.AddCity) (entities.Cit
 	var UpdateCity entities.City
 	copier.Copy(&UpdateCity, &update)
 
-	res, err := s.repo.UpdateCity(id, UpdateCity)
+	res, err := s.repo.UpdateCity(id, update)
 	if err != nil {
 		log.Warn(err)
 		return entities.CityResponse{}, err
