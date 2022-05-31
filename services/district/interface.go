@@ -8,4 +8,5 @@ type DistrictControl interface {
 	DeleteDist(id uint) error
 	GetAllDist(cid uint) ([]entities.RespondDistrict, error)
 	GetDistID(id uint) (entities.RespondDistrict, error)
+	SelectAllDistrict() (entities.RespondDistrict, error)
 }

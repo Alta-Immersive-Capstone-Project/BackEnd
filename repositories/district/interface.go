@@ -8,4 +8,5 @@ type RepoDistrict interface {
 	DeleteDistrict(id uint) error
 	GetDistrictID(id uint) (entities.District, error)
 	GetAllDistrict(cid uint) ([]entities.District, error)
+	SelectAllDistrict() ([]entities.District, error)
 }
