@@ -80,7 +80,7 @@ func TestUpdateCity(t *testing.T) {
 
 	t.Run("Error Update City", func(t *testing.T) {
 		CityRepo := mocks.NewCityRepo(t)
-		CityRepo.On("UpdateCity", uint(1), mock.Anything).Return(entities.CityResponse{}, errors.New("error update cities")).Once()
+		CityRepo.On("UpdateCity", uint(1), mock.Anything).Return(entities.City{}, errors.New("error update cities")).Once()
 
 		cityService := NewServiceCity(CityRepo)
 		result, err := cityService.UpdateCity(uint(1), UpdateCity)

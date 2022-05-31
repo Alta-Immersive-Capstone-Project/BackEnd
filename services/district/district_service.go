@@ -75,14 +75,14 @@ func (ds *DistrictService) GetDistID(id uint) (entities.RespondDistrict, error) 
 	copier.Copy(&result, &res)
 	return result, nil
 }
-func (ds *DistrictService) SelectAllDistrict() (entities.RespondDistrict, error) {
+func (ds *DistrictService) SelectAllDistrict() ([]entities.RespondDistrict, error) {
 	res, err := ds.repo.SelectAllDistrict()
 	if err != nil {
 		log.Warn(err)
-		return entities.RespondDistrict{}, err
+		return []entities.RespondDistrict{}, err
 	}
 
-	var result entities.RespondDistrict
+	var result []entities.RespondDistrict
 	copier.Copy(&result, &res)
 	return result, nil
 }

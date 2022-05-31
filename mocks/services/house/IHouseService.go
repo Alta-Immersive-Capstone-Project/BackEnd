@@ -48,8 +48,100 @@ func (_m *IHouseService) DeleteHouse(id uint) error {
 	return r0
 }
 
-// GetAllHouseByDist provides a mock function with given fields: dist_id
-func (_m *IHouseService) GetAllHouseByDist(dist_id uint) ([]entities.HouseResponse, error) {
+// FindAllHouseByCities provides a mock function with given fields: cid
+func (_m *IHouseService) FindAllHouseByCities(cid uint) ([]entities.HouseResponseJoin, error) {
+	ret := _m.Called(cid)
+
+	var r0 []entities.HouseResponseJoin
+	if rf, ok := ret.Get(0).(func(uint) []entities.HouseResponseJoin); ok {
+		r0 = rf(cid)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.HouseResponseJoin)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(cid)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindAllHouseByCtyAndDst provides a mock function with given fields: cid, dist_id
+func (_m *IHouseService) FindAllHouseByCtyAndDst(cid uint, dist_id uint) ([]entities.HouseResponseJoin, error) {
+	ret := _m.Called(cid, dist_id)
+
+	var r0 []entities.HouseResponseJoin
+	if rf, ok := ret.Get(0).(func(uint, uint) []entities.HouseResponseJoin); ok {
+		r0 = rf(cid, dist_id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.HouseResponseJoin)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint, uint) error); ok {
+		r1 = rf(cid, dist_id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindAllHouseByDistrict provides a mock function with given fields: dist_id
+func (_m *IHouseService) FindAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseJoin, error) {
+	ret := _m.Called(dist_id)
+
+	var r0 []entities.HouseResponseJoin
+	if rf, ok := ret.Get(0).(func(uint) []entities.HouseResponseJoin); ok {
+		r0 = rf(dist_id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.HouseResponseJoin)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(dist_id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindHouseByTitle provides a mock function with given fields: title
+func (_m *IHouseService) FindHouseByTitle(title string) ([]entities.HouseResponseJoin, error) {
+	ret := _m.Called(title)
+
+	var r0 []entities.HouseResponseJoin
+	if rf, ok := ret.Get(0).(func(string) []entities.HouseResponseJoin); ok {
+		r0 = rf(title)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.HouseResponseJoin)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(title)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetAllHouseByDistrict provides a mock function with given fields: dist_id
+func (_m *IHouseService) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponse, error) {
 	ret := _m.Called(dist_id)
 
 	var r0 []entities.HouseResponse
@@ -85,6 +177,29 @@ func (_m *IHouseService) GetHouseID(id uint) (entities.HouseResponse, error) {
 	var r1 error
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// SelectAllHouse provides a mock function with given fields:
+func (_m *IHouseService) SelectAllHouse() ([]entities.HouseResponseJoin, error) {
+	ret := _m.Called()
+
+	var r0 []entities.HouseResponseJoin
+	if rf, ok := ret.Get(0).(func() []entities.HouseResponseJoin); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.HouseResponseJoin)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
 	} else {
 		r1 = ret.Error(1)
 	}

@@ -116,18 +116,18 @@ func (_m *CityRepo) GetCity(cityID uint) (entities.City, error) {
 }
 
 // UpdateCity provides a mock function with given fields: id, new
-func (_m *CityRepo) UpdateCity(id uint, new entities.City) (entities.City, error) {
+func (_m *CityRepo) UpdateCity(id uint, new entities.AddCity) (entities.City, error) {
 	ret := _m.Called(id, new)
 
 	var r0 entities.City
-	if rf, ok := ret.Get(0).(func(uint, entities.City) entities.City); ok {
+	if rf, ok := ret.Get(0).(func(uint, entities.AddCity) entities.City); ok {
 		r0 = rf(id, new)
 	} else {
 		r0 = ret.Get(0).(entities.City)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uint, entities.City) error); ok {
+	if rf, ok := ret.Get(1).(func(uint, entities.AddCity) error); ok {
 		r1 = rf(id, new)
 	} else {
 		r1 = ret.Error(1)
