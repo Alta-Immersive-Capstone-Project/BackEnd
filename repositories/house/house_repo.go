@@ -108,7 +108,7 @@ func (hr *HouseRepo) SelectAllHouse() ([]entities.HouseResponseJoin, error) {
 }
 func (hr *HouseRepo) FindHouseByTitle(title string) ([]entities.HouseResponseJoin, error) {
 	var houses []entities.HouseResponseJoin
-	err := hr.Db.Raw("SELECT * FROM (SELECT houses.id , houses.title , houses.brief , houses.address, districts.name as 'district', rooms.`type` , MIN(rooms.price) as price, AVG(reviews.rating) as rating FROM houses JOIN districts ON districts.id = houses.district_id JOIN rooms ON rooms.house_id = houses.id LEFT JOIN reviews ON reviews.room_id = rooms.id GROUP BY title) as hs WHERE hs.title like ?", "%"+title+"%").Scan(&houses).Error
+	err := hr.Db.Raw("SELECT * FROM (SELECT houses.id , houses.title , houses.brief , houses.address, districts.name as 'district', rooms.`type` , MIN(rooms.price) as price, AVG(reviews.rating) as rating FROM houses JOIN districts ON districts.id = houses.district_id LEFT JOIN rooms ON rooms.house_id = houses.id LEFT JOIN reviews ON reviews.room_id = rooms.id GROUP BY title) as hs WHERE hs.title like ?", "%"+title+"%").Scan(&houses).Error
 	if err != nil {
 		log.Warn("Error Get Data", err)
 		return houses, err

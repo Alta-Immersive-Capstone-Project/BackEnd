@@ -124,7 +124,7 @@ func TestGetAllCity(t *testing.T) {
 	})
 	t.Run("Error Get All City", func(t *testing.T) {
 		CityRepo := mocks.NewCityRepo(t)
-		CityRepo.On("GetAllCity", mock.Anything).Return(entities.CityResponse{}, errors.New("error access database")).Once()
+		CityRepo.On("GetAllCity", mock.Anything).Return([]entities.City{}, errors.New("error access database")).Once()
 		cityService := NewServiceCity(CityRepo)
 
 		_, err := cityService.GetAllCity()
@@ -137,7 +137,7 @@ func TestGetAllCity(t *testing.T) {
 func TestGetIDCity(t *testing.T) {
 	t.Run("Success Get ID City", func(t *testing.T) {
 		CityRepo := mocks.NewCityRepo(t)
-		CityRepo.On("GetIDCity", uint(1)).Return(mockCities[0].City, nil).Once()
+		CityRepo.On("GetCity", uint(1)).Return(mockCities[0], nil).Once()
 		cityService := NewServiceCity(CityRepo)
 
 		result, err := cityService.GetIDCity(uint(1))
@@ -148,7 +148,7 @@ func TestGetIDCity(t *testing.T) {
 	})
 	t.Run("Error Get ID City", func(t *testing.T) {
 		CityRepo := mocks.NewCityRepo(t)
-		CityRepo.On("GetIDCity", mock.Anything).Return(entities.CityResponse{}, errors.New("error access database")).Once()
+		CityRepo.On("GetCity", mock.Anything).Return(entities.City{}, errors.New("error access database")).Once()
 		cityService := NewServiceCity(CityRepo)
 		result, err := cityService.GetIDCity(uint(1))
 
