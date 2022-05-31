@@ -1,6 +1,7 @@
 package room
 
 import (
+	"fmt"
 	"kost/entities"
 
 	"github.com/labstack/gommon/log"
@@ -43,15 +44,23 @@ func (r *roomDB) GetRoomID(id uint) (entities.Room, error) {
 		log.Warn(err)
 		return entities.Room{}, err
 	}
+	if len(room.Images) == 0 {
+		room.Images = []entities.Image{
+			{RoomID: id,
+				Url: "https://belajar-be.s3.ap-southeast-1.amazonaws.com/1653880602.png",
+			},
+		}
+	}
 	return room, nil
 }
 
-func (r *roomDB) UpdateRoom(id uint, new entities.UpdateRoom) (entities.Room, error) {
+func (r *roomDB) UpdateRoom(id uint, new entities.Room) (entities.Room, error) {
 	var room entities.Room
-	err := r.Db.Where("id = ?", id).First(&room).Updates(&new).Find(&room).Error
+	fmt.Println("masuk")
+	err := r.Db.Where("id = ?", id).First(&room).Updates(&new).Error
 	if err != nil {
 		log.Warn(err)
-		return entities.Room{}, err
+		return room, err
 	}
 	return room, nil
 }
@@ -59,7 +68,7 @@ func (r *roomDB) UpdateRoom(id uint, new entities.UpdateRoom) (entities.Room, er
 func (r *roomDB) DeleteRoom(id uint) error {
 	var room entities.Room
 
-	err := r.Db.Where("id = ?", id).First(&room).Delete(&room).Error
+	err := r.Db.Where("id = ?", id).Delete(&room).Error
 
 	if err != nil {
 		log.Warn(err)

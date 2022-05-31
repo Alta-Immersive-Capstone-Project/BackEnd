@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"fmt"
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
+	"kost/deliveries/validations"
 	"kost/entities"
+	"kost/services/image"
 	"kost/services/room"
 	"net/http"
 	"strconv"
@@ -15,12 +18,14 @@ import (
 
 type HandlersRoom struct {
 	service room.RoomServices
+	image   image.ServiceImage
 	valid   *validator.Validate
 }
 
-func NewHandlersRoom(Service room.RoomServices, Valid *validator.Validate) *HandlersRoom {
+func NewHandlersRoom(Service room.RoomServices, image image.ServiceImage, Valid *validator.Validate) *HandlersRoom {
 	return &HandlersRoom{
 		service: Service,
+		image:   image,
 		valid:   Valid,
 	}
 }
@@ -41,6 +46,18 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
+		form, err := c.MultipartForm()
+		if err != nil {
+			return err
+		}
+		files := form.File["files"]
+
+		msg, err := validations.ValidationImage(files)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+		}
+
 		err = h.valid.Struct(&Insert)
 		if err != nil {
 			log.Warn(err)
@@ -52,6 +69,12 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
+		err = h.image.InsertImage(files, result.ID)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
+
 		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Facility", result))
 	}
 }
@@ -63,15 +86,16 @@ func (h *HandlersRoom) GetAllRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusGetAll("Success get room", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get room", result))
 	}
 }
+
 func (h *HandlersRoom) GetIDRoom() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
 		}
 
 		result, err := h.service.GetIDRoom(uint(id))
@@ -94,11 +118,31 @@ func (h *HandlersRoom) UpdateRoom() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
 		}
 		var update entities.UpdateRoom
-		if err := c.Bind(&update); err != nil {
+		err = c.Bind(&update)
+		if err != nil {
+			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+		}
+
+		form, err := c.MultipartForm()
+		if err != nil {
+			return err
+		}
+		files := form.File["files"]
+
+		msg, err := validations.ValidationImage(files)
+		// fmt.Println("masuk pengecekan")
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+		}
+		err = h.image.InsertImage(files, uint(id))
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
 
 		result, err := h.service.UpdateRoom(uint(id), update)
@@ -121,10 +165,39 @@ func (h *HandlersRoom) DeleteRoom() echo.HandlerFunc {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+		}
+		err = h.image.DeleteImage(uint(id))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
 
 		err = h.service.DeleteRoom(uint(id))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusDelete())
+	}
+}
+func (h *HandlersRoom) DeleteImageUpdate() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		Role := middlewares.ExtractTokenRole(c)
+		if Role != "admin" && Role != "supervisor" {
+			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
+		}
+		type insert struct {
+			Id []uint `json:"id"`
+		}
+
+		var Insert insert
+		err := c.Bind(&Insert)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+		}
+		fmt.Println(Insert)
+
+		err = h.image.DeleteImagebyID(Insert.Id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}

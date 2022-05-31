@@ -77,6 +77,7 @@ func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
 	facility.GET("/:id", r.GetIDRoom())
 	facility.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
 	facility.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
+	facility.POST("/:id", r.DeleteImageUpdate(), middlewares.JWTMiddleware())
 }
 func CityPath(e *echo.Echo, C *city.HandlersCity) {
 	facility := e.Group("/cities")

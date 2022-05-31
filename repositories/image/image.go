@@ -26,9 +26,27 @@ func (i *imageDB) CreateImage(new entities.Image) error {
 	return nil
 }
 
-func (i *imageDB) DeleteImage(roomID, userID uint) error {
+func (i *imageDB) GetAllImage(roomID uint) ([]entities.Image, error) {
+	var image []entities.Image
+	err := i.Db.Where("room_id=?", roomID).Find(&image).Error
+	if err != nil {
+		log.Warn(err)
+		return []entities.Image{}, err
+	}
+	return image, nil
+}
+func (i *imageDB) GetImage(ID uint) (entities.Image, error) {
 	var image entities.Image
-	err := i.Db.Where("roomID = ? OR userID =?", roomID, userID).Delete(&image).Error
+	err := i.Db.Where("id=?", ID).First(&image).Error
+	if err != nil {
+		log.Warn(err)
+		return entities.Image{}, err
+	}
+	return image, nil
+}
+func (i *imageDB) DeleteImage(imageID uint) error {
+	var image entities.Image
+	err := i.Db.Where("id = ?", imageID).Delete(&image).Error
 	if err != nil {
 		log.Warn(err)
 		return err
