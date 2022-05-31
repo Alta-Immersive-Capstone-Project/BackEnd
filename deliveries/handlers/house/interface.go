@@ -8,4 +8,10 @@ type IHouseHandler interface {
 	Delete() echo.HandlerFunc
 	GetAllByDist() echo.HandlerFunc
 	Show() echo.HandlerFunc
+	Index() echo.HandlerFunc
+	SelectHouseByDistrict() echo.HandlerFunc
+	SelectHouseByCities() echo.HandlerFunc
+	SelectHouseByCtyAndDst() echo.HandlerFunc
+	SearchByTitle() echo.HandlerFunc
+	SearchBylocation() echo.HandlerFunc
 }
