@@ -61,9 +61,12 @@ func (s *ServiceCity) GetIDCity(id uint) (entities.CityResponse, error) {
 	return result, nil
 }
 
-func (s *ServiceCity) UpdateCity(id uint, update entities.City) (entities.CityResponse, error) {
+func (s *ServiceCity) UpdateCity(id uint, update entities.AddCity) (entities.CityResponse, error) {
 
-	res, err := s.repo.UpdateCity(id, update)
+	var UpdateCity entities.City
+	copier.Copy(&UpdateCity, &update)
+
+	res, err := s.repo.UpdateCity(id, UpdateCity)
 	if err != nil {
 		log.Warn(err)
 		return entities.CityResponse{}, err

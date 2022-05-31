@@ -62,7 +62,7 @@ func TestUpdateCity(t *testing.T) {
 		Model: gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		City:  "Gunung Kidul",
 	}
-	var UpdateCity = entities.City{
+	var UpdateCity = entities.AddCity{
 		City: "Gunung Kidul",
 	}
 
