@@ -18,7 +18,6 @@ func NewMysqlGorm(config *configs.AppConfig) *gorm.DB {
 		config.Database.Name,
 	)
 
-	// dsn := "root@tcp(localhost:3306)/Trial?charset=utf8mb4&parseTime=true"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
