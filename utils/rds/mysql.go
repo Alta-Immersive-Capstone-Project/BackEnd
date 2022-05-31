@@ -17,6 +17,7 @@ func NewMysqlGorm(config *configs.AppConfig) *gorm.DB {
 		config.Database.Port,
 		config.Database.Name,
 	)
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
