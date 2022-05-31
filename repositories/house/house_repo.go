@@ -1,6 +1,7 @@
 package house
 
 import (
+	"fmt"
 	"kost/entities"
 
 	"github.com/labstack/gommon/log"
@@ -54,19 +55,9 @@ func (hr *HouseRepo) GetHouseID(id uint) (entities.House, error) {
 	}
 	return house, nil
 }
-func (hr *HouseRepo) GetAllHouseByDistrict(dist_id uint) ([]entities.House, error) {
-	var house []entities.House
-	err := hr.Db.Where("district_id = ?", dist_id).Find(&house).Error
-	if err != nil {
-		log.Warn("Error Get Data", err)
-		return house, err
-	}
-	return house, nil
-}
-
-func (hr *HouseRepo) GetAllHouseByCities(cid uint) ([]entities.House, error) {
-	var houses []entities.House
-	err := hr.Db.Joins("JOIN districts ON districts.id = houses.district_id AND districts.city_id = ?", cid).Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Select("houses.id , houses.title , houses.brief , houses.address, houses.district_id, districts.name as district, rooms.type , MIN(rm.price) as price, reviews.id as review_id, AVG(rv.rating) as rating").Group("title").Having("MIN(rm.price) < ?", 1000000).Find(&houses).Error
+func (hr *HouseRepo) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseJoin, error) {
+	var houses []entities.HouseResponseJoin
+	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as type, reviews.id as review_id, AVG(reviews.rating) as rating").Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Where("districts.id = ?", dist_id).Scan(&houses).Error
 	if err != nil {
 		log.Warn("Error Get Data", err)
 		return houses, err
@@ -74,9 +65,9 @@ func (hr *HouseRepo) GetAllHouseByCities(cid uint) ([]entities.House, error) {
 	return houses, nil
 }
 
-func (hr *HouseRepo) GetAllHouseByDstAndCty(cid uint, dist_id uint) ([]entities.House, error) {
-	var houses []entities.House
-	err := hr.Db.Joins("JOIN districts ON districts.id = houses.district_id AND districts.city_id = ?", cid).Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Select("houses.id , houses.title , houses.brief , houses.address, houses.district_id, districts.name as district, rooms.type , MIN(rm.price) as price, reviews.id as review_id, AVG(rv.rating) as rating").Where("districts.id = ?", dist_id).Find(&houses).Error
+func (hr *HouseRepo) GetAllHouseByCities(cid uint) ([]entities.HouseResponseJoin, error) {
+	var houses []entities.HouseResponseJoin
+	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as type, reviews.id as review_id, AVG(reviews.rating) as rating").Group("title").Having("MIN(rooms.price) < ?", 1000000).Joins("JOIN districts ON districts.id = houses.district_id AND districts.city_id = ?", cid).Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Scan(&houses).Error
 	if err != nil {
 		log.Warn("Error Get Data", err)
 		return houses, err
@@ -84,27 +75,40 @@ func (hr *HouseRepo) GetAllHouseByDstAndCty(cid uint, dist_id uint) ([]entities.
 	return houses, nil
 }
 
-func (hr *HouseRepo) SelectAllHouse() ([]entities.House, error) {
-	var houses []entities.House
-	err := hr.Db.Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Select("houses.id , houses.title , houses.brief , houses.address, houses.district_id, districts.name as district, rooms.type , MIN(rm.price) as price, reviews.id as review_id, AVG(rv.rating) as rating").Group("title").Having("MIN(rm.price) < ?", 1000000).Find(&houses).Error
+func (hr *HouseRepo) GetAllHouseByDstAndCty(cid uint, dist_id uint) ([]entities.HouseResponseJoin, error) {
+	var houses []entities.HouseResponseJoin
+	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as type, reviews.id as review_id, AVG(reviews.rating) as rating").Joins("JOIN districts ON districts.id = houses.district_id AND districts.city_id = ?", cid).Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Where("districts.id = ?", dist_id).Scan(&houses).Error
 	if err != nil {
 		log.Warn("Error Get Data", err)
 		return houses, err
 	}
 	return houses, nil
 }
-func (hr *HouseRepo) FindHouseByTitle(title string) ([]entities.House, error) {
-	var houses []entities.House
-	err := hr.Db.Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Select("houses.id , houses.title , houses.brief , houses.address, houses.district_id, districts.name as district, rooms.type , MIN(rm.price) as price, reviews.id as review_id, AVG(rv.rating) as rating").Where("houses.title like ?", "%"+title+"%").Find(&houses).Error
+
+func (hr *HouseRepo) SelectAllHouse() ([]entities.HouseResponseJoin, error) {
+	var response []entities.HouseResponseJoin
+	// var response = make(map[string]interface{})
+	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as type, reviews.id as review_id, AVG(reviews.rating) as rating").Group("title").Having("MIN(rooms.price) < ?", 1000000).Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Scan(&response).Error
+	if err != nil {
+		log.Warn("Error Get Data", err)
+		return response, err
+	}
+	fmt.Println(response)
+	return response, nil
+}
+func (hr *HouseRepo) FindHouseByTitle(title string) ([]entities.HouseResponseJoin, error) {
+	// var houses []entities.House
+	var houses []entities.HouseResponseJoin
+	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as type, reviews.id as review_id, AVG(reviews.rating) as rating").Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Where("houses.title like ?", "%"+title+"%").Scan(&houses).Error
 	if err != nil {
 		log.Warn("Error Get Data", err)
 		return houses, err
 	}
 	return houses, nil
 }
-func (hr *HouseRepo) FindHouseByLocation(lat float64, long float64) ([]entities.House, error) {
-	var houses []entities.House
-	err := hr.Db.Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Select("houses.id , houses.title , houses.brief , houses.address, houses.district_id, districts.name as district, rooms.type , MIN(rm.price) as price, reviews.id as review_id, AVG(rv.rating) as rating").Where("houses.latitude = ? AND house.longitude = ?", lat, long).Find(&houses).Error
+func (hr *HouseRepo) FindHouseByLocation(lat float64, long float64) ([]entities.HouseResponseJoin, error) {
+	var houses []entities.HouseResponseJoin
+	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as type, reviews.id as review_id, AVG(reviews.rating) as rating").Joins("JOIN districts ON districts.id = houses.district_id").Joins("JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Where("houses.latitude = ? AND house.longitude = ?", lat, long).Scan(&houses).Error
 	if err != nil {
 		log.Warn("Error Get Data", err)
 		return houses, err
