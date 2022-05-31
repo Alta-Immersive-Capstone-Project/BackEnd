@@ -61,9 +61,18 @@ type HouseResponse struct {
 }
 
 type HouseResponseJoin struct {
-	Title   string  `json:"title"`
-	Address string  `json:"address"`
-	Rating  float32 `json:"rating"`
-	Price   int32   `json:"price"`
-	Type    string  `json:"type"`
+	ID         uint    `json:"house_id"`
+	Title      string  `json:"title"`
+	Brief      string  `json:"brief"`
+	OwnerName  string  `json:"owner_name"`
+	OwnerPhone string  `json:"owner_phone"`
+	Address    string  `json:"address"`
+	Available  int     `json:"available"`
+	RoomID     uint    `json:"room_id"`
+	Price      int32   `json:"price"`
+	Type       string  `json:"type"`
+	ReviewID   uint    `json:"review_id"`
+	Rating     float32 `json:"rating"`
+	ImagesUrl  string  `json:"images_url"`
+	DistrictID uint    `json:"district_id"`
 }
