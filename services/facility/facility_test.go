@@ -16,18 +16,18 @@ import (
 // Create Sample Data
 var MockFacility = []entities.Facility{
 	{
-		Model:     gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
-		Name:      "Rumah Sakit Primaya",
-		Longitude: -6.168273696181832,
-		Latitude:  106.86491520706296,
-		HouseID:   1,
+		Model:      gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Name:       "Rumah Sakit Primaya",
+		Longitude:  -6.168273696181832,
+		Latitude:   106.86491520706296,
+		DistrictID: 1,
 	},
 	{
-		Model:     gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()},
-		Name:      "Grand Chandra Karya",
-		Longitude: -6.19395219376102,
-		Latitude:  106.85925435178284,
-		HouseID:   1,
+		Model:      gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Name:       "Grand Chandra Karya",
+		Longitude:  -6.19395219376102,
+		Latitude:   106.85925435178284,
+		DistrictID: 1,
 	},
 }
 
@@ -35,10 +35,10 @@ var MockFacility = []entities.Facility{
 func TestCreateFacility(t *testing.T) {
 
 	var NewFacility = entities.AddNewFacility{
-		Name:      "Rumah Sakit Primaya",
-		Longitude: -6.168273696181832,
-		Latitude:  106.86491520706296,
-		HouseID:   1,
+		Name:       "Rumah Sakit Primaya",
+		Longitude:  -6.168273696181832,
+		Latitude:   106.86491520706296,
+		DistrictID: 1,
 	}
 	t.Run("Success Create Facility", func(t *testing.T) {
 
@@ -116,11 +116,11 @@ func TestGetFacilityID(t *testing.T) {
 // TEST UPDATE FACILITY SERVICE
 func TestUpdateFacility(t *testing.T) {
 	var respon = entities.Facility{
-		Model:     gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
-		Name:      "Mall Ciputra",
-		Longitude: -6.168273696181832,
-		Latitude:  106.86491520706296,
-		HouseID:   1,
+		Model:      gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Name:       "Mall Ciputra",
+		Longitude:  -6.168273696181832,
+		Latitude:   106.86491520706296,
+		DistrictID: 1,
 	}
 	var NewFacility = entities.UpdateFacility{
 		Name:      "Mall Ciputra",

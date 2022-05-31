@@ -32,4 +32,4 @@ type RespondRoom struct {
 	Type                   string `json:"type"`
 	Price                  int32  `json:"price"`
 	Additional_description string `json:"additional_description"`
-}
+} 

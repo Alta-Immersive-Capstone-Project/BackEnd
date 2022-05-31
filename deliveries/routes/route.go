@@ -31,14 +31,15 @@ func UserRoute(e *echo.Echo, u user.HandleUser) {
 
 func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 	e.POST("/login", l.Login)
-
 }
 
 func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmenities, d district.IDistrictHandler, h house.IHouseHandler) {
 
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
-	e.GET("/houses/:id/facilities", f.GetAllFacility())
+	e.GET("/houses/:id/facilities", f.GetNearFacility())
+	e.GET("/district/:id/facilities", f.GetNearFacility())
+
 	facility.GET("/:id", f.GetFacilityID())
 	facility.PUT("/:id", f.UpdateFacility(), middlewares.JWTMiddleware())
 	facility.DELETE("/:id", f.DeleteFacility(), middlewares.JWTMiddleware())
@@ -71,20 +72,20 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 	e.GET("/houses/district/:id", h.SelectHouseByDistrict())
 }
 func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
-	facility := e.Group("/room")
-	facility.POST("", r.CreateRoom(), middlewares.JWTMiddleware())
-	facility.GET("", r.GetAllRoom())
-	facility.GET("/:id", r.GetIDRoom())
-	facility.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
-	facility.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
+	room := e.Group("/room")
+	room.POST("", r.CreateRoom(), middlewares.JWTMiddleware())
+	room.GET("", r.GetAllRoom())
+	room.GET("/:id", r.GetIDRoom())
+	room.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
+	room.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
 }
 func CityPath(e *echo.Echo, C *city.HandlersCity) {
-	facility := e.Group("/cities")
-	facility.POST("", C.CreateCity(), middlewares.JWTMiddleware())
-	facility.GET("", C.GetAllCity())
-	facility.GET("/:id", C.GetIDCity())
-	facility.PUT("/:id", C.UpdateCity(), middlewares.JWTMiddleware())
-	facility.DELETE("/:id", C.DeleteCity(), middlewares.JWTMiddleware())
+	city := e.Group("/cities")
+	city.POST("", C.CreateCity(), middlewares.JWTMiddleware())
+	city.GET("", C.GetAllCity())
+	city.GET("/:id", C.GetIDCity())
+	city.PUT("/:id", C.UpdateCity(), middlewares.JWTMiddleware())
+	city.DELETE("/:id", C.DeleteCity(), middlewares.JWTMiddleware())
 }
 
 func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {

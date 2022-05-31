@@ -8,4 +8,5 @@ type FacilityHandler interface {
 	GetFacilityID() echo.HandlerFunc
 	UpdateFacility() echo.HandlerFunc
 	DeleteFacility() echo.HandlerFunc
+	GetNearFacility() echo.HandlerFunc
 }

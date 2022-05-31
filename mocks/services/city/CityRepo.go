@@ -72,14 +72,14 @@ func (_m *CityRepo) GetAllCity() ([]entities.CityResponse, error) {
 }
 
 // GetIDCity provides a mock function with given fields: id
-func (_m *CityRepo) GetIDCity(id uint) (entities.RespondRoom, error) {
+func (_m *CityRepo) GetIDCity(id uint) (entities.CityResponse, error) {
 	ret := _m.Called(id)
 
-	var r0 entities.RespondRoom
-	if rf, ok := ret.Get(0).(func(uint) entities.RespondRoom); ok {
+	var r0 entities.CityResponse
+	if rf, ok := ret.Get(0).(func(uint) entities.CityResponse); ok {
 		r0 = rf(id)
 	} else {
-		r0 = ret.Get(0).(entities.RespondRoom)
+		r0 = ret.Get(0).(entities.CityResponse)
 	}
 
 	var r1 error
@@ -93,18 +93,18 @@ func (_m *CityRepo) GetIDCity(id uint) (entities.RespondRoom, error) {
 }
 
 // UpdateCity provides a mock function with given fields: id, update
-func (_m *CityRepo) UpdateCity(id uint, update entities.City) (entities.RespondRoom, error) {
+func (_m *CityRepo) UpdateCity(id uint, update entities.AddCity) (entities.CityResponse, error) {
 	ret := _m.Called(id, update)
 
-	var r0 entities.RespondRoom
-	if rf, ok := ret.Get(0).(func(uint, entities.City) entities.RespondRoom); ok {
+	var r0 entities.CityResponse
+	if rf, ok := ret.Get(0).(func(uint, entities.AddCity) entities.CityResponse); ok {
 		r0 = rf(id, update)
 	} else {
-		r0 = ret.Get(0).(entities.RespondRoom)
+		r0 = ret.Get(0).(entities.CityResponse)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uint, entities.City) error); ok {
+	if rf, ok := ret.Get(1).(func(uint, entities.AddCity) error); ok {
 		r1 = rf(id, update)
 	} else {
 		r1 = ret.Error(1)

@@ -37,9 +37,9 @@ func (s *ServiceFacility) CreateFacility(Insert entities.AddNewFacility) (entiti
 }
 
 // Get All Facilities
-func (s *ServiceFacility) GetAllFacility(HouseID uint) ([]entities.RespondFacility, error) {
+func (s *ServiceFacility) GetAllFacility(DistrictID uint) ([]entities.RespondFacility, error) {
 
-	res, err := s.repo.GetAllFacility(HouseID)
+	res, err := s.repo.GetAllFacility(DistrictID)
 	if err != nil {
 		log.Warn(err)
 		return []entities.RespondFacility{}, err
@@ -91,4 +91,13 @@ func (s *ServiceFacility) DeleteFacility(id uint) error {
 		return err
 	}
 	return nil
+}
+
+func (s *ServiceFacility) GetNearFacility(HouseID uint) ([]entities.NearFacility, error) {
+	result, err := s.repo.GetNearFacility(HouseID)
+	if err != nil {
+		log.Warn(err)
+		return []entities.NearFacility{}, err
+	}
+	return result, nil
 }

@@ -39,7 +39,6 @@ func (h *HandlersAmenities) CreateAmenities() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
-
 		var Insert entities.AddAmenities
 		err = c.Bind(&Insert)
 		if err != nil {

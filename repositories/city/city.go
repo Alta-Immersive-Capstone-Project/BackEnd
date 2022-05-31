@@ -65,7 +65,7 @@ func (c *cityDB) DeleteCity(cityID uint) error {
 	return nil
 }
 
-func (c *cityDB) UpdateCity(id uint, new entities.AddCity) (entities.City, error) {
+func (c *cityDB) UpdateCity(id uint, new entities.City) (entities.City, error) {
 	var city entities.City
 	err := c.Db.Where("id = ?", id).First(&city).Updates(&new).Find(&city).Error
 	if err != nil {

@@ -8,4 +8,5 @@ type FacilityControl interface {
 	GetFacilityID(id uint) (entities.RespondFacility, error)
 	UpdateFacility(id uint, update entities.UpdateFacility) (entities.RespondFacility, error)
 	DeleteFacility(id uint) error
+	GetNearFacility(HouseID uint) ([]entities.NearFacility, error)
 }
