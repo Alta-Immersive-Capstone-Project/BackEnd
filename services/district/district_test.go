@@ -183,3 +183,25 @@ func TestGetDistrictID(t *testing.T) {
 		DistrictRepo.AssertExpectations(t)
 	})
 }
+
+func TestSelectAllDistrict(t *testing.T) {
+	t.Run("Success Select All District", func(t *testing.T) {
+		DistrictRepo := mocks.NewRepoDistrict(t)
+		DistrictRepo.On("SelectAllDistrict", mock.Anything).Return(MockDistrict, nil).Once()
+		DistrictService := NewDistService(DistrictRepo)
+		res, err := DistrictService.SelectAllDistrict()
+		assert.NoError(t, err)
+		assert.Equal(t, MockDistrict, res)
+
+		DistrictRepo.AssertExpectations(t)
+	})
+	t.Run("Error Select All District", func(t *testing.T) {
+		DistrictRepo := mocks.NewRepoDistrict(t)
+		DistrictRepo.On("SelectAllDistrict", mock.Anything).Return(entities.RespondDistrict{}, errors.New("error access database")).Once()
+		DistrictService := NewDistService(DistrictRepo)
+		_, err := DistrictService.SelectAllDistrict()
+		assert.Error(t, err)
+
+		DistrictRepo.AssertExpectations(t)
+	})
+}
