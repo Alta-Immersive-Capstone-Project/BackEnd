@@ -69,3 +69,12 @@ func (m *transactionModel) Update(booking_id string, transaction entities.Transa
 
 	return transaction, nil
 }
+
+func (m *transactionModel) GetAllbyKost(duration int, status string, name string) []entities.TransactionKost {
+	var transactions []entities.TransactionKost
+
+	query := "select distinct t.booking_id, u.name, t.checkin_date, t.rent_duration, t.total_bill, t.status, t.created_at from transactions as t left join rooms r on r.id = t.room_id left join houses h on h.id = r.house_id left join users u on u.id = t.user_id where t.rent_duration = ? and t.status = ? OR h.title LIKE ?"
+
+	m.db.Raw(query, duration, status, "%"+name+"%").Scan(&transactions)
+	return transactions
+}

@@ -108,3 +108,21 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Transaction", response))
 }
+
+func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
+	role := middlewares.ExtractTokenRole(c)
+	status := c.QueryParam("status")
+	duration, _ := strconv.Atoi(c.QueryParam("duration"))
+	name := c.QueryParam("name")
+
+	if role == "customer" {
+		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
+	}
+
+	response := th.ts.GetAllTransactionbyKost(duration, status, name)
+	if len(response) == 0 {
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
+	}
+
+	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
+}

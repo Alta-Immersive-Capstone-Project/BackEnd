@@ -8,4 +8,5 @@ type TransactionService interface {
 	GetAllTransactionbyConsultant() []entities.TransactionResponse
 	UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error)
 	GetAllTransactionbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin
+	GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost
 }

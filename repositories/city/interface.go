@@ -8,5 +8,5 @@ type CityRepo interface {
 	GetAllCityDistricts(cityID uint) ([]entities.City, error)
 	GetCity(cityID uint) (entities.City, error)
 	DeleteCity(cityID uint) error
-	UpdateCity(id uint, new entities.City) (entities.City, error)
+	UpdateCity(id uint, new entities.AddCity) (entities.City, error)
 }
