@@ -92,6 +92,29 @@ func (_m *FacilityControl) GetFacilityID(id uint) (entities.RespondFacility, err
 	return r0, r1
 }
 
+// GetNearFacility provides a mock function with given fields: HouseID
+func (_m *FacilityControl) GetNearFacility(HouseID uint) ([]entities.NearFacility, error) {
+	ret := _m.Called(HouseID)
+
+	var r0 []entities.NearFacility
+	if rf, ok := ret.Get(0).(func(uint) []entities.NearFacility); ok {
+		r0 = rf(HouseID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.NearFacility)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(HouseID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateFacility provides a mock function with given fields: id, update
 func (_m *FacilityControl) UpdateFacility(id uint, update entities.UpdateFacility) (entities.RespondFacility, error) {
 	ret := _m.Called(id, update)

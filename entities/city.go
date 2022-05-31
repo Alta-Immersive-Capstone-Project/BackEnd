@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type City struct {
 	gorm.Model
-	City      string     `json:"city_name"`
-	Districts []District `gorm:"foreingkey:CityID"`
+	City     string     `json:"city_name"`
+	District []District `gorm:"foreingkey:CityID"`
 }
 type CityResponse struct {
 	ID   uint   `json:"id"`

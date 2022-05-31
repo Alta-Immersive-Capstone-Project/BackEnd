@@ -69,21 +69,21 @@ func TestGetTransaction(t *testing.T) {
 	})
 }
 
-func TestGetByCustomer(t *testing.T) {
-	repo := new(repoMock.TransactionModel)
-	insert, status := uint(1), "pending"
-	returnData := []entities.Transaction{{Model: gorm.Model{ID: uint(1)}, BookingID: "DM-1653825446724", UserID: 1, RoomID: 1, CheckinDate: time.Now(), RentDuration: 7, TotalBill: 100000, PaymentMethod: "gopay"}}
+// func TestGetByCustomer(t *testing.T) {
+// 	repo := new(repoMock.TransactionModel)
+// 	insert, status := uint(1), "pending"
+// 	returnData := []entities.Transaction{{Model: gorm.Model{ID: uint(1)}, BookingID: "DM-1653825446724", UserID: 1, RoomID: 1, CheckinDate: time.Now(), RentDuration: 7, TotalBill: 100000, PaymentMethod: "gopay"}}
 
-	t.Run("Success Get All", func(t *testing.T) {
-		repo.On("GetAllbyCustomer", insert, status).Return(returnData, nil).Once()
-		srv := transactions.NewTransactionService(repo)
+// 	t.Run("Success Get All", func(t *testing.T) {
+// 		repo.On("GetAllbyCustomer", insert, status).Return(returnData, nil).Once()
+// 		srv := transactions.NewTransactionService(repo)
 
-		res := srv.GetAllTransactionbyCustomer(insert, status)
-		assert.Equal(t, returnData[0].ID, res[0].ID)
-		assert.Equal(t, returnData[0].RoomID, res[0].RoomID)
-		repo.AssertExpectations(t)
-	})
-}
+// 		res := srv.GetAllTransactionbyCustomer(insert, status)
+// 		assert.Equal(t, returnData[0].ID, res[0].ID)
+// 		assert.Equal(t, returnData[0].RoomID, res[0].RoomID)
+// 		repo.AssertExpectations(t)
+// 	})
+// }
 
 func TestGetByConsultant(t *testing.T) {
 	repo := new(repoMock.TransactionModel)

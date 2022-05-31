@@ -30,3 +30,8 @@ type RespondFacility struct {
 	Latitude   float64 `json:"latitude"`
 	DistrictID uint    `json:"district_id"`
 }
+
+type NearFacility struct {
+	Name   string  `json:"name"`
+	Radius float64 `json:"radius"`
+}

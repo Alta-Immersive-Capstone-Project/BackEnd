@@ -92,3 +92,12 @@ func (s *ServiceFacility) DeleteFacility(id uint) error {
 	}
 	return nil
 }
+
+func (s *ServiceFacility) GetNearFacility(HouseID uint) ([]entities.NearFacility, error) {
+	result, err := s.repo.GetNearFacility(HouseID)
+	if err != nil {
+		log.Warn(err)
+		return []entities.NearFacility{}, err
+	}
+	return result, nil
+}
