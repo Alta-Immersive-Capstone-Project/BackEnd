@@ -41,6 +41,7 @@ func (ur *UserRepository) GetUserID(id int) (entities.User, error) {
 	log.Info()
 	return arrUser[0], nil
 }
+
 func (ur *UserRepository) FindByUser(value string) (entities.User, error) {
 	user := entities.User{}
 	tx := ur.Db.Where("email = ?", value).First(&user)
@@ -51,6 +52,11 @@ func (ur *UserRepository) FindByUser(value string) (entities.User, error) {
 }
 
 func (ur *UserRepository) UpdateUser(id int, user entities.User) (entities.User, error) {
+	_, err := ur.GetUserID(id)
+	if err != nil {
+		// return Kode 500 jika error
+		return entities.User{}, err
+	}
 
 	tx := ur.Db.Save(&user)
 	if tx.Error != nil {

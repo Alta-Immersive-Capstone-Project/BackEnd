@@ -34,7 +34,7 @@ func (f *forgotService) GetToken(email string) (entities.InternalAuthResponse, e
 	userRes := entities.CustomerResponse{}
 	copier.Copy(&userRes, &user)
 
-	token, err := middlewares.CreateToken(1, user.Name, user.Role)
+	token, err := middlewares.CreateToken(int(user.ID), user.Name, user.Role)
 	if err != nil {
 		return entities.InternalAuthResponse{}, err
 	}
@@ -45,16 +45,22 @@ func (f *forgotService) GetToken(email string) (entities.InternalAuthResponse, e
 	return authRes, nil
 }
 
-func (f *forgotService) ResetPassword(reqNew entities.ForgotPassword) (entities.User, error) {
-	user := entities.User{}
-	id, _, _ := middlewares.ReadToken(reqNew.Token)
-	hashedPassword, _ := helpers.HashPassword(reqNew.Password)
+func (f *forgotService) ResetPassword(id int, password string) (entities.CustomerResponse, error) {
+	user, err := f.userRepo.GetUserID(id)
+	if err != nil {
+		return entities.CustomerResponse{}, err
+	}
+
+	hashedPassword, _ := helpers.HashPassword(password)
 	user.Password = hashedPassword
 
 	res, err := f.userRepo.UpdateUser(id, user)
 	if err != nil {
-		return entities.User{}, err
+		return entities.CustomerResponse{}, err
 	}
 
-	return res, nil
+	userRes := entities.CustomerResponse{}
+	copier.Copy(&userRes, &res)
+
+	return userRes, nil
 }

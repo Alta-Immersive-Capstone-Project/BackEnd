@@ -38,9 +38,15 @@ type AppConfig struct {
 		DistanceMatrixAPIKey  string
 		DistanceMatrixBaseURL string
 	}
+
 	Email struct {
 		Domain string
 		ApiKey string
+	}
+
+	Frontend struct {
+		Domain    string
+		ResetPage string
 	}
 }
 
@@ -70,8 +76,8 @@ func initConfig() *AppConfig {
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "kost")
 
-	config.Email.Domain = GetEnv("EMAIL", "email-domain")
-	config.Email.ApiKey = GetEnv("API_KEY", "abcde545655757hjffyy")
+	config.Email.Domain = GetEnv("EMAIL", "domain")
+	config.Email.ApiKey = GetEnv("API_KEY", "87979adhjhjbbb")
 
 	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "kost-bucket")
 	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")
@@ -85,8 +91,11 @@ func initConfig() *AppConfig {
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "https://maps.googleapis.com/maps/api/distancematrix/json")
 
+	config.Frontend.Domain = GetEnv("FRONTEND_DOMAIN", "http://localhost:8001")
+	config.Frontend.ResetPage = GetEnv("FRONTEND_RESET_PAGE", "/password-confirmation")
 	// Info
 	fmt.Println(config.App)
+	fmt.Println(config.Email)
 	fmt.Println(config.Database)
 	fmt.Println(config.AwsS3)
 	fmt.Println(config.Payment)

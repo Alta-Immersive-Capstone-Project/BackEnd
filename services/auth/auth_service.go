@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"kost/deliveries/helpers"
 	middleware "kost/deliveries/middlewares"
 	"kost/entities"
@@ -27,12 +28,12 @@ func (as AuthService) Login(authReq entities.AuthRequest) (string, error) {
 	// Get user by username via repository
 	user, err := as.userRepo.FindByUser(authReq.Email)
 	if err != nil {
-		return "", err
+		return "", errors.New("invalid username/password")
 	}
 
 	// Verify password
 	if !helpers.CheckPasswordHash(authReq.Password, user.Password) {
-		return "", err
+		return "", errors.New("invalid username/password")
 	}
 
 	if user.Role != "customer" {

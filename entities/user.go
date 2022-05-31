@@ -70,6 +70,5 @@ type CustomerResponse struct {
 }
 
 type ForgotPassword struct {
-	Token    string `form:"token"`
 	Password string `form:"password"`
 }

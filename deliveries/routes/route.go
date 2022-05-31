@@ -31,9 +31,9 @@ func UserRoute(e *echo.Echo, u user.HandleUser) {
 }
 
 func AuthRoute(e *echo.Echo, l *handlers.AuthHandler, f *forgot.ForgotHandler) {
-	e.POST("/login", l.Login)
+	e.POST("/login", l.Login())
 	e.GET("/forgot", f.SendEmail())
-	e.POST("/forgot", f.ResetPassword())
+	e.POST("/forgot", f.ResetPassword(), middlewares.JWTMiddleware())
 }
 
 func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmenities, d district.IDistrictHandler, h house.IHouseHandler) {
