@@ -36,22 +36,10 @@ func (rs *reviewService) AddComment(customer_id uint, request entities.ReviewReq
 	return response, nil
 }
 
-func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse, error) {
-	var responses []entities.ReviewGetResponse
-
-	result, err := rs.rm.GetByRoomID(room_id)
+func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
+	responses, err := rs.rm.GetByRoomID(room_id)
 	if err != nil {
-		return []entities.ReviewGetResponse{}, err
-	}
-
-	for _, r := range result {
-		var response entities.ReviewGetResponse
-		copier.Copy(&response, &r)
-
-		result, _ := rs.rm.GetByUserID(response.UserID)
-		response.Name = result.Name
-
-		responses = append(responses, response)
+		return []entities.ReviewJoin{}, err
 	}
 
 	return responses, nil
