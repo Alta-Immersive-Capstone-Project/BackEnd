@@ -45,20 +45,15 @@ func TestAddComment(t *testing.T) {
 
 func TestGetByRoomID(t *testing.T) {
 	repo := new(repoMock.ReviewModel)
-	userData := entities.User{Model: gorm.Model{ID: uint(1)}, Name: "test"}
-	returnData := []entities.Review{{Model: gorm.Model{ID: uint(1), CreatedAt: time.Now()}, UserID: uint(1), RoomID: uint(1), Comment: "test", Rating: 5}}
+	returnData := []entities.ReviewJoin{{Name: "test", Comment: "test", Rating: 5, CreatedAt: time.Now()}}
 
 	t.Run("Success Get All", func(t *testing.T) {
 		repo.On("GetByRoomID", uint(1)).Return(returnData, nil).Once()
-		repo.On("GetByUserID", uint(1)).Return(userData, nil).Once()
 		srv := review.NewReviewService(repo)
 
 		res, err := srv.GetByRoomID(uint(1))
 		assert.NoError(t, err)
-		// assert.Equal(t, returnData[0].ID, res[0].ID)
-		// assert.Equal(t, returnData[0].UserID, res[0].UserID)
-		assert.Equal(t, userData.Name, res[0].Name)
-		// assert.Equal(t, returnData[0].RoomID, res[0].RoomID)
+		assert.Equal(t, returnData[0].Name, res[0].Name)
 		assert.Equal(t, returnData[0].Comment, res[0].Comment)
 		assert.Equal(t, returnData[0].Rating, res[0].Rating)
 		assert.Equal(t, returnData[0].CreatedAt, res[0].CreatedAt)
@@ -72,30 +67,33 @@ func TestGetByRoomID(t *testing.T) {
 		res, err := srv.GetByRoomID(uint(1))
 		assert.Error(t, err)
 		assert.EqualError(t, err, "data not found")
-		assert.Equal(t, []entities.ReviewGetResponse{}, res)
+		assert.Equal(t, []entities.ReviewJoin{}, res)
 		repo.AssertExpectations(t)
 	})
 }
 
 func TestGetRating(t *testing.T) {
 	repo := new(repoMock.ReviewModel)
+	returnArray := []int{1, 2, 3, 4, 5}
 	returnData := float32(5)
 
 	t.Run("Success Get Rating", func(t *testing.T) {
-		repo.On("GetRating", uint(1)).Return(returnData, nil).Once()
+		repo.On("GetRating", uint(1)).Return(returnArray, returnData, nil).Once()
 		srv := review.NewReviewService(repo)
 
-		res, _ := srv.GetRating(uint(1))
-		assert.Equal(t, returnData, res)
+		count, total := srv.GetRating(uint(1))
+		assert.Equal(t, returnArray, count)
+		assert.Equal(t, returnData, total)
 		repo.AssertExpectations(t)
 	})
 
 	t.Run("Error Get Rating", func(t *testing.T) {
-		repo.On("GetRating", uint(1)).Return(float32(0), errors.New("data not found")).Once()
+		repo.On("GetRating", uint(1)).Return([]int{}, float32(0), errors.New("data not found")).Once()
 		srv := review.NewReviewService(repo)
 
-		res, _ := srv.GetRating(uint(1))
-		assert.Equal(t, float32(0), res)
+		count, total := srv.GetRating(uint(1))
+		assert.Equal(t, []int{}, count)
+		assert.Equal(t, float32(0), total)
 		repo.AssertExpectations(t)
 	})
 }
