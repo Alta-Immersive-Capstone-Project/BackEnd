@@ -69,6 +69,7 @@ type CustomerResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type ForgotRequest struct {
-	Email string `form:"email"`
+type ForgotPassword struct {
+	Token    string `form:"token"`
+	Password string `form:"password"`
 }

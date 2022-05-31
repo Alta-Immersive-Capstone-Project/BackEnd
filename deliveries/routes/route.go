@@ -6,6 +6,7 @@ import (
 	city "kost/deliveries/handlers/city"
 	district "kost/deliveries/handlers/district"
 	facility "kost/deliveries/handlers/facility"
+	forgot "kost/deliveries/handlers/forgot"
 	house "kost/deliveries/handlers/house"
 	review "kost/deliveries/handlers/reviews"
 	room "kost/deliveries/handlers/room"
@@ -29,9 +30,10 @@ func UserRoute(e *echo.Echo, u user.HandleUser) {
 	customerGroup.DELETE("/:id", u.DeleteCustomer(), middlewares.JWTMiddleware())
 }
 
-func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
+func AuthRoute(e *echo.Echo, l *handlers.AuthHandler, f *forgot.ForgotHandler) {
 	e.POST("/login", l.Login)
-
+	e.GET("/forgot", f.SendEmail())
+	e.POST("/forgot", f.ResetPassword())
 }
 
 func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmenities, d district.IDistrictHandler, h house.IHouseHandler) {

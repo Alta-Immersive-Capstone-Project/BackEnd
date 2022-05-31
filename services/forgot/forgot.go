@@ -1,6 +1,7 @@
 package forgot
 
 import (
+	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
 	"kost/entities"
 	userRepository "kost/repositories/user"
@@ -21,7 +22,7 @@ func NewforgotService(repository userRepository.UserRepositoryInterface, valid *
 	}
 }
 
-func (f *forgotService) SendEmail(email string) (entities.InternalAuthResponse, error) {
+func (f *forgotService) GetToken(email string) (entities.InternalAuthResponse, error) {
 	user := entities.User{}
 	copier.Copy(&user, &email)
 
@@ -33,7 +34,7 @@ func (f *forgotService) SendEmail(email string) (entities.InternalAuthResponse, 
 	userRes := entities.CustomerResponse{}
 	copier.Copy(&userRes, &user)
 
-	token, err := middlewares.CreateToken(int(user.ID), user.Name, user.Role)
+	token, err := middlewares.CreateToken(1, user.Name, user.Role)
 	if err != nil {
 		return entities.InternalAuthResponse{}, err
 	}
@@ -42,4 +43,18 @@ func (f *forgotService) SendEmail(email string) (entities.InternalAuthResponse, 
 		Token: token,
 	}
 	return authRes, nil
+}
+
+func (f *forgotService) ResetPassword(reqNew entities.ForgotPassword) (entities.User, error) {
+	user := entities.User{}
+	id, _, _ := middlewares.ReadToken(reqNew.Token)
+	hashedPassword, _ := helpers.HashPassword(reqNew.Password)
+	user.Password = hashedPassword
+
+	res, err := f.userRepo.UpdateUser(id, user)
+	if err != nil {
+		return entities.User{}, err
+	}
+
+	return res, nil
 }

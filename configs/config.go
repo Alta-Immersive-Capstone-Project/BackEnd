@@ -38,6 +38,10 @@ type AppConfig struct {
 		DistanceMatrixAPIKey  string
 		DistanceMatrixBaseURL string
 	}
+	Email struct {
+		Domain string
+		ApiKey string
+	}
 }
 
 var lock = &sync.Mutex{}
@@ -61,10 +65,13 @@ func initConfig() *AppConfig {
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3307")
+	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "kost")
+
+	config.Email.Domain = GetEnv("EMAIL", "sandboxa1f7f0d535814e8480bb15653fd31d3c.mailgun.org")
+	config.Email.ApiKey = GetEnv("API_KEY", "afe8f60c7a25be9eef8288fa7ffb71d0-27a562f9-e00fe5ef")
 
 	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "kost-bucket")
 	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")

@@ -52,6 +52,10 @@ import (
 	facilityHandlers "kost/deliveries/handlers/facility"
 	roomHandlers "kost/deliveries/handlers/room"
 	userHandlers "kost/deliveries/handlers/user"
+
+	forgotHandler "kost/deliveries/handlers/forgot"
+	emailService "kost/services/email"
+	forgotService "kost/services/forgot"
 )
 
 func main() {
@@ -62,7 +66,7 @@ func main() {
 	DB := utils.NewMysqlGorm(config)
 
 	// Migrate
-	utils.Migrate(DB)
+	// utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -94,6 +98,8 @@ func main() {
 	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
+	emailService := emailService.NewEmailConfig()
+	forgotService := forgotService.NewforgotService(userRepository, validator.New())
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
@@ -106,12 +112,13 @@ func main() {
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
+	forgotHandler := forgotHandler.NewForgotHandler(forgotService, *emailService, validation)
 
 	// Middlewares
 	middlewares.General(e)
 
 	// Routes
-	routes.AuthRoute(e, authHandler)
+	routes.AuthRoute(e, authHandler, forgotHandler)
 	routes.UserRoute(e, userHandler)
 	routes.Path(e, facilityHandler, amenitiesHandler, districtHandler, houseHandler)
 	routes.ReviewsPath(e, reviewsHandler)

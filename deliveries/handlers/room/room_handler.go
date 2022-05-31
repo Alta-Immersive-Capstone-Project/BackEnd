@@ -30,7 +30,7 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		id, Role := middlewares.ExtractTokenRoleID(c)
-		if Role != "admin" && Role != "supervisor" {
+		if Role != "admin" || Role != "supervisor" {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
 
@@ -87,7 +87,7 @@ func (h *HandlersRoom) GetIDRoom() echo.HandlerFunc {
 func (h *HandlersRoom) UpdateRoom() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		Role := middlewares.ExtractTokenRole(c)
-		if Role != "admin" && Role != "supervisor" {
+		if Role != "admin" || Role != "supervisor" {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
 
@@ -114,7 +114,7 @@ func (h *HandlersRoom) UpdateRoom() echo.HandlerFunc {
 func (h *HandlersRoom) DeleteRoom() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		Role := middlewares.ExtractTokenRole(c)
-		if Role != "admin" && Role != "supervisor" {
+		if Role != "admin" || Role != "supervisor" {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
 
