@@ -70,8 +70,8 @@ func initConfig() *AppConfig {
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "kost")
 
-	config.Email.Domain = GetEnv("EMAIL", "sandboxa1f7f0d535814e8480bb15653fd31d3c.mailgun.org")
-	config.Email.ApiKey = GetEnv("API_KEY", "afe8f60c7a25be9eef8288fa7ffb71d0-27a562f9-e00fe5ef")
+	config.Email.Domain = GetEnv("EMAIL", "email-domain")
+	config.Email.ApiKey = GetEnv("API_KEY", "abcde545655757hjffyy")
 
 	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "kost-bucket")
 	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")

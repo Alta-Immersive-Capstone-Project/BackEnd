@@ -37,7 +37,7 @@ func (h *ForgotHandler) SendEmail() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
 
-		id, err := h.emailService.SendEmail("test@gmail.com", "reset password", fmt.Sprintf("Url forgot password: %s", token), email)
+		id, err := h.emailService.SendEmail("test@gmail.com", "reset password", fmt.Sprintf("Hai %s/tThis is your link to reset password/t url: %s", token.User.Name, token), email)
 
 		if err != nil {
 			log.Warn(err)
