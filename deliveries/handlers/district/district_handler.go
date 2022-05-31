@@ -138,3 +138,14 @@ func (dh *DistrictHandler) Show() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data District", result))
 	}
 }
+
+func (dh *DistrictHandler) Index() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		result, err := dh.Service.SelectAllDistrict()
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Select All District", result))
+	}
+}

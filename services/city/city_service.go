@@ -47,29 +47,32 @@ func (s *ServiceCity) GetAllCity() ([]entities.CityResponse, error) {
 
 	return result, nil
 }
-func (s *ServiceCity) GetIDCity(id uint) (entities.RespondRoom, error) {
+func (s *ServiceCity) GetIDCity(id uint) (entities.CityResponse, error) {
 
 	res, err := s.repo.GetCity(id)
 	if err != nil {
 		log.Warn(err)
-		return entities.RespondRoom{}, err
+		return entities.CityResponse{}, err
 	}
 
-	result := entities.RespondRoom{}
+	result := entities.CityResponse{}
 	copier.Copy(&result, &res)
 
 	return result, nil
 }
 
-func (s *ServiceCity) UpdateCity(id uint, update entities.City) (entities.RespondRoom, error) {
+func (s *ServiceCity) UpdateCity(id uint, update entities.AddCity) (entities.CityResponse, error) {
 
-	res, err := s.repo.UpdateCity(id, update)
+	var UpdateCity entities.City
+	copier.Copy(&UpdateCity, &update)
+
+	res, err := s.repo.UpdateCity(id, UpdateCity)
 	if err != nil {
 		log.Warn(err)
-		return entities.RespondRoom{}, err
+		return entities.CityResponse{}, err
 	}
 
-	result := entities.RespondRoom{}
+	result := entities.CityResponse{}
 	copier.Copy(&result, &res)
 
 	return result, nil

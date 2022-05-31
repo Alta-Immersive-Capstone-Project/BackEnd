@@ -38,11 +38,17 @@ func (m *transactionModel) Get(booking_id string) (entities.Transaction, error) 
 	return transaction, nil
 }
 
-func (m *transactionModel) GetAllbyCustomer(customer_id uint, status string) []entities.Transaction {
-	var transactions []entities.Transaction
+func (m *transactionModel) GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	var transactions []entities.TransactionJoin
 
-	m.db.Where("user_id = ? OR consultant_id = ? AND status LIKE ?", customer_id, customer_id, "%"+status+"%").Find(&transactions)
+	query := "select distinct t.id, t.checkin_date, t.rent_duration, t.booking_id, t.total_bill, t.status, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.city_id = h.district_id left join cities c on c.id = d.city_id where t.status = ? and c.id = ? and h.district_id = ?"
+	if role == "customer" {
+		query += " and t.user_id = ?"
+	} else {
+		query += " and t.consultant_id = ?"
+	}
 
+	m.db.Raw(query, status, city, district, user).Scan(&transactions)
 	return transactions
 }
 
@@ -62,4 +68,13 @@ func (m *transactionModel) Update(booking_id string, transaction entities.Transa
 	}
 
 	return transaction, nil
+}
+
+func (m *transactionModel) GetAllbyKost(duration int, status string, name string) []entities.TransactionKost {
+	var transactions []entities.TransactionKost
+
+	query := "select distinct t.booking_id, u.name, t.checkin_date, t.rent_duration, t.total_bill, t.status, t.created_at from transactions as t left join rooms r on r.id = t.room_id left join houses h on h.id = r.house_id left join users u on u.id = t.user_id where t.rent_duration = ? and t.status = ? OR h.title LIKE ?"
+
+	m.db.Raw(query, duration, status, "%"+name+"%").Scan(&transactions)
+	return transactions
 }

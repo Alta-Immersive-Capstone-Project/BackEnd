@@ -62,3 +62,13 @@ func (dr *DistrictRepo) GetAllDistrict(cid uint) ([]entities.District, error) {
 	}
 	return Districts, nil
 }
+
+func (dr *DistrictRepo) SelectAllDistrict() ([]entities.District, error) {
+	var Districts []entities.District
+	err := dr.Db.Find(&Districts).Error
+	if err != nil {
+		log.Warn("Error Get Data", err)
+		return Districts, err
+	}
+	return Districts, nil
+}

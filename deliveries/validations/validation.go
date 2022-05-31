@@ -29,6 +29,16 @@ func (v *validation) Validation(request interface{}) error {
 		if name == "-" {
 			return ""
 		}
+
+		return name
+	})
+
+	v.v.RegisterTagNameFunc(func(fld reflect.StructField) string {
+		name := strings.SplitN(fld.Tag.Get("form"), ",", 2)[0]
+		if name == "-" {
+			return ""
+		}
+
 		return name
 	})
 
@@ -39,7 +49,8 @@ func (v *validation) Validation(request interface{}) error {
 
 	return nil
 }
-func validationImage(files []*multipart.FileHeader) error {
+
+func ValidationImage(files []*multipart.FileHeader) error {
 	for i, file := range files {
 		if file.Size >= 1000*1000 {
 			return errors.New("max file image 1 MB")
@@ -56,5 +67,6 @@ func validationImage(files []*multipart.FileHeader) error {
 			return errors.New("file image " + strconv.Itoa(i+1) + " type not PNG")
 		}
 	}
+
 	return nil
 }

@@ -8,4 +8,5 @@ type IDistrictHandler interface {
 	Delete() echo.HandlerFunc
 	GetAllByCity() echo.HandlerFunc
 	Show() echo.HandlerFunc
+	Index() echo.HandlerFunc
 }

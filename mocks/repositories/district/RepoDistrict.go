@@ -92,6 +92,29 @@ func (_m *RepoDistrict) GetDistrictID(id uint) (entities.District, error) {
 	return r0, r1
 }
 
+// SelectAllDistrict provides a mock function with given fields:
+func (_m *RepoDistrict) SelectAllDistrict() ([]entities.District, error) {
+	ret := _m.Called()
+
+	var r0 []entities.District
+	if rf, ok := ret.Get(0).(func() []entities.District); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.District)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateDistrict provides a mock function with given fields: id, update
 func (_m *RepoDistrict) UpdateDistrict(id uint, update entities.District) (entities.District, error) {
 	ret := _m.Called(id, update)

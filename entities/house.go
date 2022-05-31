@@ -6,20 +6,34 @@ import (
 
 type House struct {
 	gorm.Model
-	DistrictID uint    `gorm:"not null json:district_id"`
-	Title      string  `json:"title" gorm:"type:varchar(161);not null;unique"`
-	Brief      string  `json:"brief" gorm:"type:text;not null"`
-	OwnerName  string  `json:"owner_name" gorm:"type:varchar(255);not null"`
-	OwnerPhone string  `json:"owner_phone" gorm:"type:varchar(15);not null"`
-	Address    string  `json:"address" gorm:"type:varchar(255);not null"`
-	SlotRoom   int     `json:"slot_room" gorm:"type:int(3);not null"`
-	Available  int     `json:"available" gorm:"type:int(3);not null"`
-	Latitude   float64 `json:"latitude" gorm:"not null"`
-	Longitude  float64 `json:"longitude" gorm:"not null"`
-	Room       []Room  `gorm:"foreingkey:HouseID"`
+	DistrictID uint       `gorm:"not null json:district_id"`
+	Title      string     `json:"title" gorm:"type:varchar(161);not null"`
+	Brief      string     `json:"brief" gorm:"type:text;not null"`
+	OwnerName  string     `json:"owner_name" gorm:"type:varchar(255);not null"`
+	OwnerPhone string     `json:"owner_phone" gorm:"type:varchar(15);not null"`
+	Address    string     `json:"address" gorm:"type:varchar(255);not null"`
+	SlotRoom   int        `json:"slot_room" gorm:"type:int(3);not null"`
+	Available  int        `json:"available" gorm:"type:int(3);not null"`
+	Latitude   float64    `json:"latitude" gorm:"not null"`
+	Longitude  float64    `json:"longitude" gorm:"not null"`
+	Facility   []Facility `gorm:"foreingkey:HouseID"`
+	Room       []Room     `gorm:"foreingkey:HouseID"`
 }
 
-type HouseRequest struct {
+type AddHouse struct {
+	DistrictID uint    `json:"district_id" validate:"required"`
+	Title      string  `json:"title" validate:"required"`
+	Brief      string  `json:"brief" validate:"required"`
+	OwnerName  string  `json:"owner_name" validate:"required"`
+	OwnerPhone string  `json:"owner_phone" validate:"required"`
+	Address    string  `json:"address" validate:"required"`
+	SlotRoom   int     `json:"slot_room" validate:"required"`
+	Available  int     `json:"available" validate:"required"`
+	Latitude   float64 `json:"latitude" validate:"required"`
+	Longitude  float64 `json:"longitude" validate:"required"`
+}
+
+type UpdateHouse struct {
 	DistrictID uint    `json:"district_id"`
 	Title      string  `json:"title"`
 	Brief      string  `json:"brief"`
@@ -43,5 +57,22 @@ type HouseResponse struct {
 	Available  int     `json:"available"`
 	Latitude   float64 `json:"latitude"`
 	Longitude  float64 `json:"longitude"`
+	DistrictID uint    `json:"district_id"`
+}
+
+type HouseResponseJoin struct {
+	ID         uint    `json:"house_id"`
+	Title      string  `json:"title"`
+	Brief      string  `json:"brief"`
+	OwnerName  string  `json:"owner_name"`
+	OwnerPhone string  `json:"owner_phone"`
+	Address    string  `json:"address"`
+	Available  int     `json:"available"`
+	RoomID     uint    `json:"room_id"`
+	Price      int32   `json:"price"`
+	Type       string  `json:"type"`
+	ReviewID   uint    `json:"review_id"`
+	Rating     float32 `json:"rating"`
+	ImagesUrl  string  `json:"images_url"`
 	DistrictID uint    `json:"district_id"`
 }

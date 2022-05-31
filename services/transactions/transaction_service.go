@@ -54,17 +54,8 @@ func (ts *transactionService) GetTransaction(booking_id string) (entities.Transa
 	return response, nil
 }
 
-func (ts *transactionService) GetAllTransactionbyCustomer(customer_id uint, status string) []entities.TransactionResponse {
-	var response []entities.TransactionResponse
-
-	results := ts.tm.GetAllbyCustomer(customer_id, status)
-
-	for _, r := range results {
-		var transaction entities.TransactionResponse
-		copier.Copy(&transaction, &r)
-		response = append(response, transaction)
-	}
-
+func (ts *transactionService) GetAllTransactionbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	response := ts.tm.GetAllbyCustomer(role, user, status, city, district)
 	return response
 }
 
@@ -97,4 +88,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	copier.Copy(&response, &result)
 	return response, nil
+}
+
+func (ts *transactionService) GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost {
+	response := ts.tm.GetAllbyKost(duration, status, name)
+	return response
 }

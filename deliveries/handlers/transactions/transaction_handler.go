@@ -7,6 +7,7 @@ import (
 	"kost/entities"
 	service "kost/services/transactions"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -46,10 +47,13 @@ func (th *transactionHandler) InsertTransaction(c echo.Context) error {
 }
 
 func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
-	customer_id := uint(middlewares.ExtractTokenUserId(c))
-	status := c.QueryParam("status")
+	customer_id, role := middlewares.ExtractTokenRoleID(c)
 
-	response := th.ts.GetAllTransactionbyCustomer(customer_id, status)
+	status := c.QueryParam("status")
+	city, _ := strconv.Atoi(c.QueryParam("city"))
+	district, _ := strconv.Atoi(c.QueryParam("district"))
+
+	response := th.ts.GetAllTransactionbyCustomer(role, uint(customer_id), status, uint(city), uint(district))
 	if len(response) == 0 {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
@@ -103,4 +107,22 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Transaction", response))
+}
+
+func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
+	role := middlewares.ExtractTokenRole(c)
+	status := c.QueryParam("status")
+	duration, _ := strconv.Atoi(c.QueryParam("duration"))
+	name := c.QueryParam("name")
+
+	if role == "customer" {
+		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
+	}
+
+	response := th.ts.GetAllTransactionbyKost(duration, status, name)
+	if len(response) == 0 {
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
+	}
+
+	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
 }

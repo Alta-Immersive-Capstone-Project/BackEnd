@@ -35,15 +35,15 @@ func (_m *ReviewModel) Create(review entities.Review) (entities.Review, error) {
 }
 
 // GetByRoomID provides a mock function with given fields: room_id
-func (_m *ReviewModel) GetByRoomID(room_id uint) ([]entities.Review, error) {
+func (_m *ReviewModel) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
 	ret := _m.Called(room_id)
 
-	var r0 []entities.Review
-	if rf, ok := ret.Get(0).(func(uint) []entities.Review); ok {
+	var r0 []entities.ReviewJoin
+	if rf, ok := ret.Get(0).(func(uint) []entities.ReviewJoin); ok {
 		r0 = rf(room_id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]entities.Review)
+			r0 = ret.Get(0).([]entities.ReviewJoin)
 		}
 	}
 
@@ -57,46 +57,34 @@ func (_m *ReviewModel) GetByRoomID(room_id uint) ([]entities.Review, error) {
 	return r0, r1
 }
 
-// GetByUserID provides a mock function with given fields: user_id
-func (_m *ReviewModel) GetByUserID(user_id uint) (entities.User, error) {
-	ret := _m.Called(user_id)
-
-	var r0 entities.User
-	if rf, ok := ret.Get(0).(func(uint) entities.User); ok {
-		r0 = rf(user_id)
-	} else {
-		r0 = ret.Get(0).(entities.User)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(user_id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // GetRating provides a mock function with given fields: room_id
-func (_m *ReviewModel) GetRating(room_id uint) (float32, error) {
+func (_m *ReviewModel) GetRating(room_id uint) ([]int, float32, error) {
 	ret := _m.Called(room_id)
 
-	var r0 float32
-	if rf, ok := ret.Get(0).(func(uint) float32); ok {
+	var r0 []int
+	if rf, ok := ret.Get(0).(func(uint) []int); ok {
 		r0 = rf(room_id)
 	} else {
-		r0 = ret.Get(0).(float32)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]int)
+		}
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(uint) error); ok {
+	var r1 float32
+	if rf, ok := ret.Get(1).(func(uint) float32); ok {
 		r1 = rf(room_id)
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(float32)
 	}
 
-	return r0, r1
+	var r2 error
+	if rf, ok := ret.Get(2).(func(uint) error); ok {
+		r2 = rf(room_id)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
 }
 
 type NewReviewModelT interface {
