@@ -42,6 +42,39 @@ var MockHouse = []entities.House{
 	},
 }
 
+var MockHouseJoin = []entities.HouseResponseJoin{
+	{
+		ID:         1,
+		Title:      "Kost A Maguwoharjo Ring road Utara",
+		Brief:      "Brief information about the house",
+		OwnerName:  "Adi Yudho",
+		OwnerPhone: "+62823987654321",
+		Address:    "Jl. Maguwoharjo RT.11 RW.11",
+		Available:  3,
+		DistrictID: 1,
+		District:   "Maguwoharjo",
+		RoomID:     1,
+		Type:       "Putra",
+		Price:      700000,
+		Rating:     4.5,
+	},
+	{
+		ID:         2,
+		Title:      "Kost A12 Kedaman Maguwo",
+		Brief:      "Brief information about the house",
+		OwnerName:  "Ana Mana",
+		OwnerPhone: "+6282398761111",
+		Address:    "Jl. Maguwoharjo RT.12 RW.11",
+		Available:  2,
+		DistrictID: 1,
+		District:   "Maguwoharjo",
+		RoomID:     1,
+		Type:       "Putri",
+		Price:      600000,
+		Rating:     4,
+	},
+}
+
 func TestCreateHouse(t *testing.T) {
 	var NewHouse = entities.AddHouse{
 		DistrictID: 1,
@@ -161,24 +194,24 @@ func TestDeleteHouse(t *testing.T) {
 	})
 }
 
-func TestGetAllHouse(t *testing.T) {
-	t.Run("Success Get All Houses", func(t *testing.T) {
+func TestGetAllHouseByDist(t *testing.T) {
+	t.Run("Success Get All Houses By Dist", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetAllHouse", uint(1)).Return(MockHouse, nil).Once()
+		HouseRepo.On("GetAllHouseByDist", uint(1)).Return(MockHouse, nil).Once()
 		HouseService := NewHouseService(HouseRepo)
 
-		result, err := HouseService.GetAllHouseByDist(uint(1))
+		result, err := HouseService.GetAllHouseByDistrict(uint(1))
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
 
 		HouseRepo.AssertExpectations(t)
 	})
-	t.Run("Error Get All Houses", func(t *testing.T) {
+	t.Run("Error Get All Houses By Dist", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetAllHouse", uint(1)).Return(nil, errors.New("Error Access Database")).Once()
+		HouseRepo.On("GetAllHouseByDist", uint(1)).Return(nil, errors.New("Error Access Database")).Once()
 		HouseService := NewHouseService(HouseRepo)
 
-		result, err := HouseService.GetAllHouseByDist(uint(1))
+		result, err := HouseService.GetAllHouseByDistrict(uint(1))
 		assert.Error(t, err)
 		assert.NotNil(t, result)
 
@@ -206,6 +239,132 @@ func TestGetHouseID(t *testing.T) {
 		result, err := DistrictService.GetHouseID(uint(1))
 		assert.Error(t, err)
 		assert.NotEqual(t, MockHouse[0].OwnerName, result.OwnerName)
+
+		HouseRepo.AssertExpectations(t)
+	})
+}
+
+func TestFindAllHouseByDistrict(t *testing.T) {
+	t.Run("Success Find All Houses By Dist", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetAllHouseByDistrict", uint(1)).Return(MockHouseJoin, nil).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindAllHouseByDistrict(uint(1))
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Get All Houses By Dist", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetAllHouseByDistrict", uint(1)).Return(nil, errors.New("Error Access Database")).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindAllHouseByDistrict(uint(1))
+		assert.Error(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+}
+
+func TestFindAllHouseByCities(t *testing.T) {
+	t.Run("Success Find All Houses By Cities", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetAllHouseByCities", uint(1)).Return(MockHouseJoin, nil).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindAllHouseByCities(uint(1))
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Get All Houses By Cities", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetAllHouseByCities", uint(1)).Return(nil, errors.New("Error Access Database")).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindAllHouseByCities(uint(1))
+		assert.Error(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+}
+
+func TestFindAllHouseByCtyAndDst(t *testing.T) {
+	t.Run("Success Find All Houses By Cities And District", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetAllHouseByDstAndCty", uint(1), uint(2)).Return(MockHouseJoin, nil).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindAllHouseByCtyAndDst(uint(1), uint(2))
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Get All Houses By Cities And Dsitrict", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetAllHouseByDstAndCty", uint(1), uint(2)).Return(nil, errors.New("error access database")).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		_, err := HouseService.FindAllHouseByCtyAndDst(uint(1), uint(2))
+		assert.Error(t, err)
+
+		HouseRepo.AssertExpectations(t)
+	})
+}
+
+func TestSelectAllHouse(t *testing.T) {
+	t.Run("Success Find All Houses By Cities", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("SelectAllHouse", mock.Anything).Return(MockHouseJoin, nil).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.SelectAllHouse()
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Get All Houses By Cities", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("SelectAllHouse", mock.Anything).Return(nil, errors.New("Error Access Database")).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.SelectAllHouse()
+		assert.Error(t, err)
+		assert.Nil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+}
+
+func TestFindHouseByTitle(t *testing.T) {
+	t.Run("Success Find House By Title", func(t *testing.T) {
+		title := "Maguwo"
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("FindHouseByTitle", title).Return(MockHouseJoin, nil).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindHouseByTitle(title)
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Get All Houses By Cities", func(t *testing.T) {
+		title := "Maguwo"
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("FindHouseByTitle", title).Return([]entities.HouseResponseJoin{}, errors.New("Error Access Database")).Once()
+		HouseService := NewHouseService(HouseRepo)
+
+		result, err := HouseService.FindHouseByTitle(title)
+		assert.Error(t, err)
+		assert.Nil(t, result)
 
 		HouseRepo.AssertExpectations(t)
 	})

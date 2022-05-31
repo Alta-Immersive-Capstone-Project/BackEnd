@@ -67,8 +67,8 @@ func (hs *HouseService) GetHouseID(id uint) (entities.HouseResponse, error) {
 	return result, nil
 }
 
-func (hs *HouseService) GetAllHouseByDist(dist_id uint) ([]entities.HouseResponse, error) {
-	res, err := hs.repo.GetAllHouseByDistrict(dist_id)
+func (hs *HouseService) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponse, error) {
+	res, err := hs.repo.GetAllHouseByDist(dist_id)
 	if err != nil {
 		log.Warn(err)
 		return []entities.HouseResponse{}, err
@@ -130,13 +130,14 @@ func (hs *HouseService) FindHouseByTitle(title string) ([]entities.HouseResponse
 	copier.Copy(&result, &res)
 	return result, nil
 }
-func (hs *HouseService) FindHouseByLocation(lat float64, long float64) ([]entities.HouseResponseJoin, error) {
-	res, err := hs.repo.FindHouseByLocation(lat, long)
-	if err != nil {
-		log.Warn(err)
-		return []entities.HouseResponseJoin{}, err
-	}
-	var result []entities.HouseResponseJoin
-	copier.Copy(&result, &res)
-	return result, nil
-}
+
+// func (hs *HouseService) FindHouseByLocation(lat float64, long float64) ([]entities.HouseResponseJoin, error) {
+// 	res, err := hs.repo.FindHouseByLocation(lat, long)
+// 	if err != nil {
+// 		log.Warn(err)
+// 		return []entities.HouseResponseJoin{}, err
+// 	}
+// 	var result []entities.HouseResponseJoin
+// 	copier.Copy(&result, &res)
+// 	return result, nil
+// }
