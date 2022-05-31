@@ -115,7 +115,6 @@ func (f *FacilityDB) GetNearFacility(HouseID uint) ([]entities.NearFacility, err
 			nearFacility.Radius = jarak.(float64)
 			result = append(result, nearFacility)
 		}
-		fmt.Println("result>>>", result)
 	}
 	return result, nil
 }

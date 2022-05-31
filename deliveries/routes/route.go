@@ -38,6 +38,8 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
 	e.GET("/houses/:id/facilities", f.GetNearFacility())
+	e.GET("/district/:id/facilities", f.GetNearFacility())
+
 	facility.GET("/:id", f.GetFacilityID())
 	facility.PUT("/:id", f.UpdateFacility(), middlewares.JWTMiddleware())
 	facility.DELETE("/:id", f.DeleteFacility(), middlewares.JWTMiddleware())
