@@ -30,6 +30,13 @@ type ReviewResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+type ReviewJoin struct {
+	Name      string    `json:"name"`
+	Comment   string    `json:"comment"`
+	Rating    float32   `json:"rating"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
 type ReviewGetResponse struct {
 	ID        uint      `json:"id"`
 	UserID    uint      `json:"user_id"`

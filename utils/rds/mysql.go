@@ -10,7 +10,7 @@ import (
 
 func NewMysqlGorm(config *configs.AppConfig) *gorm.DB {
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true",
 		config.Database.Username,
 		config.Database.Password,
 		config.Database.Host,
