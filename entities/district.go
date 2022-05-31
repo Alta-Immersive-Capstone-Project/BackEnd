@@ -8,7 +8,8 @@ type District struct {
 	Longitude float64
 	Latitude  float64
 	CityID    uint
-	House     []House `gorm:"foreingkey:DistrictID"`
+	House     []House    `gorm:"foreingkey:DistrictID"`
+	Facility  []Facility `gorm:"foreingkey:DistrictID"`
 }
 
 type AddDistrict struct {

@@ -37,9 +37,9 @@ func (s *ServiceFacility) CreateFacility(Insert entities.AddNewFacility) (entiti
 }
 
 // Get All Facilities
-func (s *ServiceFacility) GetAllFacility(HouseID uint) ([]entities.RespondFacility, error) {
+func (s *ServiceFacility) GetAllFacility(DistrictID uint) ([]entities.RespondFacility, error) {
 
-	res, err := s.repo.GetAllFacility(HouseID)
+	res, err := s.repo.GetAllFacility(DistrictID)
 	if err != nil {
 		log.Warn(err)
 		return []entities.RespondFacility{}, err

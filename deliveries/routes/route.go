@@ -31,7 +31,6 @@ func UserRoute(e *echo.Echo, u user.HandleUser) {
 
 func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
 	e.POST("/login", l.Login)
-
 }
 
 func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmenities, d district.IDistrictHandler, h house.IHouseHandler) {
