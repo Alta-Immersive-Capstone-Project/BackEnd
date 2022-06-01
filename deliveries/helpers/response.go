@@ -121,6 +121,15 @@ func StatusForbidden(message string) map[string]interface{} {
 		"data":    nil,
 	}
 }
+
+func StatusUnauthorized(err error) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    http.StatusForbidden,
+		"message": err.Error(),
+		"data":    nil,
+	}
+}
+
 func ErrorS3(message string) map[string]interface{} {
 	return map[string]interface{}{
 		"Code":    http.StatusForbidden,
