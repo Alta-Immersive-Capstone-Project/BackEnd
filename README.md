@@ -59,7 +59,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 <!-- CONTACT -->
 ## Contact
 
-Project Repository Link :  [https://github.com/Alta-Immersive-Capstone-Project/BackEnd](https://github.com/Alta-Immersive-Capstone-Project/BackEnd)<br/>
+Project Repository Link :  [https://github.com/Alta-Immersive-Capstone-Project/BackEnd](https://github.com/Alta-Immersive-Capstone-Project)<br/>
 Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.0.0](https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.0.0)
 
 <!-- :heart: -->
