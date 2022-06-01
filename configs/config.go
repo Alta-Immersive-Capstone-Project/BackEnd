@@ -29,9 +29,8 @@ type AppConfig struct {
 	}
 
 	Payment struct {
-		MidtransBaseURLProduction  string
-		MidtransBaseURLDevelopment string
-		MidtransServerKey          string
+		MidtransServerKey string
+		MidtransStatus    string
 	}
 
 	DistanceMatrix struct {
@@ -71,9 +70,8 @@ func initConfig() *AppConfig {
 	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "AKIAJXZQZQ7Z5Z5Z5Z5Z")
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
-	config.Payment.MidtransBaseURLProduction = GetEnv("MIDTRANS_BASE_URL_PRODUCTION", "https://api.midtrans.com")
-	config.Payment.MidtransBaseURLDevelopment = GetEnv("MIDTRANS_BASE_URL_DEVELOPMENT", "https://api.midtrans.com/v2/")
-	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
+	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "SB-Mid-server-YyE7uWSDeo-SBo5lNU6XUA4l")
+	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "https://maps.googleapis.com/maps/api/distancematrix/json")
