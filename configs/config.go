@@ -61,10 +61,10 @@ func initConfig() *AppConfig {
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3307")
+	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "kost")
+	config.Database.Name = GetEnv("DB_NAME", "Trial")
 
 	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "kost-bucket")
 	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")
