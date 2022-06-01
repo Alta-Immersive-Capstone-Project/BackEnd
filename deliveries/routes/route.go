@@ -62,14 +62,14 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 	house.POST("", h.Store(), middlewares.JWTMiddleware())
 	house.GET("", h.Index())
 	house.GET("/search", h.SearchByTitle())
-	house.GET("/q", h.SearchBylocation())
+	// house.GET("/search", h.SearchBylocation())
 	house.GET("/:id", h.Show())
 	house.PUT("/:id", h.Update(), middlewares.JWTMiddleware())
 	house.DELETE("/:id", h.Delete(), middlewares.JWTMiddleware())
+	house.GET("/district/:id", h.SelectHouseByDistrict())
 	e.GET("/districts/:id/houses", h.GetAllByDist())
 	e.GET("/cities/:cid/districts/houses", h.SelectHouseByCities())
 	e.GET("/cities/:cid/districts/:dist_id/houses", h.SelectHouseByCtyAndDst())
-	e.GET("/houses/district/:id", h.SelectHouseByDistrict())
 }
 func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
 	room := e.Group("/room")

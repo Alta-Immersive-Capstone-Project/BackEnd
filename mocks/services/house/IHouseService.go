@@ -117,36 +117,13 @@ func (_m *IHouseService) FindAllHouseByDistrict(dist_id uint) ([]entities.HouseR
 	return r0, r1
 }
 
-// FindHouseByLocation provides a mock function with given fields: lat, long
-func (_m *IHouseService) FindHouseByLocation(lat float64, long float64) ([]entities.HouseResponseJoin, error) {
-	ret := _m.Called(lat, long)
-
-	var r0 []entities.HouseResponseJoin
-	if rf, ok := ret.Get(0).(func(float64, float64) []entities.HouseResponseJoin); ok {
-		r0 = rf(lat, long)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]entities.HouseResponseJoin)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(float64, float64) error); ok {
-		r1 = rf(lat, long)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// FindHouseByTitle provides a mock function with given fields: name
-func (_m *IHouseService) FindHouseByTitle(name string) ([]entities.HouseResponseJoin, error) {
-	ret := _m.Called(name)
+// FindHouseByTitle provides a mock function with given fields: title
+func (_m *IHouseService) FindHouseByTitle(title string) ([]entities.HouseResponseJoin, error) {
+	ret := _m.Called(title)
 
 	var r0 []entities.HouseResponseJoin
 	if rf, ok := ret.Get(0).(func(string) []entities.HouseResponseJoin); ok {
-		r0 = rf(name)
+		r0 = rf(title)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.HouseResponseJoin)
@@ -155,7 +132,7 @@ func (_m *IHouseService) FindHouseByTitle(name string) ([]entities.HouseResponse
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(name)
+		r1 = rf(title)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -163,8 +140,8 @@ func (_m *IHouseService) FindHouseByTitle(name string) ([]entities.HouseResponse
 	return r0, r1
 }
 
-// GetAllHouseByDist provides a mock function with given fields: dist_id
-func (_m *IHouseService) GetAllHouseByDist(dist_id uint) ([]entities.HouseResponse, error) {
+// GetAllHouseByDistrict provides a mock function with given fields: dist_id
+func (_m *IHouseService) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponse, error) {
 	ret := _m.Called(dist_id)
 
 	var r0 []entities.HouseResponse

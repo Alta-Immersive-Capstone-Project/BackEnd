@@ -111,7 +111,7 @@ func (hh *HouseHandler) GetAllByDist() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
-		result, err := hh.Service.GetAllHouseByDist(uint(DistrictID))
+		result, err := hh.Service.GetAllHouseByDistrict(uint(DistrictID))
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
@@ -166,7 +166,7 @@ func (hh *HouseHandler) SelectHouseByDistrict() echo.HandlerFunc {
 }
 func (hh *HouseHandler) SelectHouseByCities() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := c.Param("id")
+		id := c.Param("cid")
 		CityID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
@@ -215,27 +215,27 @@ func (hh *HouseHandler) SearchByTitle() echo.HandlerFunc {
 	}
 }
 
-func (hh *HouseHandler) SearchBylocation() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		rlat := c.QueryParam("rlat")
-		lat, err := strconv.ParseFloat(rlat, 64)
-		if err != nil {
-			log.Warn(err)
-			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
-		}
+// func (hh *HouseHandler) SearchBylocation() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		rlat := c.QueryParam("rlat")
+// 		lat, err := strconv.ParseFloat(rlat, 64)
+// 		if err != nil {
+// 			log.Warn(err)
+// 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+// 		}
 
-		rlong := c.QueryParam("rlong")
-		long, err := strconv.ParseFloat(rlong, 64)
-		if err != nil {
-			log.Warn(err)
-			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
-		}
+// 		rlong := c.QueryParam("rlong")
+// 		long, err := strconv.ParseFloat(rlong, 64)
+// 		if err != nil {
+// 			log.Warn(err)
+// 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+// 		}
 
-		result, err := hh.Service.FindHouseByLocation(lat, long)
-		if err != nil {
-			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
-		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
-	}
-}
+// 		result, err := hh.Service.FindHouseByLocation(lat, long)
+// 		if err != nil {
+// 			log.Warn(err)
+// 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+// 		}
+// 		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+// 	}
+// }

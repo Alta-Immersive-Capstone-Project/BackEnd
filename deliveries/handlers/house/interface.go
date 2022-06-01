@@ -13,5 +13,5 @@ type IHouseHandler interface {
 	SelectHouseByCities() echo.HandlerFunc
 	SelectHouseByCtyAndDst() echo.HandlerFunc
 	SearchByTitle() echo.HandlerFunc
-	SearchBylocation() echo.HandlerFunc
+	// SearchBylocation() echo.HandlerFunc
 }
