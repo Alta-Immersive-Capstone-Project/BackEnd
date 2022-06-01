@@ -96,12 +96,6 @@ func (ts *transactionService) UpdateStatus(req entities.Callback) error {
 	hash.Write([]byte(key))
 	SignatureKey := hex.EncodeToString(hash.Sum(nil))
 
-	fmt.Println(req.OrderID)
-	fmt.Println(req.StatusCode)
-	fmt.Println(req.GrossAmount)
-	fmt.Println(configs.Get().Payment.MidtransServerKey)
-	fmt.Println(SignatureKey)
-
 	if req.SignatureKey != SignatureKey {
 		return errors.New("you are not allowed to access this resource")
 	}
