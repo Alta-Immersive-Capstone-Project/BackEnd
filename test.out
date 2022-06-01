@@ -1,0 +1,20 @@
+mode: set
+kost/services/facility/facility_service.go:15.70,19.2 1 1
+kost/services/facility/facility_service.go:22.108,27.16 4 1
+kost/services/facility/facility_service.go:32.2,36.20 3 1
+kost/services/facility/facility_service.go:27.16,30.3 2 1
+kost/services/facility/facility_service.go:40.95,43.16 2 1
+kost/services/facility/facility_service.go:47.2,50.20 3 1
+kost/services/facility/facility_service.go:43.16,46.3 2 1
+kost/services/facility/facility_service.go:54.84,57.16 2 1
+kost/services/facility/facility_service.go:62.2,65.20 3 1
+kost/services/facility/facility_service.go:57.16,60.3 2 1
+kost/services/facility/facility_service.go:69.117,74.16 4 1
+kost/services/facility/facility_service.go:79.2,82.20 3 1
+kost/services/facility/facility_service.go:74.16,77.3 2 1
+kost/services/facility/facility_service.go:86.57,89.16 2 1
+kost/services/facility/facility_service.go:93.2,93.12 1 1
+kost/services/facility/facility_service.go:89.16,92.3 2 1
+kost/services/facility/facility_service.go:96.90,98.16 2 1
+kost/services/facility/facility_service.go:102.2,102.20 1 1
+kost/services/facility/facility_service.go:98.16,101.3 2 1
