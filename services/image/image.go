@@ -2,7 +2,6 @@ package image
 
 import (
 	"fmt"
-	"kost/deliveries/helpers"
 	"kost/entities"
 	"kost/repositories/image"
 	"kost/repositories/room"
@@ -84,7 +83,7 @@ func (i *ServiceImage) DeleteImagebyID(id_room []uint) error {
 			return err
 		}
 		file := strings.Replace(result.Url, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
-		err = helpers.DeleteFromS3(file)
+		err = i.s3.DeleteFromS3(file)
 		if err != nil {
 			return err
 		}
