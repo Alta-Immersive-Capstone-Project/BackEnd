@@ -12,6 +12,7 @@ type House struct {
 	OwnerName  string  `json:"owner_name" gorm:"type:varchar(255);not null"`
 	OwnerPhone string  `json:"owner_phone" gorm:"type:varchar(15);not null"`
 	Address    string  `json:"address" gorm:"type:varchar(255);not null"`
+	Type       string  `json:"type" gorm:"type:varchar(255);not null"`
 	SlotRoom   int     `json:"slot_room" gorm:"type:int(3);not null"`
 	Available  int     `json:"available" gorm:"type:int(3);not null"`
 	Latitude   float64 `json:"latitude" gorm:"not null"`
@@ -26,6 +27,7 @@ type AddHouse struct {
 	OwnerName  string  `json:"owner_name" validate:"required"`
 	OwnerPhone string  `json:"owner_phone" validate:"required"`
 	Address    string  `json:"address" validate:"required"`
+	Type       string  `json:"type" validate:"required"`
 	SlotRoom   int     `json:"slot_room" validate:"required"`
 	Available  int     `json:"available" validate:"required"`
 	Latitude   float64 `json:"latitude" validate:"required"`
@@ -39,6 +41,7 @@ type UpdateHouse struct {
 	OwnerName  string  `json:"owner_name"`
 	OwnerPhone string  `json:"owner_phone"`
 	Address    string  `json:"address"`
+	Type       string  `json:"type"`
 	SlotRoom   int     `json:"slot_room"`
 	Available  int     `json:"available"`
 	Latitude   float64 `json:"latitude"`
@@ -53,6 +56,7 @@ type HouseResponse struct {
 	OwnerPhone string  `json:"owner_phone"`
 	Address    string  `json:"address"`
 	SlotRoom   int     `json:"slot_room"`
+	Type       string  `json:"type"`
 	Available  int     `json:"available"`
 	Latitude   float64 `json:"latitude"`
 	Longitude  float64 `json:"longitude"`
@@ -67,9 +71,10 @@ type HouseResponseJoin struct {
 	OwnerPhone string  `json:"owner_phone"`
 	Address    string  `json:"address"`
 	Available  int     `json:"available"`
-	RoomID     uint    `json:"room_id"`
-	Price      int32   `json:"price"`
 	Type       string  `json:"type"`
+	RoomID     uint    `json:"room_id"`
+	RoomType   string  `json:"room_type"`
+	Price      int32   `json:"price"`
 	Rating     float32 `json:"rating"`
 	DistrictID uint    `json:"district_id"`
 	District   string  `json:"district"`
