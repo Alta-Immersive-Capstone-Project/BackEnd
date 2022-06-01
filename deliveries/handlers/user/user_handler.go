@@ -112,7 +112,7 @@ func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 		}
 
 		filename := "Avatar/" + userReq.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
-		url, _ = helpers.UploadFileToS3(filename, *avatar)
+		url, _ = handler.s3.UploadFileToS3(filename, *avatar)
 	}
 
 	// registrasi user via call user service
@@ -190,7 +190,7 @@ func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 		} else {
 			filename = "Avatar/" + userRes.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
 		}
-		file, _ := helpers.UploadFileToS3(filename, *avatar)
+		file, _ := handler.s3.UploadFileToS3(filename, *avatar)
 		if userRes.Avatar == "" {
 			userRes, err = handler.userService.UpdateInternal(entities.UpdateInternalRequest{}, uint(id), file)
 		}
