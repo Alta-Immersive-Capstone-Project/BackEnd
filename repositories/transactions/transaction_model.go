@@ -3,16 +3,19 @@ package transactions
 import (
 	"kost/entities"
 
+	"github.com/midtrans/midtrans-go/snap"
 	"gorm.io/gorm"
 )
 
 type transactionModel struct {
-	db *gorm.DB
+	db   *gorm.DB
+	snap snap.Client
 }
 
-func NewTransactionModel(db *gorm.DB) *transactionModel {
+func NewTransactionModel(db *gorm.DB, snap snap.Client) *transactionModel {
 	return &transactionModel{
-		db: db,
+		db:   db,
+		snap: snap,
 	}
 }
 
@@ -24,6 +27,21 @@ func (m *transactionModel) Create(transaction entities.Transaction) (entities.Tr
 	}
 
 	return transaction, nil
+}
+
+func (m *transactionModel) CreateSnap(req *snap.Request) (*snap.Response, error) {
+	transaction, err := m.snap.CreateTransaction(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return transaction, nil
+}
+
+func (m *transactionModel) UpdateStatus(booking_id string, status entities.Callback) {
+
+	m.db.Where("booking_id = ?", booking_id).Updates(&status)
 }
 
 func (m *transactionModel) Get(booking_id string) (entities.Transaction, error) {
