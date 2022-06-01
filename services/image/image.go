@@ -6,6 +6,7 @@ import (
 	"kost/entities"
 	"kost/repositories/image"
 	"kost/repositories/room"
+	"kost/utils/s3"
 	"mime/multipart"
 	"strconv"
 	"strings"
@@ -15,12 +16,14 @@ import (
 type ServiceImage struct {
 	image image.ImageRepo
 	repo  room.RoomRepo
+	s3    s3.S3Control
 }
 
-func NewServiceImage(Repo room.RoomRepo, image image.ImageRepo) *ServiceImage {
+func NewServiceImage(Repo room.RoomRepo, image image.ImageRepo, S3 s3.S3Control) *ServiceImage {
 	return &ServiceImage{
 		image: image,
 		repo:  Repo,
+		s3:    S3,
 	}
 }
 
@@ -32,7 +35,7 @@ func (i *ServiceImage) InsertImage(files []*multipart.FileHeader, id uint) error
 			return err
 		}
 		fileName := "room/" + strconv.Itoa(int(time.Now().Unix())) + ".png"
-		res, err := helpers.UploadFileToS3(fileName, *fileU)
+		res, err := i.s3.UploadFileToS3(fileName, *fileU)
 		fmt.Println(res)
 		if err != nil {
 			return err
@@ -61,7 +64,7 @@ func (i *ServiceImage) DeleteImage(id_room uint) error {
 
 	for _, res := range result {
 		file := strings.Replace(res.Url, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
-		err = helpers.DeleteFromS3(file)
+		err = i.s3.DeleteFromS3(file)
 		if err != nil {
 			return err
 		}
