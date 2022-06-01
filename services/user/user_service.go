@@ -104,6 +104,19 @@ func (us *UserService) GetInternal(id int) (entities.InternalResponse, error) {
 	return userRes, err
 }
 
+func (us *UserService) GetAllMember() ([]entities.User, error) {
+
+	user, err := us.userRepo.GetAllUser()
+	if err != nil {
+		return []entities.User{}, err
+	} else if user[0].Role == "customer" {
+		return []entities.User{}, err
+	}
+	// userRes := []entities.InternalResponse{}
+
+	return user, err
+}
+
 func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalRequest, id int, files map[string]*multipart.FileHeader, storageProvider storageProvider.StorageInterface) (entities.InternalResponse, error) {
 
 	// Get user by ID via repository

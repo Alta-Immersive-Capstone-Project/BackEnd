@@ -42,6 +42,18 @@ func (ur *UserRepository) GetUserID(id int) (entities.User, error) {
 	return arrUser[0], nil
 }
 
+func (ur *UserRepository) GetAllUser() ([]entities.User, error) {
+	var arrUser []entities.User
+	tx := ur.Db.Find(&arrUser)
+	if tx.Error != nil {
+		log.Warn("error find")
+		return []entities.User{}, tx.Error
+	}
+
+	log.Info(" repo")
+	return arrUser, nil
+}
+
 func (ur *UserRepository) FindByUser(value string) (entities.User, error) {
 	user := entities.User{}
 	tx := ur.Db.Where("email = ?", value).First(&user)

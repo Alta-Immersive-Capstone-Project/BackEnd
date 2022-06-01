@@ -111,7 +111,67 @@ func (handler *UserHandler) CreateCustomer() echo.HandlerFunc {
 		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+userRes.User.Role, userRes))
 	}
 }
+func (handler *UserHandler) GetCustomerByID() echo.HandlerFunc {
+	return func(c echo.Context) error {
 
+		// Get token
+
+		id, _ := strconv.Atoi(c.Param("id"))
+		idToken, role := middleware.ExtractTokenRoleID(c)
+
+		if id != int(idToken) || role != "customer" {
+			log.Warn("error")
+			return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
+		}
+
+		files := map[string]*multipart.FileHeader{}
+		avatar, _ := c.FormFile("avatar")
+		if avatar != nil {
+			files["avatar"] = avatar
+		}
+
+		// Update via user service call
+		userRes, err := handler.userService.GetCustomer(int(idToken))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
+
+		// response
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data"+userRes.Name, userRes))
+
+	}
+}
+
+func (handler *UserHandler) GetAllMember() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		// Get token
+		token := c.Get("user")
+
+		_, role, err := middleware.ReadToken(token)
+
+		if role != "admin" || err != nil {
+			return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
+		}
+
+		files := map[string]*multipart.FileHeader{}
+		avatar, _ := c.FormFile("avatar")
+		if avatar != nil {
+			files["avatar"] = avatar
+		}
+
+		// Update via user service call
+		userRes, err := handler.userService.GetAllMember()
+		if err != nil {
+			log.Warn("")
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
+
+		// response
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Member", userRes))
+	}
+
+}
 func (handler *UserHandler) UpdateInternal() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// Bind request to user request

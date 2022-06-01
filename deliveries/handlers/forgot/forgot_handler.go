@@ -40,7 +40,7 @@ func (h *ForgotHandler) SendEmail() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
 
-		id, err := h.emailService.SendEmail("sewa-kost@gmail.com", "reset password", generateBodyEmailForgotPassword(token.User.Name, token.Token), email)
+		id, err := h.emailService.SendEmail("admin@sewakost.com", "reset password", generateBodyEmailForgotPassword(token.User.Name, token.Token), email)
 
 		if err != nil {
 			log.Warn(err)
