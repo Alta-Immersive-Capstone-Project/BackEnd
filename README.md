@@ -11,7 +11,7 @@
   <h1 align="center">Sewa Kost</h1>
 
   <p align="center">
-   :collision: A Capstone Project  in Immersive Alterra Academy Batch 8 :collision:
+   :collision: Capstone Project  in Immersive Alterra Academy Batch 8 :collision:
     <br />
     <a href="https://github.com/Alta-Immersive-Capstone-Project/BackEnd.git"><strong>Explore the docs »</strong></a>
     <br />
