@@ -59,8 +59,8 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 <!-- CONTACT -->
 ## Contact
 
-Project Repository Link :  [https://github.com/Event-Planning-App-Project/Backend](https://github.com/Event-Planning-App-Project/Backend.git)<br/>
-Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/api-management_event_planning/1.0.0](https://app.swaggerhub.com/apis/galihgpr/api-management_event_planning/1.0.0)
+Project Repository Link :  [https://github.com/Alta-Immersive-Capstone-Project/BackEnd](https://github.com/Alta-Immersive-Capstone-Project/BackEnd)<br/>
+Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.0.0](https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.0.0)
 
 <!-- :heart: -->
 <!-- CONTRIBUTOR -->
