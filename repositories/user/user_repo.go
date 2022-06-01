@@ -26,21 +26,29 @@ func (ur *UserRepository) InsertUser(newUser entities.User) (entities.User, erro
 	return newUser, nil
 }
 
-func (ur *UserRepository) GetUserID(id int) (entities.User, error) {
-	var arrUser []entities.User
-	tx := ur.Db.Where("id = ?", id).Find(&arrUser)
+func (ur *UserRepository) GetUserID(id uint) (entities.User, error) {
+	var arrUser entities.User
+	tx := ur.Db.Where("id = ?", id).First(&arrUser)
 	if tx.Error != nil {
 		return entities.User{}, tx.Error
 	}
 
-	if len(arrUser) == 0 {
-		log.Warn("not found data")
-		return entities.User{}, tx.Error
+	log.Info()
+	return arrUser, nil
+}
+
+func (ur *UserRepository) GetAllUser() ([]entities.User, error) {
+	var arrUser []entities.User
+	err := ur.Db.Where("role = ? OR role = ?", "consultant", "supervisor").Find(&arrUser).Error
+	if err != nil {
+		log.Warn("error find")
+		return []entities.User{}, err
 	}
 
-	log.Info()
-	return arrUser[0], nil
+	log.Info(" repo")
+	return arrUser, nil
 }
+
 func (ur *UserRepository) FindByUser(value string) (entities.User, error) {
 	user := entities.User{}
 	tx := ur.Db.Where("email = ?", value).First(&user)
@@ -50,7 +58,7 @@ func (ur *UserRepository) FindByUser(value string) (entities.User, error) {
 	return user, nil
 }
 
-func (ur *UserRepository) UpdateUser(id int, user entities.User) (entities.User, error) {
+func (ur *UserRepository) UpdateUser(id uint, user entities.User) (entities.User, error) {
 
 	tx := ur.Db.Save(&user)
 	if tx.Error != nil {
@@ -60,7 +68,7 @@ func (ur *UserRepository) UpdateUser(id int, user entities.User) (entities.User,
 	return user, nil
 }
 
-func (ur *UserRepository) DeleteUser(id int) error {
+func (ur *UserRepository) DeleteUser(id uint) error {
 
 	// Delete from database
 	tx := ur.Db.Delete(&entities.User{}, id)

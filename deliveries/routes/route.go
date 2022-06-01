@@ -21,11 +21,14 @@ func UserRoute(e *echo.Echo, u user.HandleUser) {
 	internalGroup.POST("", u.CreateInternal, middlewares.JWTMiddleware())
 	internalGroup.DELETE("/:id", u.DeleteInternal, middlewares.JWTMiddleware())
 	internalGroup.PUT("/:id", u.UpdateInternal, middlewares.JWTMiddleware())
+	internalGroup.GET("/:id", u.GetByID, middlewares.JWTMiddleware())
+	internalGroup.GET("", u.GetAllMember, middlewares.JWTMiddleware())
 
 	customerGroup := e.Group("/customer")
 
 	customerGroup.POST("", u.CreateCustomer)
 	customerGroup.PUT("/:id", u.UpdateCustomer, middlewares.JWTMiddleware())
+	customerGroup.GET("/:id", u.GetByID, middlewares.JWTMiddleware())
 	customerGroup.DELETE("/:id", u.DeleteCustomer, middlewares.JWTMiddleware())
 }
 
@@ -78,6 +81,7 @@ func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
 	room.GET("/:id", r.GetIDRoom())
 	room.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
 	room.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
+	room.POST("/:id", r.DeleteImageUpdate(), middlewares.JWTMiddleware())
 }
 func CityPath(e *echo.Echo, C *city.HandlersCity) {
 	city := e.Group("/cities")
