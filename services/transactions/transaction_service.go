@@ -67,15 +67,15 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 	}
 
 	transaction := entities.Transaction{
-		UserID:       customer_id,
-		RoomID:       request.RoomID,
-		HouseID:      request.HouseID,
-		CheckinDate:  time.Unix(0, request.CheckinDate*int64(time.Millisecond)),
-		RentDuration: request.RentDuration,
-		BookingID:    booking_id,
-		TotalBill:    request.TotalBill,
-		Status:       "pending",
-		Token:        snap.Token,
+		UserID:            customer_id,
+		RoomID:            request.RoomID,
+		HouseID:           request.HouseID,
+		CheckinDate:       time.Unix(0, request.CheckinDate*int64(time.Millisecond)),
+		RentDuration:      request.RentDuration,
+		BookingID:         booking_id,
+		TotalBill:         request.TotalBill,
+		TransactionStatus: "pending",
+		Token:             snap.Token,
 	}
 
 	result, err := ts.tm.Create(transaction)
