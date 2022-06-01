@@ -55,4 +55,46 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 * Resolving from coding endpoint to unit test's carried out by division of tasks
 * Deployment
 
+
+<!-- CONTACT -->
+## Contact
+
+Project Repository Link :  [https://github.com/Event-Planning-App-Project/Backend](https://github.com/Event-Planning-App-Project/Backend.git)<br/>
+Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/api-management_event_planning/1.0.0](https://app.swaggerhub.com/apis/galihgpr/api-management_event_planning/1.0.0)
+
+<!-- :heart: -->
+<!-- CONTRIBUTOR -->
+:star2:Contributor :
+
+* [Galih](https://github.com/galihgpr)
+[![GitHub Galih](https://img.shields.io/github/followers/galihgpr?label=follow&style=social)](https://github.com/galihgpr)
+* [Dwi](https://github.com/DwiBactiar12)
+[![GitHub Dwi](https://img.shields.io/github/followers/DwiBactiar12?label=follow&style=social)](https://github.com/DwiBactiar12)
+* [Daka](https://github.com/dakasakti)
+[![GitHub Daka](https://img.shields.io/github/followers/dakasakti?label=follow&style=social)](https://github.com/dakasakti)
+* [Galang](https://github.com/adeeplearn)
+[![GitHub Galang](https://img.shields.io/github/followers/adeeplearn?label=follow&style=social)](https://github.com/adeeplearn)
+* [Astuti](https://github.com/astutirahmawati)
+[![GitHub Astuti](https://img.shields.io/github/followers/astutirahmawati?label=follow&style=social)](https://github.com/astutirahmawati)
+
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Altera Academy Batch 8 :pray::pray:
+
+* [Jerry Young](https://github.com/jackthepanda96)
+* [Nada](https://github.com/nurfitriana87)
+* [Fathur](https://github.com/fathurds)
+* [Fathoni](https://github.com/fathonio)
+* [Pringgo](https://github.com/pringgo23)
+
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+<h3>
+<p align="center">:copyright: 2022 | Immersive ALTA Batch 8 </p>
+</h3>
+<!-- end -->
+
+
