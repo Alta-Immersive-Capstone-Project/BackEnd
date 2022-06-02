@@ -74,7 +74,7 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 		RentDuration:      request.RentDuration,
 		BookingID:         booking_id,
 		TotalBill:         request.TotalBill,
-		TransactionStatus: "pending",
+		TransactionStatus: "processing",
 		Token:             snap.Token,
 	}
 
@@ -145,8 +145,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	var response entities.TransactionUpdateResponse
 
 	transaction := entities.Transaction{
-		ConsultantID: customer_id,
-		TotalBill:    request.TotalBill,
+		ConsultantID:      customer_id,
+		TotalBill:         request.TotalBill,
+		TransactionStatus: "pending",
 	}
 
 	result, err := ts.tm.Update(booking_id, transaction)
