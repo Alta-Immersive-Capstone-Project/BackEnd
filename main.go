@@ -22,6 +22,7 @@ import (
 	storageProvider "kost/services/storage"
 
 	citesService "kost/services/city"
+	ImageService "kost/services/image"
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
@@ -60,6 +61,7 @@ func main() {
 
 	// Init DB
 	DB := utils.NewMysqlGorm(config)
+	Snap := utils.NewSnap(config)
 
 	// Migrate
 	utils.Migrate(DB)
@@ -72,7 +74,7 @@ func main() {
 	facilityRepo := facility.NewFacilityDB(DB)
 	amenitiesRepo := amenities.NewAmenitiesDB(DB)
 	reviewsRepo := reviewRepo.NewReviewModel(DB)
-	transactionsRepo := transactionRepo.NewTransactionModel(DB)
+	transactionsRepo := transactionRepo.NewTransactionModel(DB, Snap)
 	cityRepo := city.NewCityDB(DB)
 	roomRepo := room.NewRoomDB(DB)
 	imageRepo := image.NewImageDB(DB)
@@ -89,11 +91,12 @@ func main() {
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
-	transactionsService := transactionService.NewTransactionService(transactionsRepo)
+	transactionsService := transactionService.NewTransactionService(transactionsRepo, userRepository, houseRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
+	imageService := ImageService.NewServiceImage(roomRepo, imageRepo)
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
@@ -103,7 +106,7 @@ func main() {
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
 	cityHandler := cityHandlers.NewHandlersCity(cityService, validator.New())
-	roomHandler := roomHandlers.NewHandlersRoom(roomService, validator.New())
+	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
 

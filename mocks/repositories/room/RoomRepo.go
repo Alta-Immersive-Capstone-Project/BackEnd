@@ -93,18 +93,18 @@ func (_m *RoomRepo) GetRoomID(id uint) (entities.Room, error) {
 }
 
 // UpdateRoom provides a mock function with given fields: id, new
-func (_m *RoomRepo) UpdateRoom(id uint, new entities.UpdateRoom) (entities.Room, error) {
+func (_m *RoomRepo) UpdateRoom(id uint, new entities.Room) (entities.Room, error) {
 	ret := _m.Called(id, new)
 
 	var r0 entities.Room
-	if rf, ok := ret.Get(0).(func(uint, entities.UpdateRoom) entities.Room); ok {
+	if rf, ok := ret.Get(0).(func(uint, entities.Room) entities.Room); ok {
 		r0 = rf(id, new)
 	} else {
 		r0 = ret.Get(0).(entities.Room)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uint, entities.UpdateRoom) error); ok {
+	if rf, ok := ret.Get(1).(func(uint, entities.Room) error); ok {
 		r1 = rf(id, new)
 	} else {
 		r1 = ret.Error(1)

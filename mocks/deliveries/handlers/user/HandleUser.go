@@ -69,6 +69,34 @@ func (_m *HandleUser) DeleteInternal(c echo.Context) error {
 	return r0
 }
 
+// GetAllMember provides a mock function with given fields: c
+func (_m *HandleUser) GetAllMember(c echo.Context) error {
+	ret := _m.Called(c)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(echo.Context) error); ok {
+		r0 = rf(c)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// GetByID provides a mock function with given fields: c
+func (_m *HandleUser) GetByID(c echo.Context) error {
+	ret := _m.Called(c)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(echo.Context) error); ok {
+		r0 = rf(c)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // UpdateCustomer provides a mock function with given fields: c
 func (_m *HandleUser) UpdateCustomer(c echo.Context) error {
 	ret := _m.Called(c)

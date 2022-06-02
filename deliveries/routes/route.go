@@ -38,7 +38,7 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 	facility := e.Group("/facilities")
 	facility.POST("", f.CreateFacility(), middlewares.JWTMiddleware())
 	e.GET("/houses/:id/facilities", f.GetNearFacility())
-	e.GET("/district/:id/facilities", f.GetAllFacility())
+	e.GET("/districts/:id/facilities", f.GetAllFacility())
 
 	facility.GET("/:id", f.GetFacilityID())
 	facility.PUT("/:id", f.UpdateFacility(), middlewares.JWTMiddleware())
@@ -95,14 +95,14 @@ func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 }
 
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
-	jwt := e.Group("", middlewares.JWTMiddleware())
-
 	// Customer
-	jwt.POST("/transactions", transaction.InsertTransaction)
-	jwt.GET("/transactions", transaction.GetAllTransactionbyCustomer)
+	e.POST("/transactions", transaction.InsertTransaction, middlewares.JWTMiddleware())
+	e.GET("/transactions", transaction.GetAllTransactionbyCustomer, middlewares.JWTMiddleware())
+	e.POST("/transactions/callback", transaction.UpdateStatus)
 
 	// Admin
-	jwt.GET("/admin/transactions", transaction.GetAllTransactionbyConsultant)
-	jwt.PUT("/admin/transactions/:booking_id", transaction.UpdateTransaction)
-	jwt.GET("/admin/transactions/kost", transaction.GetAllTransactionbyKost)
+	admin := e.Group("/admin/transactions", middlewares.JWTMiddleware())
+	admin.GET("", transaction.GetAllTransactionbyConsultant)
+	admin.PUT("/:booking_id", transaction.UpdateTransaction)
+	admin.GET("/kost", transaction.GetAllTransactionbyKost)
 }

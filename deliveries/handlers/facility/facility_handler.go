@@ -59,7 +59,7 @@ func (h *HandlersFacility) CreateFacility() echo.HandlerFunc {
 // Respond Get All Facility
 func (h *HandlersFacility) GetAllFacility() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := c.QueryParam("house_id")
+		id := c.Param("id")
 		HouseID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)

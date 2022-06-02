@@ -78,43 +78,26 @@ func (f *FacilityDB) DeleteFacility(id uint) error {
 // Update Facility By ID
 func (f *FacilityDB) GetNearFacility(HouseID uint) ([]entities.NearFacility, error) {
 
-	var house entities.House
-	if err := f.Db.Where("id = ?", HouseID).First(&house).Error; err != nil {
-		fmt.Println(err)
-		return []entities.NearFacility{}, err
+	var respond []entities.NearFacility
+	var data []map[string]interface{}
+
+	createView := f.Db.Exec("CREATE OR REPLACE VIEW distance AS SELECT f.name, ST_Distance_Sphere(point(h.latitude, h.longitude - 90), point(f.latitude, f.longitude - 90)) as distance FROM houses h LEFT JOIN facilities f ON f.district_id = h.district_id;")
+	if createView.Error != nil {
+		log.Warn(createView.Error)
+		return []entities.NearFacility{}, createView.Error
 	}
 
-	List, _ := f.GetAllFacility(house.DistrictID)
-
-	sphere := map[string]interface{}{}
-	var houseLongitude float64
-	if house.Longitude > 90 {
-		houseLongitude = house.Longitude - 90
-	} else {
-		houseLongitude = house.Longitude
+	selectFacility := f.Db.Table("distance").Where("distance < 500").Order("distance").Limit(5).Find(&data)
+	if selectFacility.Error != nil {
+		log.Warn(selectFacility.Error)
+		return []entities.NearFacility{}, selectFacility.Error
 	}
+	for _, v := range data {
+		nameFacility := fmt.Sprint(v["name"])
 
-	var result []entities.NearFacility
-	var nearFacility entities.NearFacility
-
-	for _, v := range List {
-		var facilityLongitude float64
-		if v.Longitude > 90 {
-			facilityLongitude = v.Longitude - 90
-		} else {
-			facilityLongitude = v.Longitude
-		}
-		point1 := fmt.Sprintf("POINT(%f %f)", v.Latitude, facilityLongitude)
-		point2 := fmt.Sprintf("POINT(%f %f)", house.Latitude, houseLongitude)
-		err := f.Db.Raw("SELECT ST_Distance_Sphere(ST_GeomFromText(?),ST_GeomFromText(?)) AS tes", point1, point2)
-		err.Find(&sphere)
-
-		jarak := sphere["tes"]
-		if jarak.(float64) <= 500 {
-			nearFacility.Name = v.Name
-			nearFacility.Radius = jarak.(float64)
-			result = append(result, nearFacility)
-		}
+		radiusFacility := v["distance"].(float64)
+		nearFacility := entities.NearFacility{Name: nameFacility, Radius: radiusFacility}
+		respond = append(respond, nearFacility)
 	}
-	return result, nil
+	return respond, nil
 }

@@ -5,6 +5,7 @@ package mocks
 import (
 	entities "kost/entities"
 
+	snap "github.com/midtrans/midtrans-go/snap"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -27,6 +28,29 @@ func (_m *TransactionModel) Create(transaction entities.Transaction) (entities.T
 	var r1 error
 	if rf, ok := ret.Get(1).(func(entities.Transaction) error); ok {
 		r1 = rf(transaction)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// CreateSnap provides a mock function with given fields: req
+func (_m *TransactionModel) CreateSnap(req *snap.Request) (*snap.Response, error) {
+	ret := _m.Called(req)
+
+	var r0 *snap.Response
+	if rf, ok := ret.Get(0).(func(*snap.Request) *snap.Response); ok {
+		r0 = rf(req)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*snap.Response)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*snap.Request) error); ok {
+		r1 = rf(req)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -122,6 +146,11 @@ func (_m *TransactionModel) Update(booking_id string, transaction entities.Trans
 	}
 
 	return r0, r1
+}
+
+// UpdateStatus provides a mock function with given fields: booking_id, status
+func (_m *TransactionModel) UpdateStatus(booking_id string, status entities.Callback) {
+	_m.Called(booking_id, status)
 }
 
 type NewTransactionModelT interface {

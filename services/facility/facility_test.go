@@ -162,12 +162,36 @@ func TestDeleteFacility(t *testing.T) {
 		FacilityService := NewServiceFacility(FacilityRepo)
 		err := FacilityService.DeleteFacility(1)
 		assert.NoError(t, err)
+
 	})
 	t.Run("Error Access Database", func(t *testing.T) {
 		FacilityRepo := mocks.NewRepoFacility(t)
 		FacilityRepo.On("DeleteFacility", uint(1)).Return(errors.New("Error Access Database")).Once()
 		FacilityService := NewServiceFacility(FacilityRepo)
 		err := FacilityService.DeleteFacility(1)
+		assert.Error(t, err)
+	})
+}
+
+//
+func TestGetNearFacility(t *testing.T) {
+	result := []entities.NearFacility{{
+		Name:   "Mall Ciputra",
+		Radius: 100,
+	}}
+	t.Run("Success Get Near Facility", func(t *testing.T) {
+		FacilityRepo := mocks.NewRepoFacility(t)
+		FacilityRepo.On("GetNearFacility", uint(1)).Return(result, nil).Once()
+		FacilityService := NewServiceFacility(FacilityRepo)
+		respon, err := FacilityService.GetNearFacility(uint(1))
+		assert.NoError(t, err)
+		assert.Equal(t, respon[0].Name, result[0].Name)
+	})
+	t.Run("Error Access Database", func(t *testing.T) {
+		FacilityRepo := mocks.NewRepoFacility(t)
+		FacilityRepo.On("GetNearFacility", uint(1)).Return(nil, errors.New("Error Access Database")).Once()
+		FacilityService := NewServiceFacility(FacilityRepo)
+		_, err := FacilityService.GetNearFacility(uint(1))
 		assert.Error(t, err)
 	})
 }
