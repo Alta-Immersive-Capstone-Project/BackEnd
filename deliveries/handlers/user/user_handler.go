@@ -126,8 +126,9 @@ func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 }
 
 func (handler *UserHandler) GetByID(c echo.Context) error {
-	idUser := middleware.ExtractTokenUserId(c)
+	idUser, _ := strconv.Atoi(c.Param("id"))
 	// Update via user service call
+
 	userRes, err := handler.userService.GetbyID(uint(idUser))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
@@ -174,10 +175,12 @@ func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 	}
 	avatar, _ := c.FormFile("avatar")
-	msg, err := validation.ValidationAvatar(avatar)
-	if err != nil {
-		log.Warn(err)
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+	if avatar != nil {
+		msg, err := validation.ValidationAvatar(avatar)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+		}
 	}
 
 	// Update via user service call
@@ -224,12 +227,11 @@ func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
 
 	avatar, _ := c.FormFile("avatar")
 	if avatar != nil {
-
-	}
-	msg, err := validation.ValidationAvatar(avatar)
-	if err != nil {
-		log.Warn(err)
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+		msg, err := validation.ValidationAvatar(avatar)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+		}
 	}
 
 	// Update via user service call
