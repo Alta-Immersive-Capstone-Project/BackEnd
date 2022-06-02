@@ -248,7 +248,8 @@ func TestDeleteInternal(t *testing.T) {
 
 	t.Run("Success Delete Data", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
-		userR.On("GetUserID", uint(2)).Return(MockUser[1], nil).Once()
+
+		userR.On("DeleteUser", uint(2)).Return(nil)
 
 		srvDelete := user.NewUserService(userR)
 
@@ -261,8 +262,8 @@ func TestDeleteInternal(t *testing.T) {
 
 	t.Run("Error Access Database", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
-		userR.On("GetUserID", uint(2)).Return(entities.User{}, errors.New("Error Access Data")).Once()
 
+		userR.On("DeleteUser", uint(2)).Return(errors.New("Error Access Database"))
 		srvDelete := user.NewUserService(userR)
 
 		err := srvDelete.DeleteInternal(2)
@@ -277,7 +278,8 @@ func TestDeleteCustomer(t *testing.T) {
 
 	t.Run("Success Delete Data", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
-		userR.On("GetUserID", uint(1)).Return(MockUser[0], nil).Once()
+
+		userR.On("DeleteUser", uint(1)).Return(nil)
 
 		srvDelete := user.NewUserService(userR)
 
@@ -290,8 +292,8 @@ func TestDeleteCustomer(t *testing.T) {
 
 	t.Run("Error Access Database", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
-		userR.On("GetUserID", uint(1)).Return(entities.User{}, errors.New("Error Access Data")).Once()
 
+		userR.On("DeleteUser", uint(1)).Return(errors.New("error")).Once()
 		srvDelete := user.NewUserService(userR)
 
 		err := srvDelete.DeleteCustomer(1)

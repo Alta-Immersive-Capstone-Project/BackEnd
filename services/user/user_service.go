@@ -153,25 +153,17 @@ func (us *UserService) UpdateCustomer(customerRequest entities.UpdateCustomerReq
 func (us *UserService) DeleteInternal(id uint) error {
 
 	// Cari user berdasarkan ID via repo
-	user, err := us.userRepo.GetUserID(id)
-	if err != nil || user.Role == "customer" {
-		return err
-	}
 
 	// Delete via repository
-	err = us.userRepo.DeleteUser(id)
+	err := us.userRepo.DeleteUser(id)
 	return err
 }
 
 func (us *UserService) DeleteCustomer(id uint) error {
 
 	// Cari user berdasarkan ID via repo
-	user, err := us.userRepo.GetUserID(id)
-	if err != nil || user.Role != "customer" {
-		return err
-	}
 
 	// Delete via repository
-	err = us.userRepo.DeleteUser(id)
+	err := us.userRepo.DeleteUser(id)
 	return err
 }
