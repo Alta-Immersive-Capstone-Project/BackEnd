@@ -38,6 +38,16 @@ type AppConfig struct {
 		DistanceMatrixAPIKey  string
 		DistanceMatrixBaseURL string
 	}
+
+	GCalendar struct {
+		ClientID     string
+		ClientSecret string
+		ProjectID    string
+		AuthUri      string
+		AuthProvider string
+		TokenUri     string
+		RedirectUri  string
+	}
 }
 
 var lock = &sync.Mutex{}
@@ -78,6 +88,13 @@ func initConfig() *AppConfig {
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
 
+	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
+	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
+	config.GCalendar.ProjectID = GetEnv("GCAL_PROJECT_ID", "")
+	config.GCalendar.AuthUri = GetEnv("GCAL_AUTH_URI", "")
+	config.GCalendar.TokenUri = GetEnv("GCAL_TOKEN_URI", "")
+	config.GCalendar.AuthProvider = GetEnv("GCAL_AUTH_PROVIDER", "")
+	config.GCalendar.RedirectUri = GetEnv("GCAL_REDIRECT_URI", "")
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)
