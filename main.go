@@ -60,12 +60,13 @@ func main() {
 
 	// Init DB
 	DB := utils.NewMysqlGorm(config)
+	Snap := utils.NewSnap(config)
 
 	// Init S3
 	s3Client := s3.NewS3Client(config)
 
 	// Migrate
-	// utils.Migrate(DB)
+	utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -75,7 +76,7 @@ func main() {
 	facilityRepo := facility.NewFacilityDB(DB)
 	amenitiesRepo := amenities.NewAmenitiesDB(DB)
 	reviewsRepo := reviewRepo.NewReviewModel(DB)
-	transactionsRepo := transactionRepo.NewTransactionModel(DB)
+	transactionsRepo := transactionRepo.NewTransactionModel(DB, Snap)
 	cityRepo := city.NewCityDB(DB)
 	roomRepo := room.NewRoomDB(DB)
 	imageRepo := image.NewImageDB(DB)
@@ -90,9 +91,9 @@ func main() {
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
-	transactionsService := transactionService.NewTransactionService(transactionsRepo)
+	transactionsService := transactionService.NewTransactionService(transactionsRepo, userRepository, houseRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
-	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
+	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)

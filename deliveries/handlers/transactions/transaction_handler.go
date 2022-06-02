@@ -46,6 +46,22 @@ func (th *transactionHandler) InsertTransaction(c echo.Context) error {
 	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Transaction", response))
 }
 
+func (th *transactionHandler) UpdateStatus(c echo.Context) error {
+	var request entities.Callback
+
+	err := c.Bind(&request)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+	}
+
+	err = th.ts.UpdateStatus(request)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, helpers.StatusUnauthorized(err))
+	}
+
+	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", nil))
+}
+
 func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
 	customer_id, role := middlewares.ExtractTokenRoleID(c)
 

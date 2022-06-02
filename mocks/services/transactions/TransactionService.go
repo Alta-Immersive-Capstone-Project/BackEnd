@@ -103,6 +103,20 @@ func (_m *TransactionService) GetTransaction(booking_id string) (entities.Transa
 	return r0, r1
 }
 
+// UpdateStatus provides a mock function with given fields: request
+func (_m *TransactionService) UpdateStatus(request entities.Callback) error {
+	ret := _m.Called(request)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(entities.Callback) error); ok {
+		r0 = rf(request)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // UpdateTransaction provides a mock function with given fields: customer_id, booking_id, request
 func (_m *TransactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
 	ret := _m.Called(customer_id, booking_id, request)
