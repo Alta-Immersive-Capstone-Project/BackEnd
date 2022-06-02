@@ -71,11 +71,11 @@ func initConfig() *AppConfig {
 	config.App.FrontURL = GetEnv("APP_FRONT_URL", "http://localhost:3000/transactions/finish")
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
-	config.Database.Host = GetEnv("DB_HOST", "localhost")
+	config.Database.Host = GetEnv("DB_HOST", "dbt3be8.cddd6kuxwhuj.ap-southeast-1.rds.amazonaws.com")
 	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
-	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "Trial")
+	config.Database.Password = GetEnv("DB_PASSWORD", "huj4ng3rimis")
+	config.Database.Name = GetEnv("DB_NAME", "dbcapstone")
 
 	config.Email.Domain = GetEnv("EMAIL", "domain")
 	config.Email.ApiKey = GetEnv("API_KEY", "87979adhjhjbbb")
