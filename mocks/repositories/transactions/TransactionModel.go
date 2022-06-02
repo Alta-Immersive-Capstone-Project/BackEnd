@@ -149,8 +149,24 @@ func (_m *TransactionModel) Update(booking_id string, transaction entities.Trans
 }
 
 // UpdateStatus provides a mock function with given fields: booking_id, status
-func (_m *TransactionModel) UpdateStatus(booking_id string, status entities.Callback) {
-	_m.Called(booking_id, status)
+func (_m *TransactionModel) UpdateStatus(booking_id string, status entities.Callback) (entities.Callback, error) {
+	ret := _m.Called(booking_id, status)
+
+	var r0 entities.Callback
+	if rf, ok := ret.Get(0).(func(string, entities.Callback) entities.Callback); ok {
+		r0 = rf(booking_id, status)
+	} else {
+		r0 = ret.Get(0).(entities.Callback)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, entities.Callback) error); ok {
+		r1 = rf(booking_id, status)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 type NewTransactionModelT interface {

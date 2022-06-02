@@ -1,11 +1,10 @@
 package transactions
 
 import (
-	"crypto/sha512"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"kost/configs"
+	"kost/deliveries/helpers"
 	"kost/entities"
 	"kost/repositories/house"
 	repo "kost/repositories/transactions"
@@ -56,8 +55,12 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 				Qty:   1,
 			},
 		},
+		EnabledPayments: snap.AllSnapPaymentType,
+		Gopay: &snap.GopayDetails{
+			EnableCallback: true,
+		},
 		Callbacks: &snap.Callbacks{
-			Finish: configs.Get().App.BaseURL + "/transactions/callback",
+			Finish: configs.Get().App.FrontURL,
 		},
 	}
 
@@ -74,7 +77,7 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 		RentDuration:      request.RentDuration,
 		BookingID:         booking_id,
 		TotalBill:         request.TotalBill,
-		TransactionStatus: "pending",
+		TransactionStatus: "processing",
 		Token:             snap.Token,
 	}
 
@@ -90,24 +93,30 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 	return response, nil
 }
 
-func (ts *transactionService) UpdateStatus(req entities.Callback) error {
-	key := req.OrderID + req.StatusCode + req.GrossAmount + configs.Get().Payment.MidtransServerKey
-	hash := sha512.New()
-	hash.Write([]byte(key))
-	SignatureKey := hex.EncodeToString(hash.Sum(nil))
-
-	if req.SignatureKey != SignatureKey {
-		return errors.New("you are not allowed to access this resource")
+func (ts *transactionService) UpdateStatus(req entities.Callback) (entities.Callback, error) {
+	check := helpers.Hash512(req)
+	if !check {
+		return entities.Callback{}, errors.New("you are not allowed to access this resource")
 	}
 
 	transaction := entities.Callback{
 		TransactionStatus: req.TransactionStatus,
+		TransactionID:     req.TransactionID,
+		StatusCode:        req.StatusCode,
+		SignatureKey:      req.SignatureKey,
 		PaymentType:       req.PaymentType,
+		OrderID:           req.OrderID,
+		GrossAmount:       req.GrossAmount,
+		FraudStatus:       req.FraudStatus,
+		ApprovalCode:      req.ApprovalCode,
 	}
 
-	ts.tm.UpdateStatus(req.OrderID, transaction)
+	response, err := ts.tm.UpdateStatus(req.OrderID, transaction)
+	if err != nil {
+		return entities.Callback{}, err
+	}
 
-	return nil
+	return response, nil
 }
 
 func (ts *transactionService) GetTransaction(booking_id string) (entities.TransactionResponse, error) {
@@ -145,8 +154,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	var response entities.TransactionUpdateResponse
 
 	transaction := entities.Transaction{
-		ConsultantID: customer_id,
-		TotalBill:    request.TotalBill,
+		ConsultantID:      customer_id,
+		TotalBill:         request.TotalBill,
+		TransactionStatus: "pending",
 	}
 
 	result, err := ts.tm.Update(booking_id, transaction)

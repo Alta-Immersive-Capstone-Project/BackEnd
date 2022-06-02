@@ -3,13 +3,13 @@ package handlers
 import (
 	"kost/deliveries/helpers"
 	validation "kost/deliveries/validations"
+	"kost/utils/s3"
 	"strconv"
 	"strings"
 	"time"
 
 	middleware "kost/deliveries/middlewares"
 	"kost/entities"
-	storageProvider "kost/services/storage"
 	userService "kost/services/user"
 	"net/http"
 
@@ -18,16 +18,16 @@ import (
 )
 
 type UserHandler struct {
-	userService     userService.UserServiceInterface
-	storageProvider storageProvider.StorageInterface
-	valid           validation.Validation
+	userService userService.UserServiceInterface
+	s3          s3.S3Control
+	valid       validation.Validation
 }
 
-func NewUserHandler(service userService.UserServiceInterface, storageProvider storageProvider.StorageInterface, Valid validation.Validation) *UserHandler {
+func NewUserHandler(service userService.UserServiceInterface, S3 s3.S3Control, Valid validation.Validation) *UserHandler {
 	return &UserHandler{
-		userService:     service,
-		storageProvider: storageProvider,
-		valid:           Valid,
+		userService: service,
+		s3:          S3,
+		valid:       Valid,
 	}
 }
 
@@ -72,7 +72,7 @@ func (handler *UserHandler) CreateInternal(c echo.Context) error {
 		}
 
 		filename := "Avatar/" + userReq.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
-		url, _ = helpers.UploadFileToS3(filename, *avatar)
+		url, _ = handler.s3.UploadFileToS3(filename, *avatar)
 	}
 
 	// registrasi user via call user service
@@ -112,7 +112,7 @@ func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 		}
 
 		filename := "Avatar/" + userReq.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
-		url, _ = helpers.UploadFileToS3(filename, *avatar)
+		url, _ = handler.s3.UploadFileToS3(filename, *avatar)
 	}
 
 	// registrasi user via call user service
@@ -190,7 +190,7 @@ func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 		} else {
 			filename = "Avatar/" + userRes.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
 		}
-		file, _ := helpers.UploadFileToS3(filename, *avatar)
+		file, _ := handler.s3.UploadFileToS3(filename, *avatar)
 		if userRes.Avatar == "" {
 			userRes, err = handler.userService.UpdateInternal(entities.UpdateInternalRequest{}, uint(id), file)
 		}
@@ -244,7 +244,7 @@ func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
 		} else {
 			filename = "Avatar/" + userRes.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
 		}
-		file, _ := helpers.UploadFileToS3(filename, *avatar)
+		file, _ := handler.s3.UploadFileToS3(filename, *avatar)
 		if userRes.Avatar == "" {
 			userRes, err = handler.userService.UpdateCustomer(entities.UpdateCustomerRequest{}, uint(id), file)
 		}
@@ -270,7 +270,7 @@ func (handler *UserHandler) DeleteInternal(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 	file := strings.Replace(res.Avatar, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
-	helpers.DeleteFromS3(file)
+	handler.s3.DeleteFromS3(file)
 
 	// call delete service
 	err = handler.userService.DeleteInternal(uint(id))
@@ -295,7 +295,7 @@ func (handler *UserHandler) DeleteCustomer(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 	}
 	file := strings.Replace(res.Avatar, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
-	helpers.DeleteFromS3(file)
+	handler.s3.DeleteFromS3(file)
 
 	// call delete service
 	err = handler.userService.DeleteCustomer(uint(id))

@@ -14,5 +14,5 @@ type TransactionModel interface {
 	Update(booking_id string, transaction entities.Transaction) (entities.Transaction, error)
 	GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin
 	GetAllbyKost(duration int, status string, name string) []entities.TransactionKost
-	UpdateStatus(booking_id string, status entities.Callback)
+	UpdateStatus(booking_id string, status entities.Callback) (entities.Callback, error)
 }
