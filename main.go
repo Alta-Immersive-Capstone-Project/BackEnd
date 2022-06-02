@@ -93,7 +93,7 @@ func main() {
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
 	transactionsService := transactionService.NewTransactionService(transactionsRepo, userRepository, houseRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
-	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
+	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo)

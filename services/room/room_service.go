@@ -2,7 +2,6 @@ package room
 
 import (
 	"kost/entities"
-	"kost/repositories/image"
 	"kost/repositories/room"
 
 	"github.com/jinzhu/copier"
@@ -10,14 +9,12 @@ import (
 )
 
 type ServiceRoom struct {
-	repo  room.RoomRepo
-	image image.ImageRepo
+	repo room.RoomRepo
 }
 
-func NewServiceRoom(Repo room.RoomRepo, image image.ImageRepo) *ServiceRoom {
+func NewServiceRoom(Repo room.RoomRepo) *ServiceRoom {
 	return &ServiceRoom{
-		repo:  Repo,
-		image: image,
+		repo: Repo,
 	}
 }
 
@@ -40,9 +37,9 @@ func (r *ServiceRoom) CreateRoom(id uint, Insert entities.AddRoom) (entities.Res
 	return result, nil
 }
 
-func (s *ServiceRoom) GetAllRoom() ([]entities.RespondRoom, error) {
+func (s *ServiceRoom) GetAllRoom(id uint) ([]entities.RespondRoom, error) {
 
-	res, err := s.repo.GetAllRoom()
+	res, err := s.repo.GetAllRoom(id)
 	if err != nil {
 		log.Warn(err)
 		return []entities.RespondRoom{}, err
