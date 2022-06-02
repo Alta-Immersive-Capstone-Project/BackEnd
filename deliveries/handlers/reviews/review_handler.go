@@ -48,15 +48,15 @@ func (rh *reviewHandler) InsertComment(c echo.Context) error {
 }
 
 func (rh *reviewHandler) GetByRoomID(c echo.Context) error {
-	room_id, _ := strconv.Atoi(c.Param("room_id"))
+	HouseID, _ := strconv.Atoi(c.Param("id"))
 
-	response, _ := rh.rs.GetByRoomID(uint(room_id))
+	response, _ := rh.rs.GetByRoomID(uint(HouseID))
 
 	if len(response) == 0 {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Comment Not Found"))
 	}
 
-	count, total := rh.rs.GetRating(uint(room_id))
+	count, total := rh.rs.GetRating(uint(HouseID))
 
 	return c.JSON(http.StatusOK, helpers.StatusOKReview("Success Get By Room ID", response, count, total))
 }

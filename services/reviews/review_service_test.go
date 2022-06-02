@@ -15,8 +15,8 @@ import (
 
 func TestAddComment(t *testing.T) {
 	repo := repoMock.NewReviewModel(t)
-	insertData := entities.ReviewRequest{RoomID: 1, Comment: "test", Rating: 5}
-	returnData := entities.Review{Model: gorm.Model{ID: uint(1), CreatedAt: time.Now()}, UserID: 1, RoomID: 1, Comment: "test", Rating: 5}
+	insertData := entities.ReviewRequest{HouseID: 1, Comment: "test", Rating: 5}
+	returnData := entities.Review{Model: gorm.Model{ID: uint(1), CreatedAt: time.Now()}, UserID: 1, HouseID: 1, Comment: "test", Rating: 5}
 
 	t.Run("Success Insert", func(t *testing.T) {
 		repo.On("Create", mock.Anything).Return(returnData, nil).Once()
@@ -25,7 +25,7 @@ func TestAddComment(t *testing.T) {
 		res, err := srv.AddComment(1, insertData)
 		assert.NoError(t, err)
 		assert.Equal(t, returnData.ID, res.ID)
-		assert.Equal(t, returnData.RoomID, res.RoomID)
+		assert.Equal(t, returnData.HouseID, res.HouseID)
 		assert.Equal(t, returnData.Comment, res.Comment)
 		assert.Equal(t, returnData.Rating, res.Rating)
 		assert.Equal(t, returnData.CreatedAt, res.CreatedAt)

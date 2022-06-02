@@ -26,10 +26,10 @@ func (m *reviewModel) Create(review entities.Review) (entities.Review, error) {
 	return review, nil
 }
 
-func (m *reviewModel) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
+func (m *reviewModel) GetByRoomID(HouseID uint) ([]entities.ReviewJoin, error) {
 	var reviews []entities.ReviewJoin
 
-	record := m.db.Raw("select u.name, r.comment, r.rating, r.created_at from reviews r left join users u on u.id = r.user_id where r.room_id = ?", room_id).Scan(&reviews)
+	record := m.db.Raw("select u.name, r.comment, r.rating, r.created_at from reviews r left join users u on u.id = r.user_id where r.house_id = ?", HouseID).Scan(&reviews)
 
 	if record.RowsAffected == 0 {
 		return reviews, record.Error
@@ -38,10 +38,10 @@ func (m *reviewModel) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
 	return reviews, nil
 }
 
-func (m *reviewModel) GetRating(room_id uint) ([]int, float32, error) {
+func (m *reviewModel) GetRating(HouseID uint) ([]int, float32, error) {
 	var reviews []entities.Review
 	var count []int
-	record := m.db.Where("room_id = ?", room_id).Find(&reviews)
+	record := m.db.Where("house_id = ?", HouseID).Find(&reviews)
 
 	if record.RowsAffected == 0 {
 		return count, 0, record.Error
