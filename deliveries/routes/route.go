@@ -96,7 +96,7 @@ func CityPath(e *echo.Echo, C *city.HandlersCity) {
 func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 	// Customer
 	e.POST("/reviews", review.InsertComment, middlewares.JWTMiddleware())
-	e.GET("/reviews/:room_id", review.GetByRoomID)
+	e.GET("houses/:id/reviews", review.GetByRoomID)
 }
 
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
