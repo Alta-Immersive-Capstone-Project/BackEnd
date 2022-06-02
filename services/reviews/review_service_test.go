@@ -43,15 +43,15 @@ func TestAddComment(t *testing.T) {
 	})
 }
 
-func TestGetByRoomID(t *testing.T) {
+func TestGetByHouseID(t *testing.T) {
 	repo := new(repoMock.ReviewModel)
 	returnData := []entities.ReviewJoin{{Name: "test", Comment: "test", Rating: 5, CreatedAt: time.Now()}}
 
 	t.Run("Success Get All", func(t *testing.T) {
-		repo.On("GetByRoomID", uint(1)).Return(returnData, nil).Once()
+		repo.On("GetByHouseID", uint(1)).Return(returnData, nil).Once()
 		srv := review.NewReviewService(repo)
 
-		res, err := srv.GetByRoomID(uint(1))
+		res, err := srv.GetByHouseID(uint(1))
 		assert.NoError(t, err)
 		assert.Equal(t, returnData[0].Name, res[0].Name)
 		assert.Equal(t, returnData[0].Comment, res[0].Comment)
@@ -61,10 +61,10 @@ func TestGetByRoomID(t *testing.T) {
 	})
 
 	t.Run("Error Get All", func(t *testing.T) {
-		repo.On("GetByRoomID", uint(1)).Return(nil, errors.New("data not found")).Once()
+		repo.On("GetByHouseID", uint(1)).Return(nil, errors.New("data not found")).Once()
 		srv := review.NewReviewService(repo)
 
-		res, err := srv.GetByRoomID(uint(1))
+		res, err := srv.GetByHouseID(uint(1))
 		assert.Error(t, err)
 		assert.EqualError(t, err, "data not found")
 		assert.Equal(t, []entities.ReviewJoin{}, res)
