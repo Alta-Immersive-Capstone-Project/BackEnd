@@ -70,7 +70,7 @@ func main() {
 	s3Client := s3.NewS3Client(config)
 
 	// Migrate
-	utils.Migrate(DB)
+	// utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
