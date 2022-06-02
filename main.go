@@ -54,6 +54,8 @@ import (
 	userHandlers "kost/deliveries/handlers/user"
 
 	forgotHandler "kost/deliveries/handlers/forgot"
+	emailService "kost/services/email"
+	forgotService "kost/services/forgot"
 )
 
 func main() {
@@ -99,7 +101,8 @@ func main() {
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
-
+	emailService := emailService.NewEmailConfig()
+	forgotService := forgotService.NewforgotService(userRepository, validator.New())
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
 	userHandler := userHandlers.NewUserHandler(userService, s3Client, validation)

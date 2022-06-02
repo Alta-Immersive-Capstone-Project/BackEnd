@@ -46,7 +46,7 @@ func (f *forgotService) GetToken(email string) (entities.InternalAuthResponse, e
 }
 
 func (f *forgotService) ResetPassword(id int, password string) (entities.CustomerResponse, error) {
-	user, err := f.userRepo.GetUserID(id)
+	user, err := f.userRepo.GetUserID(uint(id))
 	if err != nil {
 		return entities.CustomerResponse{}, err
 	}
@@ -54,7 +54,7 @@ func (f *forgotService) ResetPassword(id int, password string) (entities.Custome
 	hashedPassword, _ := helpers.HashPassword(password)
 	user.Password = hashedPassword
 
-	res, err := f.userRepo.UpdateUser(id, user)
+	res, err := f.userRepo.UpdateUser(uint(id), user)
 	if err != nil {
 		return entities.CustomerResponse{}, err
 	}

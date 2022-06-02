@@ -19,17 +19,17 @@ import (
 
 func UserRoute(e *echo.Echo, u user.HandleUser) {
 	internalGroup := e.Group("/admin")
-	internalGroup.POST("", u.CreateInternal(), middlewares.JWTMiddleware())
-	internalGroup.DELETE("/:id", u.DeleteInternal(), middlewares.JWTMiddleware())
-	internalGroup.PUT("/:id", u.UpdateInternal(), middlewares.JWTMiddleware())
-	internalGroup.GET("", u.GetAllMember(), middlewares.JWTMiddleware())
+	internalGroup.POST("", u.CreateInternal, middlewares.JWTMiddleware())
+	internalGroup.DELETE("/:id", u.DeleteInternal, middlewares.JWTMiddleware())
+	internalGroup.PUT("/:id", u.UpdateInternal, middlewares.JWTMiddleware())
+	internalGroup.GET("", u.GetAllMember, middlewares.JWTMiddleware())
 
 	customerGroup := e.Group("/customer")
 
-	customerGroup.POST("", u.CreateCustomer())
-	customerGroup.GET("/:id", u.GetCustomerByID())
-	customerGroup.PUT("/:id", u.UpdateCustomer(), middlewares.JWTMiddleware())
-	customerGroup.DELETE("/:id", u.DeleteCustomer(), middlewares.JWTMiddleware())
+	customerGroup.POST("", u.CreateCustomer)
+	customerGroup.GET("/:id", u.GetByID)
+	customerGroup.PUT("/:id", u.UpdateCustomer, middlewares.JWTMiddleware())
+	customerGroup.DELETE("/:id", u.DeleteCustomer, middlewares.JWTMiddleware())
 }
 
 func AuthRoute(e *echo.Echo, l *handlers.AuthHandler, f *forgot.ForgotHandler) {
