@@ -72,7 +72,7 @@ func initConfig() *AppConfig {
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3306")
+	config.Database.Port = GetEnv("DB_PORT", "3307")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "kost")
@@ -88,7 +88,7 @@ func initConfig() *AppConfig {
 	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
-	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
+	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "SB-Mid-server-YyE7uWSDeo-SBo5lNU6XUA4l")
 	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")

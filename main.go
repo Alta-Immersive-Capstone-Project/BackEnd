@@ -24,6 +24,7 @@ import (
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
+	midtrans "kost/utils/midtrans"
 	utils "kost/utils/rds"
 	"kost/utils/s3"
 
@@ -64,7 +65,7 @@ func main() {
 
 	// Init DB
 	DB := utils.NewMysqlGorm(config)
-	Snap := utils.NewSnap(config)
+	Snap := midtrans.NewSnap(config)
 
 	// Init S3
 	s3Client := s3.NewS3Client(config)

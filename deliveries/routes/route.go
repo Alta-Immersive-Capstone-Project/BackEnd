@@ -103,7 +103,7 @@ func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
 	// Customer
 	e.POST("/transactions", transaction.InsertTransaction, middlewares.JWTMiddleware())
 	e.GET("/transactions", transaction.GetAllTransactionbyCustomer, middlewares.JWTMiddleware())
-	e.POST("/transactions/callback", transaction.UpdateStatus)
+	e.POST("/transactions/callbacks", transaction.UpdateCallback)
 
 	// Admin
 	admin := e.Group("/admin/transactions", middlewares.JWTMiddleware())
