@@ -21,7 +21,7 @@ func (rs *reviewService) AddComment(customer_id uint, request entities.ReviewReq
 	var response entities.ReviewResponse
 
 	review := entities.Review{
-		RoomID:  request.RoomID,
+		HouseID: request.HouseID,
 		Comment: request.Comment,
 		Rating:  request.Rating,
 		UserID:  customer_id,
@@ -36,8 +36,8 @@ func (rs *reviewService) AddComment(customer_id uint, request entities.ReviewReq
 	return response, nil
 }
 
-func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
-	responses, err := rs.rm.GetByRoomID(room_id)
+func (rs *reviewService) GetByHouseID(HouseID uint) ([]entities.ReviewJoin, error) {
+	responses, err := rs.rm.GetByHouseID(HouseID)
 	if err != nil {
 		return []entities.ReviewJoin{}, err
 	}
@@ -45,8 +45,8 @@ func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error
 	return responses, nil
 }
 
-func (rs *reviewService) GetRating(room_id uint) ([]int, float32) {
-	count, total, err := rs.rm.GetRating(room_id)
+func (rs *reviewService) GetRating(HouseID uint) ([]int, float32) {
+	count, total, err := rs.rm.GetRating(HouseID)
 	if err != nil {
 		return []int{}, 0
 	}

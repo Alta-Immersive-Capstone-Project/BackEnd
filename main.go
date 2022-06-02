@@ -71,7 +71,7 @@ func main() {
 	s3Client := s3.NewS3Client(config)
 
 	// Migrate
-	utils.Migrate(DB)
+	// utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -91,7 +91,7 @@ func main() {
 	validation := validations.NewValidation(validator.New())
 
 	// Services
-	userService := userService.NewUserService(userRepository, validator.New())
+	userService := userService.NewUserService(userRepository)
 	authService := authService.NewAuthService(userRepository)
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)

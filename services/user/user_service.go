@@ -7,19 +7,16 @@ import (
 	"kost/entities"
 	userRepository "kost/repositories/user"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/jinzhu/copier"
 )
 
 type UserService struct {
 	userRepo userRepository.UserRepositoryInterface
-	validate *validator.Validate
 }
 
-func NewUserService(repository userRepository.UserRepositoryInterface, valid *validator.Validate) *UserService {
+func NewUserService(repository userRepository.UserRepositoryInterface) *UserService {
 	return &UserService{
 		userRepo: repository,
-		validate: valid,
 	}
 }
 

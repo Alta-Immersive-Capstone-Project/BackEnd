@@ -79,7 +79,7 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
 	room := e.Group("/room")
 	room.POST("", r.CreateRoom(), middlewares.JWTMiddleware())
-	e.GET("/rooms/:id", r.GetAllRoom())
+	e.GET("/houses/:id/room", r.GetAllRoom())
 	room.GET("/:id", r.GetIDRoom())
 	room.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
 	room.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
@@ -96,7 +96,7 @@ func CityPath(e *echo.Echo, C *city.HandlersCity) {
 func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 	// Customer
 	e.POST("/reviews", review.InsertComment, middlewares.JWTMiddleware())
-	e.GET("/reviews/:room_id", review.GetByRoomID)
+	e.GET("houses/:id/reviews", review.GetByHouseID)
 }
 
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {

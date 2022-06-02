@@ -11,7 +11,6 @@ type Room struct {
 	Image                  string        `json:"image"`
 	Additional_description string        `json:"additional_description"`
 	Transactions           []Transaction `gorm:"foreingkey:RoomID"`
-	Reviews                []Review      `gorm:"foreingkey:RoomID"`
 	Images                 []Image       `gorm:"foreingkey:RoomID"`
 	Amenities              Amenities     `gorm:"foreingkey:RoomID"`
 }
