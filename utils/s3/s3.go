@@ -1,4 +1,4 @@
-package helpers
+package s3
 
 import (
 	"context"
@@ -14,8 +14,11 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-func UploadFileToS3(filename string, file multipart.FileHeader) (string, error) {
-	// Connect AWS
+type S3Client struct {
+	s3 *s3.Client
+}
+
+func NewS3Client(config *configs.AppConfig) *S3Client {
 	awsConfig, err := awsConfig.LoadDefaultConfig(context.TODO(),
 		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
 			configs.Get().AwsS3.AccessKey,
@@ -25,12 +28,17 @@ func UploadFileToS3(filename string, file multipart.FileHeader) (string, error) 
 		awsConfig.WithRegion(configs.Get().AwsS3.Region),
 	)
 	if err != nil {
-		return "", err
+		log.Warn(err)
 	}
-
-	// s3 Client
 	client := s3.NewFromConfig(awsConfig)
-	uploader := manager.NewUploader(client)
+	return &S3Client{
+		s3: client,
+	}
+}
+
+func (s *S3Client) UploadFileToS3(filename string, file multipart.FileHeader) (string, error) {
+	// s3 Client
+	uploader := manager.NewUploader(s.s3)
 	src, err := file.Open()
 	if err != nil {
 		log.Info(err)
@@ -51,24 +59,10 @@ func UploadFileToS3(filename string, file multipart.FileHeader) (string, error) 
 	return result.Location, nil
 }
 
-func DeleteFromS3(filename string) error {
-
-	// Connect AWS
-	awsConfig, err := awsConfig.LoadDefaultConfig(context.TODO(),
-		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
-			configs.Get().AwsS3.AccessKey,
-			configs.Get().AwsS3.SecretKey,
-			"",
-		)),
-		awsConfig.WithRegion(configs.Get().AwsS3.Region),
-	)
-	if err != nil {
-		return err
-	}
+func (s *S3Client) DeleteFromS3(filename string) error {
 
 	// s3 Client
-	client := s3.NewFromConfig(awsConfig)
-	_, err = client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
+	_, err := s.s3.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
 		Bucket: aws.String(configs.Get().AwsS3.Bucket),
 		Key:    aws.String(filename),
 	})

@@ -19,14 +19,13 @@ import (
 	userRepository "kost/repositories/user"
 	authService "kost/services/auth"
 
-	storageProvider "kost/services/storage"
-
 	citesService "kost/services/city"
 	ImageService "kost/services/image"
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
 	utils "kost/utils/rds"
+	"kost/utils/s3"
 
 	"github.com/labstack/echo/v4"
 
@@ -63,6 +62,9 @@ func main() {
 	DB := utils.NewMysqlGorm(config)
 	Snap := utils.NewSnap(config)
 
+	// Init S3
+	s3Client := s3.NewS3Client(config)
+
 	// Migrate
 	utils.Migrate(DB)
 
@@ -80,12 +82,10 @@ func main() {
 	imageRepo := image.NewImageDB(DB)
 	districtRepo := districtRepo.NewDistrictRepo(DB)
 	houseRepo := houseRepo.NewHouseRepo(DB)
-
 	// Validation
 	validation := validations.NewValidation(validator.New())
 
 	// Services
-	s3 := storageProvider.NewS3()
 	userService := userService.NewUserService(userRepository, validator.New())
 	authService := authService.NewAuthService(userRepository)
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
@@ -93,14 +93,14 @@ func main() {
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
 	transactionsService := transactionService.NewTransactionService(transactionsRepo, userRepository, houseRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
-	roomService := roomsService.NewServiceRoom(roomRepo, imageRepo)
+	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
-	imageService := ImageService.NewServiceImage(roomRepo, imageRepo)
+	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
-	userHandler := userHandlers.NewUserHandler(userService, s3, validation)
+	userHandler := userHandlers.NewUserHandler(userService, s3Client, validation)
 	facilityHandler := facilityHandlers.NewHandlersFacility(facilityService, validation)
 	amenitiesHandler := amenitiesHandlers.NewHandlersAmenities(amenitiesService, validation)
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)

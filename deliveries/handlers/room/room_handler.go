@@ -81,7 +81,12 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 
 func (h *HandlersRoom) GetAllRoom() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		result, err := h.service.GetAllRoom()
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotAcceptable, helpers.ErrorConvertID())
+		}
+		result, err := h.service.GetAllRoom(uint(id))
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
