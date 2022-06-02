@@ -1,10 +1,7 @@
 package house
 
 import (
-<<<<<<< HEAD
-=======
 	"fmt"
->>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	"kost/entities"
 
 	"github.com/labstack/gommon/log"
@@ -49,8 +46,6 @@ func (hr *HouseRepo) DeleteHouse(id uint) error {
 	}
 	return nil
 }
-<<<<<<< HEAD
-=======
 
 func (hr *HouseRepo) GetAllHouseByDist(dist_id uint) ([]entities.House, error) {
 	var houses []entities.House
@@ -62,7 +57,6 @@ func (hr *HouseRepo) GetAllHouseByDist(dist_id uint) ([]entities.House, error) {
 	return houses, nil
 }
 
->>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 func (hr *HouseRepo) GetHouseID(id uint) (entities.House, error) {
 	var house entities.House
 	err := hr.Db.Where("id = ?", id).First(&house).Error
@@ -72,17 +66,6 @@ func (hr *HouseRepo) GetHouseID(id uint) (entities.House, error) {
 	}
 	return house, nil
 }
-<<<<<<< HEAD
-func (hr *HouseRepo) GetAllHouse(dist_id uint) ([]entities.House, error) {
-	var house []entities.House
-	err := hr.Db.Where("district_id = ?", dist_id).Find(&house).Error
-	if err != nil {
-		log.Warn("Error Get Data", err)
-		return house, err
-	}
-	return house, nil
-}
-=======
 func (hr *HouseRepo) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseJoin, error) {
 	var houses []entities.HouseResponseJoin
 	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.type, houses.available, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as room_type, AVG(reviews.rating) as rating").Group("title").Joins("JOIN districts ON districts.id = houses.district_id").Joins("LEFT JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.room_id = rooms.id").Where("houses.district_id = ?", dist_id).Scan(&houses).Error
@@ -142,4 +125,3 @@ func (hr *HouseRepo) FindHouseByTitle(title string) ([]entities.HouseResponseJoi
 // 	}
 // 	return houses, nil
 // }
->>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
