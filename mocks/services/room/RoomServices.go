@@ -48,13 +48,13 @@ func (_m *RoomServices) DeleteRoom(id uint) error {
 	return r0
 }
 
-// GetAllRoom provides a mock function with given fields:
-func (_m *RoomServices) GetAllRoom() ([]entities.RespondRoom, error) {
-	ret := _m.Called()
+// GetAllRoom provides a mock function with given fields: id
+func (_m *RoomServices) GetAllRoom(id uint) ([]entities.RespondRoom, error) {
+	ret := _m.Called(id)
 
 	var r0 []entities.RespondRoom
-	if rf, ok := ret.Get(0).(func() []entities.RespondRoom); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(uint) []entities.RespondRoom); ok {
+		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.RespondRoom)
@@ -62,8 +62,8 @@ func (_m *RoomServices) GetAllRoom() ([]entities.RespondRoom, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(id)
 	} else {
 		r1 = ret.Error(1)
 	}

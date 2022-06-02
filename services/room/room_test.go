@@ -57,17 +57,16 @@ func TestCreateRoom(t *testing.T) {
 func TestGetAllRoom(t *testing.T) {
 	repo := repoMock.NewRoomRepo(t)
 	returnData := []entities.Room{{
-		HouseID: 1,
-		Type: "4x3",
-		UserID: 1,
-		Price:  2000000,
-		Image: "image",
+		HouseID:                1,
+		Type:                   "4x3",
+		UserID:                 1,
+		Price:                  2000000,
+		Image:                  "image",
 		Additional_description: "free wifi",
-
 	}}
 
 	t.Run("Success Insert", func(t *testing.T) {
-		repo.On("GetAllRoom",uint(1)).Return(returnData, nil).Once()
+		repo.On("GetAllRoom", uint(1)).Return(returnData, nil).Once()
 		srv := room.NewServiceRoom(repo)
 
 		res, err := srv.GetAllRoom(uint(1))
