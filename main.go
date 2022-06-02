@@ -90,7 +90,7 @@ func main() {
 	validation := validations.NewValidation(validator.New())
 
 	// Services
-	userService := userService.NewUserService(userRepository, validator.New())
+	userService := userService.NewUserService(userRepository)
 	authService := authService.NewAuthService(userRepository)
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
