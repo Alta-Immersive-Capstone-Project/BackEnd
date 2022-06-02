@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
 	validation "kost/deliveries/validations"
@@ -26,55 +27,24 @@ func NewTransactionHandler(ts service.TransactionService, v validation.Validatio
 
 func (th *transactionHandler) InsertTransaction(c echo.Context) error {
 	user_id := uint(middlewares.ExtractTokenUserId(c))
-	var request entities.TransactionRequest
+	var req entities.TransactionRequest
 
-	err := c.Bind(&request)
+	err := c.Bind(&req)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 	}
 
-	err = th.v.Validation(request)
+	err = th.v.Validation(req)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	response, err := th.ts.AddTransaction(user_id, request)
+	response, err := th.ts.CreateTransaction(user_id, req)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
 	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Transaction", response))
-}
-
-func (th *transactionHandler) UpdateStatus(c echo.Context) error {
-	var request entities.Callback
-
-	err := c.Bind(&request)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
-	}
-
-	response, err := th.ts.UpdateStatus(request)
-	if err != nil {
-		return c.JSON(http.StatusForbidden, helpers.StatusUnauthorized(err))
-	}
-
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", response))
-}
-
-func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
-	customer_id, role := middlewares.ExtractTokenRoleID(c)
-
-	status := c.QueryParam("status")
-	city, _ := strconv.Atoi(c.QueryParam("city"))
-	district, _ := strconv.Atoi(c.QueryParam("district"))
-
-	response := th.ts.GetAllTransactionbyCustomer(role, uint(customer_id), status, uint(city), uint(district))
-	if len(response) == 0 {
-		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
-	}
-
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyConsultant(c echo.Context) error {
@@ -112,17 +82,49 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
-	_, err = th.ts.GetTransaction(booking_id)
-	if err != nil {
-		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("Your are not allowed to access this resource"))
-	}
-
 	response, err := th.ts.UpdateTransaction(user_id, booking_id, request)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Transaction", response))
+}
+
+func (th *transactionHandler) UpdateCallback(c echo.Context) error {
+	var request entities.Callback
+
+	err := c.Bind(&request)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+	}
+
+	check := helpers.Hash512(request)
+	if !check {
+		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("Your are not allowed to access this resource"))
+	}
+
+	response, err := th.ts.UpdateCallback(request)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, helpers.StatusUnauthorized(err))
+	}
+
+	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", response))
+}
+
+func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
+	customer_id, role := middlewares.ExtractTokenRoleID(c)
+
+	status := c.QueryParam("status")
+	city, _ := strconv.Atoi(c.QueryParam("city"))
+	district, _ := strconv.Atoi(c.QueryParam("district"))
+
+	response := th.ts.GetAllTransactionbyCustomer(role, uint(customer_id), status, uint(city), uint(district))
+	fmt.Println(response)
+	if len(response) == 0 {
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
+	}
+
+	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {

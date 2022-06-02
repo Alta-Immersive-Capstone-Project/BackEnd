@@ -96,14 +96,14 @@ func CityPath(e *echo.Echo, C *city.HandlersCity) {
 func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 	// Customer
 	e.POST("/reviews", review.InsertComment, middlewares.JWTMiddleware())
-	e.GET("houses/:id/reviews", review.GetByRoomID)
+	e.GET("houses/:id/reviews", review.GetByHouseID)
 }
 
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
 	// Customer
 	e.POST("/transactions", transaction.InsertTransaction, middlewares.JWTMiddleware())
 	e.GET("/transactions", transaction.GetAllTransactionbyCustomer, middlewares.JWTMiddleware())
-	e.POST("/transactions/callback", transaction.UpdateStatus)
+	e.POST("/transactions/callbacks", transaction.UpdateCallback)
 
 	// Admin
 	admin := e.Group("/admin/transactions", middlewares.JWTMiddleware())

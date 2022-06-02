@@ -1,15 +1,12 @@
 package transactions
 
 import (
-	"errors"
 	"fmt"
 	"kost/configs"
-	"kost/deliveries/helpers"
 	"kost/entities"
 	"kost/repositories/house"
 	repo "kost/repositories/transactions"
 	"kost/repositories/user"
-	"strconv"
 	"time"
 
 	"github.com/jinzhu/copier"
@@ -31,27 +28,66 @@ func NewTransactionService(tm repo.TransactionModel, um user.UserRepositoryInter
 	}
 }
 
-func (ts *transactionService) AddTransaction(customer_id uint, request entities.TransactionRequest) (entities.TransactionResponse, error) {
-	var response entities.TransactionResponse
-	booking_id := fmt.Sprintf("DM-%d", request.CheckinDate)
+func (ts *transactionService) CreateTransaction(customer_id uint, req entities.TransactionRequest) (entities.TransactionResponse, error) {
+	transaction := entities.Transaction{
+		BookingID:         fmt.Sprintf("DM-%d", req.CheckIn),
+		UserID:            customer_id,
+		RoomID:            req.RoomID,
+		HouseID:           req.HouseID,
+		CheckIn:           time.Unix(0, req.CheckIn*int64(time.Millisecond)),
+		Duration:          req.Duration,
+		Price:             req.Price,
+		TransactionStatus: "processing",
+	}
 
-	user, _ := ts.um.GetUserID(customer_id)
-	house, _ := ts.hm.GetHouseID(request.HouseID)
+	result, err := ts.tm.Create(transaction)
+	if err != nil {
+		return entities.TransactionResponse{}, err
+	}
+
+	response, err := ts.tm.Request(result.BookingID)
+	if err != nil {
+		return entities.TransactionResponse{}, err
+	}
+
+	copier.Copy(&response, &result)
+	return response, nil
+}
+
+func (ts *transactionService) GetAllTransactionbyConsultant() []entities.TransactionResponse {
+	var response []entities.TransactionResponse
+
+	results := ts.tm.GetAllbyConsultant()
+
+	for _, r := range results {
+		transaction, _ := ts.tm.Request(r.BookingID)
+		copier.Copy(&transaction, &r)
+		response = append(response, transaction)
+	}
+
+	return response
+}
+
+func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
+	req, err := ts.tm.Request(booking_id)
+	if err != nil {
+		return entities.TransactionUpdateResponse{}, err
+	}
+
 	snapRequest := &snap.Request{
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: user.Name,
-			Email: user.Email,
-			Phone: user.Phone,
+			FName: req.Name,
+			Email: req.Email,
+			Phone: req.Phone,
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  booking_id,
-			GrossAmt: request.TotalBill,
+			GrossAmt: request.Price,
 		},
 		Items: &[]midtrans.ItemDetails{
 			{
-				ID:    strconv.Itoa(int(house.ID)),
-				Name:  house.Title,
-				Price: request.TotalBill,
+				Name:  req.Title,
+				Price: request.Price,
 				Qty:   1,
 			},
 		},
@@ -66,39 +102,31 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
-		return entities.TransactionResponse{}, err
+		return entities.TransactionUpdateResponse{}, err
 	}
 
 	transaction := entities.Transaction{
-		UserID:            customer_id,
-		RoomID:            request.RoomID,
-		HouseID:           request.HouseID,
-		CheckinDate:       time.Unix(0, request.CheckinDate*int64(time.Millisecond)),
-		RentDuration:      request.RentDuration,
 		BookingID:         booking_id,
-		TotalBill:         request.TotalBill,
-		TransactionStatus: "processing",
-		Token:             snap.Token,
+		ConsultantID:      customer_id,
+		Duration:          req.Duration,
+		Price:             request.Price,
+		TransactionStatus: "pending",
+		RedirectURL:       snap.RedirectURL,
 	}
 
-	result, err := ts.tm.Create(transaction)
+	result, err := ts.tm.Update(booking_id, transaction)
 	if err != nil {
-		return entities.TransactionResponse{}, err
+		return entities.TransactionUpdateResponse{}, err
 	}
 
-	copier.Copy(&response, &result)
-	copier.Copy(&response, &house)
-	copier.Copy(&response, &user)
+	var response entities.TransactionUpdateResponse
+	copier.Copy(&response, &req)
 	copier.Copy(&response, &snap)
+	copier.Copy(&response, &result)
 	return response, nil
 }
 
-func (ts *transactionService) UpdateStatus(req entities.Callback) (entities.Callback, error) {
-	check := helpers.Hash512(req)
-	if !check {
-		return entities.Callback{}, errors.New("you are not allowed to access this resource")
-	}
-
+func (ts *transactionService) UpdateCallback(req entities.Callback) (entities.Callback, error) {
 	transaction := entities.Callback{
 		TransactionStatus: req.TransactionStatus,
 		TransactionID:     req.TransactionID,
@@ -111,7 +139,7 @@ func (ts *transactionService) UpdateStatus(req entities.Callback) (entities.Call
 		ApprovalCode:      req.ApprovalCode,
 	}
 
-	response, err := ts.tm.UpdateStatus(req.OrderID, transaction)
+	response, err := ts.tm.UpdateSnap(req.OrderID, transaction)
 	if err != nil {
 		return entities.Callback{}, err
 	}
@@ -119,53 +147,9 @@ func (ts *transactionService) UpdateStatus(req entities.Callback) (entities.Call
 	return response, nil
 }
 
-func (ts *transactionService) GetTransaction(booking_id string) (entities.TransactionResponse, error) {
-	var response entities.TransactionResponse
-
-	result, err := ts.tm.Get(booking_id)
-	if err != nil {
-		return entities.TransactionResponse{}, err
-	}
-
-	copier.Copy(&response, &result)
-	return response, nil
-}
-
 func (ts *transactionService) GetAllTransactionbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
 	response := ts.tm.GetAllbyCustomer(role, user, status, city, district)
 	return response
-}
-
-func (ts *transactionService) GetAllTransactionbyConsultant() []entities.TransactionResponse {
-	var response []entities.TransactionResponse
-
-	results := ts.tm.GetAllbyConsultant()
-
-	for _, r := range results {
-		var transaction entities.TransactionResponse
-		copier.Copy(&transaction, &r)
-		response = append(response, transaction)
-	}
-
-	return response
-}
-
-func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
-	var response entities.TransactionUpdateResponse
-
-	transaction := entities.Transaction{
-		ConsultantID:      customer_id,
-		TotalBill:         request.TotalBill,
-		TransactionStatus: "pending",
-	}
-
-	result, err := ts.tm.Update(booking_id, transaction)
-	if err != nil {
-		return entities.TransactionUpdateResponse{}, err
-	}
-
-	copier.Copy(&response, &result)
-	return response, nil
 }
 
 func (ts *transactionService) GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost {

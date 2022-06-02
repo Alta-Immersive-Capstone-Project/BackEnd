@@ -7,11 +7,10 @@ type Room struct {
 	HouseID                uint          `json:"house_id"`
 	Type                   string        `json:"type"`
 	UserID                 uint          `json:"userid"`
-	Price                  int32         `json:"price"`
+	Price                  int64         `json:"price"`
 	Image                  string        `json:"image"`
 	Additional_description string        `json:"additional_description"`
 	Transactions           []Transaction `gorm:"foreingkey:RoomID"`
-	Reviews                []Review      `gorm:"foreingkey:RoomID"`
 	Images                 []Image       `gorm:"foreingkey:RoomID"`
 	Amenities              Amenities     `gorm:"foreingkey:RoomID"`
 }
@@ -19,12 +18,12 @@ type Room struct {
 type AddRoom struct {
 	HouseID                uint   `json:"house_id" validate:"required" form:"house_id"`
 	Type                   string `gorm:"type:varchar(100);not null" json:"type" validate:"required" form:"type"`
-	Price                  int32  `gorm:"type:int;not null" json:"price" validate:"required" form:"price"`
+	Price                  int64  `gorm:"type:int;not null" json:"price" validate:"required" form:"price"`
 	Additional_description string `gorm:"type:varchar(100);not null" json:"additional_description" validate:"required" form:"additional_description"`
 }
 type UpdateRoom struct {
 	Type                   string `gorm:"type:varchar(100);not null" json:"type" form:"type"`
-	Price                  int32  `gorm:"type:int;not null" json:"price" form:"price"`
+	Price                  int64  `gorm:"type:int;not null" json:"price" form:"price"`
 	Additional_description string `gorm:"type:varchar(100);not null" json:"additional_description" form:"additional_description"`
 	Image                  string `json:"image"`
 }
@@ -32,7 +31,7 @@ type RespondRoom struct {
 	ID                     uint   `json:"id"`
 	HouseID                uint   `json:"house_id"`
 	Type                   string `json:"type"`
-	Price                  int32  `json:"price"`
+	Price                  int64  `json:"price"`
 	Additional_description string `json:"additional_description"`
 	Image                  string `json:"image"`
 }
@@ -40,6 +39,6 @@ type RespondRoomcreat struct {
 	ID                     uint   `json:"id"`
 	HouseID                uint   `json:"house_id"`
 	Type                   string `json:"type"`
-	Price                  int32  `json:"price"`
+	Price                  int64  `json:"price"`
 	Additional_description string `json:"additional_description"`
 }

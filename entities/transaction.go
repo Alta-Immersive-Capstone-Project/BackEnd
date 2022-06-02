@@ -8,28 +8,59 @@ import (
 
 type Transaction struct {
 	gorm.Model
+	BookingID         string    `gorm:"type:varchar(100);not null"`
 	UserID            uint      `gorm:"type:int;not null"`
 	ConsultantID      uint      `gorm:"type:int"`
-	RoomID            uint      `json:"room_id" gorm:"type:int;not null"`
 	HouseID           uint      `json:"house_id" gorm:"type:int;not null"`
-	CheckinDate       time.Time `json:"checkin_date" gorm:"type:date;not null"`
-	RentDuration      int       `json:"rent_duration" gorm:"type:int;not null"`
-	BookingID         string    `gorm:"type:varchar(100);not null"`
-	TotalBill         int64     `json:"total_bill" gorm:"type:int;not null"`
+	RoomID            uint      `json:"room_id" gorm:"type:int;not null"`
+	CheckIn           time.Time `json:"check_in" gorm:"type:date;not null"`
+	Duration          int       `json:"duration" gorm:"type:int;not null"`
+	Price             int64     `gorm:"type:int;not null"`
 	TransactionStatus string    `gorm:"type:varchar(100);not null"`
 	TransactionType   string    `gorm:"type:varchar(100)"`
-	Token             string    `gorm:"type:varchar(100);not null"`
 	PaymentType       string    `gorm:"type:varchar(100)"`
 	Acquirer          string    `gorm:"type:varchar(100)"`
+	RedirectURL       string    `gorm:"type:varchar(100)"`
 }
 
-// Request
 type TransactionRequest struct {
-	RoomID       uint  `json:"room_id" form:"room_id" validate:"required"`
-	HouseID      uint  `json:"house_id" form:"house_id" validate:"required"`
-	CheckinDate  int64 `json:"checkin_date" form:"checkin_date" validate:"required"`
-	RentDuration int   `json:"rent_duration" form:"rent_duration" validate:"required"`
-	TotalBill    int64 `json:"total_bill" form:"total_bill" validate:"required"`
+	HouseID  uint  `json:"house_id" form:"house_id" validate:"required"`
+	RoomID   uint  `json:"room_id" form:"room_id" validate:"required"`
+	CheckIn  int64 `json:"check_in" form:"check_in" validate:"required"`
+	Duration int   `json:"duration" form:"duration" validate:"required"`
+	Price    int64 `json:"price" form:"price" validate:"required"`
+}
+
+type TransactionResponse struct {
+	BookingID         string    `json:"booking_id"`
+	Name              string    `json:"name"`
+	Email             string    `json:"email"`
+	Phone             string    `json:"phone"`
+	Title             string    `json:"title"`
+	Address           string    `json:"address"`
+	Price             int64     `json:"price"`
+	CheckIn           time.Time `json:"check_in"`
+	Duration          int       `json:"duration"`
+	TransactionStatus string    `json:"transaction_status"`
+	CreatedAt         time.Time `json:"created_at"`
+}
+
+type TransactionUpdateRequest struct {
+	Price int64 `json:"price" form:"price" validate:"required"`
+}
+
+type TransactionUpdateResponse struct {
+	BookingID         string    `json:"booking_id"`
+	Name              string    `json:"name"`
+	Phone             string    `json:"phone"`
+	Title             string    `json:"title"`
+	Address           string    `json:"address"`
+	Price             int64     `json:"price"`
+	CheckIn           time.Time `json:"check_in"`
+	Duration          int       `json:"duration"`
+	TransactionStatus string    `json:"transaction_status"`
+	RedirectURL       string    `json:"redirect_url"`
+	UpdatedAt         time.Time `json:"updated_at"`
 }
 
 type Callback struct {
@@ -46,27 +77,6 @@ type Callback struct {
 	ApprovalCode      string `json:"approval_code"`
 }
 
-type TransactionUpdateRequest struct {
-	TotalBill int64 `json:"total_bill" form:"total_bill" validate:"required"`
-}
-
-// Response
-type TransactionResponse struct {
-	ID                uint      `json:"id"`
-	BookingID         string    `json:"booking_id"`
-	RoomID            uint      `json:"room_id"`
-	Title             string    `json:"title"`
-	Address           string    `json:"address"`
-	CheckinDate       time.Time `json:"checkin_date"`
-	RentDuration      int       `json:"rent_duration"`
-	Name              string    `json:"name"`
-	Phone             string    `json:"phone"`
-	TotalBill         int64     `json:"total_bill"`
-	TransactionStatus string    `json:"transaction_status"`
-	RedirectURL       string    `json:"redirect_url"`
-	CreatedAt         time.Time `json:"created_at"`
-}
-
 type TransactionUpdate struct {
 	BookingID         string    `json:"booking_id"`
 	TransactionStatus string    `json:"transaction_status"`
@@ -75,24 +85,21 @@ type TransactionUpdate struct {
 
 type TransactionJoin struct {
 	BookingID         string    `json:"booking_id"`
-	CheckinDate       time.Time `json:"checkin_date"`
-	RentDuration      int       `json:"rent_duration"`
-	TotalBill         int64     `json:"total_bill"`
-	TransactionStatus string    `json:"transaction_status"`
-	Url               string    `json:"url"`
 	Title             string    `json:"title"`
+	Url               string    `json:"url"`
+	CheckIn           time.Time `json:"check_in"`
+	Duration          int       `json:"duration"`
+	Price             int64     `json:"price"`
+	TransactionStatus string    `json:"transaction_status"`
+	RedirectURL       string    `json:"redirect_url"`
 }
 
 type TransactionKost struct {
 	BookingID         string    `json:"booking_id"`
 	Name              string    `json:"name"`
-	RentDuration      int       `json:"rent_duration"`
-	TotalBill         int64     `json:"total_bill"`
+	Duration          int       `json:"duration"`
+	Price             int64     `json:"price"`
 	TransactionStatus string    `json:"transaction_status"`
+	RedirectURL       string    `json:"redirect_url"`
 	CreatedAt         time.Time `json:"created_at"`
-}
-
-type TransactionUpdateResponse struct {
-	TotalBill int64     `json:"total_bill"`
-	UpdatedAt time.Time `json:"updated_at"`
 }

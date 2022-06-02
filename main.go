@@ -24,6 +24,7 @@ import (
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
+	midtrans "kost/utils/midtrans"
 	utils "kost/utils/rds"
 	"kost/utils/s3"
 
@@ -64,13 +65,13 @@ func main() {
 
 	// Init DB
 	DB := utils.NewMysqlGorm(config)
-	Snap := utils.NewSnap(config)
+	Snap := midtrans.NewSnap(config)
 
 	// Init S3
 	s3Client := s3.NewS3Client(config)
 
 	// Migrate
-	utils.Migrate(DB)
+	// utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -90,7 +91,7 @@ func main() {
 	validation := validations.NewValidation(validator.New())
 
 	// Services
-	userService := userService.NewUserService(userRepository, validator.New())
+	userService := userService.NewUserService(userRepository)
 	authService := authService.NewAuthService(userRepository)
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
