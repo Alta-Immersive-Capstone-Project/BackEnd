@@ -13,8 +13,8 @@ type ReviewHandler struct {
 	mock.Mock
 }
 
-// GetByRoomID provides a mock function with given fields: c
-func (_m *ReviewHandler) GetByRoomID(c echo.Context) error {
+// GetByHouseID provides a mock function with given fields: c
+func (_m *ReviewHandler) GetByHouseID(c echo.Context) error {
 	ret := _m.Called(c)
 
 	var r0 error
