@@ -71,9 +71,9 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 | --- | --- |
 | Customer| Manage customer's profile |
 |         | Reset password if forgot |
- | | Find the available room  in a city, district, or house by Map Visualization|
-  | | Find the available room  in a city, district, or house based on the lowest's or highest price|
- | | Comprehensive information about available room include the amenities and rules|
+ | | Find the Kosts in a city, district, or house by Map Visualization|
+  | | Gain list of the Kosts based on the lowest's or highest price|
+ | | Comprehensive information about available room include the amenities, rules, and location on the Map|
   | | Chat with Consultant about dealing room price or just asking some questions|
   | | Available various choices of payment methods |
   | | Review and Rate about customer's experience after renting |
