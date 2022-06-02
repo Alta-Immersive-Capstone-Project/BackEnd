@@ -8,9 +8,10 @@ import (
 
 type AppConfig struct {
 	App struct {
-		BaseURL string
-		Port    string
-		ENV     string
+		BaseURL  string
+		FrontURL string
+		Port     string
+		ENV      string
 	}
 
 	Database struct {
@@ -57,6 +58,7 @@ func initConfig() *AppConfig {
 
 	config.App.Port = GetEnv("APP_PORT", "8000")
 	config.App.BaseURL = GetEnv("APP_BASE_URL", "http://localhost:8000")
+	config.App.FrontURL = GetEnv("APP_FRONT_URL", "http://localhost:3000/transactions/finish")
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
@@ -65,16 +67,16 @@ func initConfig() *AppConfig {
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "kost")
 
-	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "kost-bucket")
-	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")
-	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "AKIAJXZQZQ7Z5Z5Z5Z5Z")
+	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "")
+	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "")
+	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
-	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "SB-Mid-server-YyE7uWSDeo-SBo5lNU6XUA4l")
+	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
 	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
-	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "https://maps.googleapis.com/maps/api/distancematrix/json")
+	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
 
 	// Info
 	fmt.Println(config.App)

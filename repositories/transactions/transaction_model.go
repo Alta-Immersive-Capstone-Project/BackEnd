@@ -39,9 +39,14 @@ func (m *transactionModel) CreateSnap(req *snap.Request) (*snap.Response, error)
 	return transaction, nil
 }
 
-func (m *transactionModel) UpdateStatus(booking_id string, status entities.Callback) {
+func (m *transactionModel) UpdateStatus(booking_id string, status entities.Callback) (entities.Callback, error) {
 
-	m.db.Model(entities.Transaction{}).Where("booking_id = ?", booking_id).Updates(&status)
+	record := m.db.Model(entities.Transaction{}).Where("booking_id = ?", booking_id).Updates(&status)
+	if record.RowsAffected == 0 {
+		return entities.Callback{}, record.Error
+	}
+
+	return status, nil
 }
 
 func (m *transactionModel) Get(booking_id string) (entities.Transaction, error) {

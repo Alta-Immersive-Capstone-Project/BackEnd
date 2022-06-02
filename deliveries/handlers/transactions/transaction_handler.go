@@ -54,12 +54,12 @@ func (th *transactionHandler) UpdateStatus(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 	}
 
-	err = th.ts.UpdateStatus(request)
+	response, err := th.ts.UpdateStatus(request)
 	if err != nil {
 		return c.JSON(http.StatusForbidden, helpers.StatusUnauthorized(err))
 	}
 
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", nil))
+	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {

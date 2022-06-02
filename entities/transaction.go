@@ -16,9 +16,11 @@ type Transaction struct {
 	RentDuration      int       `json:"rent_duration" gorm:"type:int;not null"`
 	BookingID         string    `gorm:"type:varchar(100);not null"`
 	TotalBill         int64     `json:"total_bill" gorm:"type:int;not null"`
-	PaymentType       string    `json:"payment_type" gorm:"type:varchar(100)"`
 	TransactionStatus string    `gorm:"type:varchar(100);not null"`
+	TransactionType   string    `gorm:"type:varchar(100)"`
 	Token             string    `gorm:"type:varchar(100);not null"`
+	PaymentType       string    `gorm:"type:varchar(100)"`
+	Acquirer          string    `gorm:"type:varchar(100)"`
 }
 
 // Request
@@ -31,6 +33,7 @@ type TransactionRequest struct {
 }
 
 type Callback struct {
+	TransactionType   string `json:"transaction_type"`
 	TransactionStatus string `json:"transaction_status"`
 	TransactionID     string `json:"transaction_id"`
 	StatusCode        string `json:"status_code"`
@@ -39,6 +42,7 @@ type Callback struct {
 	OrderID           string `json:"order_id"`
 	GrossAmount       string `json:"gross_amount"`
 	FraudStatus       string `json:"fraud_status"`
+	Acquirer          string `json:"acquirer"`
 	ApprovalCode      string `json:"approval_code"`
 }
 
