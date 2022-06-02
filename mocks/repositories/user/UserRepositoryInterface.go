@@ -14,11 +14,19 @@ type UserRepositoryInterface struct {
 }
 
 // DeleteUser provides a mock function with given fields: id
+<<<<<<< HEAD
 func (_m *UserRepositoryInterface) DeleteUser(id int) error {
 	ret := _m.Called(id)
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(int) error); ok {
+=======
+func (_m *UserRepositoryInterface) DeleteUser(id uint) error {
+	ret := _m.Called(id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		r0 = rf(id)
 	} else {
 		r0 = ret.Error(0)
@@ -48,19 +56,55 @@ func (_m *UserRepositoryInterface) FindByUser(value string) (entities.User, erro
 	return r0, r1
 }
 
+<<<<<<< HEAD
 // GetUserID provides a mock function with given fields: id
 func (_m *UserRepositoryInterface) GetUserID(id int) (entities.User, error) {
 	ret := _m.Called(id)
 
 	var r0 entities.User
 	if rf, ok := ret.Get(0).(func(int) entities.User); ok {
+=======
+// GetAllUser provides a mock function with given fields:
+func (_m *UserRepositoryInterface) GetAllUser() ([]entities.User, error) {
+	ret := _m.Called()
+
+	var r0 []entities.User
+	if rf, ok := ret.Get(0).(func() []entities.User); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.User)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetUserID provides a mock function with given fields: id
+func (_m *UserRepositoryInterface) GetUserID(id uint) (entities.User, error) {
+	ret := _m.Called(id)
+
+	var r0 entities.User
+	if rf, ok := ret.Get(0).(func(uint) entities.User); ok {
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		r0 = rf(id)
 	} else {
 		r0 = ret.Get(0).(entities.User)
 	}
 
 	var r1 error
+<<<<<<< HEAD
 	if rf, ok := ret.Get(1).(func(int) error); ok {
+=======
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		r1 = rf(id)
 	} else {
 		r1 = ret.Error(1)
@@ -91,18 +135,30 @@ func (_m *UserRepositoryInterface) InsertUser(newUser entities.User) (entities.U
 }
 
 // UpdateUser provides a mock function with given fields: id, _a1
+<<<<<<< HEAD
 func (_m *UserRepositoryInterface) UpdateUser(id int, _a1 entities.User) (entities.User, error) {
 	ret := _m.Called(id, _a1)
 
 	var r0 entities.User
 	if rf, ok := ret.Get(0).(func(int, entities.User) entities.User); ok {
+=======
+func (_m *UserRepositoryInterface) UpdateUser(id uint, _a1 entities.User) (entities.User, error) {
+	ret := _m.Called(id, _a1)
+
+	var r0 entities.User
+	if rf, ok := ret.Get(0).(func(uint, entities.User) entities.User); ok {
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		r0 = rf(id, _a1)
 	} else {
 		r0 = ret.Get(0).(entities.User)
 	}
 
 	var r1 error
+<<<<<<< HEAD
 	if rf, ok := ret.Get(1).(func(int, entities.User) error); ok {
+=======
+	if rf, ok := ret.Get(1).(func(uint, entities.User) error); ok {
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		r1 = rf(id, _a1)
 	} else {
 		r1 = ret.Error(1)

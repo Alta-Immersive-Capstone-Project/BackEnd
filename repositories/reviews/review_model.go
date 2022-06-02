@@ -26,6 +26,7 @@ func (m *reviewModel) Create(review entities.Review) (entities.Review, error) {
 	return review, nil
 }
 
+<<<<<<< HEAD
 func (m *reviewModel) GetByRoomID(room_id uint) ([]entities.Review, error) {
 	var reviews []entities.Review
 
@@ -33,11 +34,21 @@ func (m *reviewModel) GetByRoomID(room_id uint) ([]entities.Review, error) {
 
 	if record.RowsAffected == 0 {
 		return []entities.Review{}, record.Error
+=======
+func (m *reviewModel) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
+	var reviews []entities.ReviewJoin
+
+	record := m.db.Raw("select u.name, r.comment, r.rating, r.created_at from reviews r left join users u on u.id = r.user_id where r.room_id = ?", room_id).Scan(&reviews)
+
+	if record.RowsAffected == 0 {
+		return reviews, record.Error
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	}
 
 	return reviews, nil
 }
 
+<<<<<<< HEAD
 func (m *reviewModel) GetByUserID(user_id uint) (entities.User, error) {
 	var customer entities.User
 
@@ -50,6 +61,8 @@ func (m *reviewModel) GetByUserID(user_id uint) (entities.User, error) {
 	return customer, nil
 }
 
+=======
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 func (m *reviewModel) GetRating(room_id uint) ([]int, float32, error) {
 	var reviews []entities.Review
 	var count []int

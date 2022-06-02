@@ -21,19 +21,20 @@ func NewServiceRoom(Repo room.RoomRepo, image image.ImageRepo) *ServiceRoom {
 	}
 }
 
-func (r *ServiceRoom) CreateRoom(id uint, Insert entities.AddRoom) (entities.RespondRoom, error) {
+func (r *ServiceRoom) CreateRoom(id uint, Insert entities.AddRoom) (entities.RespondRoomcreat, error) {
 
 	newRoom := entities.Room{}
 	copier.Copy(&newRoom, &Insert)
 	newRoom.UserID = id
+	newRoom.Image = "https://belajar-be.s3.ap-southeast-1.amazonaws.com/room/1653973008.png"
 
 	res, err := r.repo.CreateRoom(newRoom)
 	if err != nil {
 		log.Warn(err)
-		return entities.RespondRoom{}, err
+		return entities.RespondRoomcreat{}, err
 	}
 
-	result := entities.RespondRoom{}
+	result := entities.RespondRoomcreat{}
 	copier.Copy(&result, &res)
 
 	return result, nil
@@ -65,7 +66,10 @@ func (s *ServiceRoom) GetIDRoom(id uint) (entities.Room, error) {
 
 func (s *ServiceRoom) UpdateRoom(id uint, update entities.UpdateRoom) (entities.RespondRoom, error) {
 
-	res, err := s.repo.UpdateRoom(id, update)
+	var updateRoom entities.Room
+	copier.Copy(&updateRoom, &update)
+
+	res, err := s.repo.UpdateRoom(id, updateRoom)
 	if err != nil {
 		log.Warn(err)
 		return entities.RespondRoom{}, err

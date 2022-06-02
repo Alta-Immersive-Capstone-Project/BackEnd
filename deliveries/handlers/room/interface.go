@@ -8,4 +8,5 @@ type RoomHanlder interface {
 	GetIDRoom() echo.HandlerFunc
 	UpdateRoom() echo.HandlerFunc
 	DeleteRoom() echo.HandlerFunc
+	DeleteImageUpdate() echo.HandlerFunc
 }

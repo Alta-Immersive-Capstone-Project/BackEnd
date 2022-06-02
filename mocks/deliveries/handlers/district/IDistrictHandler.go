@@ -44,6 +44,25 @@ func (_m *IDistrictHandler) GetAllByCity() echo.HandlerFunc {
 	return r0
 }
 
+<<<<<<< HEAD
+=======
+// Index provides a mock function with given fields:
+func (_m *IDistrictHandler) Index() echo.HandlerFunc {
+	ret := _m.Called()
+
+	var r0 echo.HandlerFunc
+	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(echo.HandlerFunc)
+		}
+	}
+
+	return r0
+}
+
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 // Show provides a mock function with given fields:
 func (_m *IDistrictHandler) Show() echo.HandlerFunc {
 	ret := _m.Called()

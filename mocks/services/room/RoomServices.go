@@ -14,6 +14,7 @@ type RoomServices struct {
 }
 
 // CreateRoom provides a mock function with given fields: id, Insert
+<<<<<<< HEAD
 func (_m *RoomServices) CreateRoom(id uint, Insert entities.AddRoom) (entities.RespondRoom, error) {
 	ret := _m.Called(id, Insert)
 
@@ -22,6 +23,16 @@ func (_m *RoomServices) CreateRoom(id uint, Insert entities.AddRoom) (entities.R
 		r0 = rf(id, Insert)
 	} else {
 		r0 = ret.Get(0).(entities.RespondRoom)
+=======
+func (_m *RoomServices) CreateRoom(id uint, Insert entities.AddRoom) (entities.RespondRoomcreat, error) {
+	ret := _m.Called(id, Insert)
+
+	var r0 entities.RespondRoomcreat
+	if rf, ok := ret.Get(0).(func(uint, entities.AddRoom) entities.RespondRoomcreat); ok {
+		r0 = rf(id, Insert)
+	} else {
+		r0 = ret.Get(0).(entities.RespondRoomcreat)
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	}
 
 	var r1 error

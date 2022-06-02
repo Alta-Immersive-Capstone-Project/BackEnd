@@ -27,6 +27,7 @@ func (_m *ImageRepo) CreateImage(new entities.Image) error {
 	return r0
 }
 
+<<<<<<< HEAD
 // DeleteImage provides a mock function with given fields: roomID, userID
 func (_m *ImageRepo) DeleteImage(roomID uint, userID uint) error {
 	ret := _m.Called(roomID, userID)
@@ -34,6 +35,15 @@ func (_m *ImageRepo) DeleteImage(roomID uint, userID uint) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
 		r0 = rf(roomID, userID)
+=======
+// DeleteImage provides a mock function with given fields: imageID
+func (_m *ImageRepo) DeleteImage(imageID uint) error {
+	ret := _m.Called(imageID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+		r0 = rf(imageID)
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -41,6 +51,53 @@ func (_m *ImageRepo) DeleteImage(roomID uint, userID uint) error {
 	return r0
 }
 
+<<<<<<< HEAD
+=======
+// GetAllImage provides a mock function with given fields: roomID
+func (_m *ImageRepo) GetAllImage(roomID uint) ([]entities.Image, error) {
+	ret := _m.Called(roomID)
+
+	var r0 []entities.Image
+	if rf, ok := ret.Get(0).(func(uint) []entities.Image); ok {
+		r0 = rf(roomID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.Image)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(roomID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetImage provides a mock function with given fields: ID
+func (_m *ImageRepo) GetImage(ID uint) (entities.Image, error) {
+	ret := _m.Called(ID)
+
+	var r0 entities.Image
+	if rf, ok := ret.Get(0).(func(uint) entities.Image); ok {
+		r0 = rf(ID)
+	} else {
+		r0 = ret.Get(0).(entities.Image)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(ID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 type NewImageRepoT interface {
 	mock.TestingT
 	Cleanup(func())

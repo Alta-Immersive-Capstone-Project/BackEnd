@@ -50,6 +50,7 @@ func (_m *TransactionService) GetAllTransactionbyConsultant() []entities.Transac
 	return r0
 }
 
+<<<<<<< HEAD
 // GetAllTransactionbyCustomer provides a mock function with given fields: customer_id, status
 func (_m *TransactionService) GetAllTransactionbyCustomer(customer_id uint, status string) []entities.TransactionResponse {
 	ret := _m.Called(customer_id, status)
@@ -60,6 +61,34 @@ func (_m *TransactionService) GetAllTransactionbyCustomer(customer_id uint, stat
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.TransactionResponse)
+=======
+// GetAllTransactionbyCustomer provides a mock function with given fields: role, user, status, city, district
+func (_m *TransactionService) GetAllTransactionbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	ret := _m.Called(role, user, status, city, district)
+
+	var r0 []entities.TransactionJoin
+	if rf, ok := ret.Get(0).(func(string, uint, string, uint, uint) []entities.TransactionJoin); ok {
+		r0 = rf(role, user, status, city, district)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.TransactionJoin)
+		}
+	}
+
+	return r0
+}
+
+// GetAllTransactionbyKost provides a mock function with given fields: duration, status, name
+func (_m *TransactionService) GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost {
+	ret := _m.Called(duration, status, name)
+
+	var r0 []entities.TransactionKost
+	if rf, ok := ret.Get(0).(func(int, string, string) []entities.TransactionKost); ok {
+		r0 = rf(duration, status, name)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.TransactionKost)
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		}
 	}
 
@@ -87,6 +116,23 @@ func (_m *TransactionService) GetTransaction(booking_id string) (entities.Transa
 	return r0, r1
 }
 
+<<<<<<< HEAD
+=======
+// UpdateStatus provides a mock function with given fields: request
+func (_m *TransactionService) UpdateStatus(request entities.Callback) error {
+	ret := _m.Called(request)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(entities.Callback) error); ok {
+		r0 = rf(request)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 // UpdateTransaction provides a mock function with given fields: customer_id, booking_id, request
 func (_m *TransactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
 	ret := _m.Called(customer_id, booking_id, request)

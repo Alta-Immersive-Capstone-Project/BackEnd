@@ -1,4 +1,5 @@
 mode: set
+<<<<<<< HEAD
 kost/services/amenities/amenities_service.go:16.74,20.2 1 1
 kost/services/amenities/amenities_service.go:23.109,29.16 4 1
 kost/services/amenities/amenities_service.go:34.2,36.20 3 1
@@ -15,11 +16,17 @@ kost/services/amenities/amenities_service.go:74.16,77.3 2 1
 kost/services/amenities/amenities_service.go:86.59,89.16 2 1
 kost/services/amenities/amenities_service.go:93.2,93.12 1 1
 kost/services/amenities/amenities_service.go:89.16,92.3 2 1
+=======
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 kost/services/facility/facility_service.go:15.70,19.2 1 1
 kost/services/facility/facility_service.go:22.108,27.16 4 1
 kost/services/facility/facility_service.go:32.2,36.20 3 1
 kost/services/facility/facility_service.go:27.16,30.3 2 1
+<<<<<<< HEAD
 kost/services/facility/facility_service.go:40.92,43.16 2 1
+=======
+kost/services/facility/facility_service.go:40.95,43.16 2 1
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 kost/services/facility/facility_service.go:47.2,50.20 3 1
 kost/services/facility/facility_service.go:43.16,46.3 2 1
 kost/services/facility/facility_service.go:54.84,57.16 2 1
@@ -31,3 +38,9 @@ kost/services/facility/facility_service.go:74.16,77.3 2 1
 kost/services/facility/facility_service.go:86.57,89.16 2 1
 kost/services/facility/facility_service.go:93.2,93.12 1 1
 kost/services/facility/facility_service.go:89.16,92.3 2 1
+<<<<<<< HEAD
+=======
+kost/services/facility/facility_service.go:96.90,98.16 2 1
+kost/services/facility/facility_service.go:102.2,102.20 1 1
+kost/services/facility/facility_service.go:98.16,101.3 2 1
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9

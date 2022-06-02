@@ -35,6 +35,7 @@ func (_m *ReviewService) AddComment(customer_id uint, request entities.ReviewReq
 }
 
 // GetByRoomID provides a mock function with given fields: room_id
+<<<<<<< HEAD
 func (_m *ReviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse, error) {
 	ret := _m.Called(room_id)
 
@@ -44,6 +45,17 @@ func (_m *ReviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.ReviewGetResponse)
+=======
+func (_m *ReviewService) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
+	ret := _m.Called(room_id)
+
+	var r0 []entities.ReviewJoin
+	if rf, ok := ret.Get(0).(func(uint) []entities.ReviewJoin); ok {
+		r0 = rf(room_id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.ReviewJoin)
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		}
 	}
 
@@ -58,6 +70,7 @@ func (_m *ReviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse
 }
 
 // GetRating provides a mock function with given fields: room_id
+<<<<<<< HEAD
 func (_m *ReviewService) GetRating(room_id uint) float32 {
 	ret := _m.Called(room_id)
 
@@ -69,6 +82,28 @@ func (_m *ReviewService) GetRating(room_id uint) float32 {
 	}
 
 	return r0
+=======
+func (_m *ReviewService) GetRating(room_id uint) ([]int, float32) {
+	ret := _m.Called(room_id)
+
+	var r0 []int
+	if rf, ok := ret.Get(0).(func(uint) []int); ok {
+		r0 = rf(room_id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]int)
+		}
+	}
+
+	var r1 float32
+	if rf, ok := ret.Get(1).(func(uint) float32); ok {
+		r1 = rf(room_id)
+	} else {
+		r1 = ret.Get(1).(float32)
+	}
+
+	return r0, r1
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 }
 
 type NewReviewServiceT interface {

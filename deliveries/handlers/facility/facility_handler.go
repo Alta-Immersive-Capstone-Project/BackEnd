@@ -59,7 +59,7 @@ func (h *HandlersFacility) CreateFacility() echo.HandlerFunc {
 // Respond Get All Facility
 func (h *HandlersFacility) GetAllFacility() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := c.QueryParam("house_id")
+		id := c.Param("id")
 		HouseID, err := strconv.Atoi(id)
 		if err != nil {
 			log.Warn(err)
@@ -142,5 +142,25 @@ func (h *HandlersFacility) DeleteFacility() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
+	}
+}
+
+// Respond Near Facility
+func (h *HandlersFacility) GetNearFacility() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		id := c.Param("id")
+		HouseID, err := strconv.Atoi(id)
+
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+		}
+
+		result, err := h.service.GetNearFacility(uint(HouseID))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get Near Facility", result))
 	}
 }

@@ -50,23 +50,40 @@ func (v *validation) Validation(request interface{}) error {
 	return nil
 }
 
-func ValidationImage(files []*multipart.FileHeader) error {
+func ValidationImage(files []*multipart.FileHeader) (string, error) {
 	for i, file := range files {
 		if file.Size >= 1000*1000 {
-			return errors.New("max file image 1 MB")
+			return "max file image 1 MB", errors.New("max file image 1 MB")
 		}
 		fmt.Println(file.Size)
 		src, err := file.Open()
 		defer src.Close()
 		if err != nil {
-			return err
+			return "eror open file", err
 		}
 		fileByte, _ := ioutil.ReadAll(src)
 		fileType := http.DetectContentType(fileByte)
 		if fileType != "image/png" {
-			return errors.New("file image " + strconv.Itoa(i+1) + " type not PNG")
+			return "type file image " + strconv.Itoa(i+1) + " not PNG", errors.New("file image " + strconv.Itoa(i+1) + " type not PNG")
 		}
 	}
+	return "", nil
+}
 
-	return nil
+func ValidationAvatar(file *multipart.FileHeader) (string, error) {
+	if file.Size >= 1000*1000 {
+		return "max file image 1 MB", errors.New("max file image 1 MB")
+	}
+	fmt.Println(file.Size)
+	src, err := file.Open()
+	defer src.Close()
+	if err != nil {
+		return "eror open file", err
+	}
+	fileByte, _ := ioutil.ReadAll(src)
+	fileType := http.DetectContentType(fileByte)
+	if fileType != "image/png" {
+		return "type file image not PNG", errors.New("file image type not PNG")
+	}
+	return "", nil
 }

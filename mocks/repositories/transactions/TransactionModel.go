@@ -5,6 +5,10 @@ package mocks
 import (
 	entities "kost/entities"
 
+<<<<<<< HEAD
+=======
+	snap "github.com/midtrans/midtrans-go/snap"
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -34,6 +38,32 @@ func (_m *TransactionModel) Create(transaction entities.Transaction) (entities.T
 	return r0, r1
 }
 
+<<<<<<< HEAD
+=======
+// CreateSnap provides a mock function with given fields: req
+func (_m *TransactionModel) CreateSnap(req *snap.Request) (*snap.Response, error) {
+	ret := _m.Called(req)
+
+	var r0 *snap.Response
+	if rf, ok := ret.Get(0).(func(*snap.Request) *snap.Response); ok {
+		r0 = rf(req)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*snap.Response)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*snap.Request) error); ok {
+		r1 = rf(req)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 // Get provides a mock function with given fields: booking_id
 func (_m *TransactionModel) Get(booking_id string) (entities.Transaction, error) {
 	ret := _m.Called(booking_id)
@@ -71,6 +101,7 @@ func (_m *TransactionModel) GetAllbyConsultant() []entities.Transaction {
 	return r0
 }
 
+<<<<<<< HEAD
 // GetAllbyCustomer provides a mock function with given fields: customer_id, status
 func (_m *TransactionModel) GetAllbyCustomer(customer_id uint, status string) []entities.Transaction {
 	ret := _m.Called(customer_id, status)
@@ -81,6 +112,34 @@ func (_m *TransactionModel) GetAllbyCustomer(customer_id uint, status string) []
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.Transaction)
+=======
+// GetAllbyCustomer provides a mock function with given fields: role, user, status, city, district
+func (_m *TransactionModel) GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	ret := _m.Called(role, user, status, city, district)
+
+	var r0 []entities.TransactionJoin
+	if rf, ok := ret.Get(0).(func(string, uint, string, uint, uint) []entities.TransactionJoin); ok {
+		r0 = rf(role, user, status, city, district)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.TransactionJoin)
+		}
+	}
+
+	return r0
+}
+
+// GetAllbyKost provides a mock function with given fields: duration, status, name
+func (_m *TransactionModel) GetAllbyKost(duration int, status string, name string) []entities.TransactionKost {
+	ret := _m.Called(duration, status, name)
+
+	var r0 []entities.TransactionKost
+	if rf, ok := ret.Get(0).(func(int, string, string) []entities.TransactionKost); ok {
+		r0 = rf(duration, status, name)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.TransactionKost)
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		}
 	}
 
@@ -108,6 +167,14 @@ func (_m *TransactionModel) Update(booking_id string, transaction entities.Trans
 	return r0, r1
 }
 
+<<<<<<< HEAD
+=======
+// UpdateStatus provides a mock function with given fields: booking_id, status
+func (_m *TransactionModel) UpdateStatus(booking_id string, status entities.Callback) {
+	_m.Called(booking_id, status)
+}
+
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 type NewTransactionModelT interface {
 	mock.TestingT
 	Cleanup(func())

@@ -111,7 +111,7 @@ func (hh *HouseHandler) GetAllByDist() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
-		result, err := hh.Service.GetAllHouseByDist(uint(DistrictID))
+		result, err := hh.Service.GetAllHouseByDistrict(uint(DistrictID))
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
@@ -136,3 +136,106 @@ func (hh *HouseHandler) Show() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data House", result))
 	}
 }
+
+func (hh *HouseHandler) Index() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		result, err := hh.Service.SelectAllHouse()
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+	}
+}
+
+func (hh *HouseHandler) SelectHouseByDistrict() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		DistrictID, err := strconv.Atoi(id)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+		}
+		result, err := hh.Service.FindAllHouseByDistrict(uint(DistrictID))
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+	}
+}
+func (hh *HouseHandler) SelectHouseByCities() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("cid")
+		CityID, err := strconv.Atoi(id)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+		}
+		result, err := hh.Service.FindAllHouseByCities(uint(CityID))
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+	}
+}
+func (hh *HouseHandler) SelectHouseByCtyAndDst() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cid := c.Param("cid")
+		dist_id := c.Param("dist_id")
+		DistrictID, err := strconv.Atoi(dist_id)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+		}
+		CityID, err := strconv.Atoi(cid)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+		}
+		result, err := hh.Service.FindAllHouseByCtyAndDst(uint(CityID), uint(DistrictID))
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+	}
+}
+func (hh *HouseHandler) SearchByTitle() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		title := c.QueryParam("title")
+
+		result, err := hh.Service.FindHouseByTitle(title)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+		}
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+	}
+}
+
+// func (hh *HouseHandler) SearchBylocation() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		rlat := c.QueryParam("rlat")
+// 		lat, err := strconv.ParseFloat(rlat, 64)
+// 		if err != nil {
+// 			log.Warn(err)
+// 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+// 		}
+
+// 		rlong := c.QueryParam("rlong")
+// 		long, err := strconv.ParseFloat(rlong, 64)
+// 		if err != nil {
+// 			log.Warn(err)
+// 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
+// 		}
+
+// 		result, err := hh.Service.FindHouseByLocation(lat, long)
+// 		if err != nil {
+// 			log.Warn(err)
+// 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+// 		}
+// 		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+// 	}
+// }

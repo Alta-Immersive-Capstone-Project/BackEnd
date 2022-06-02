@@ -57,7 +57,14 @@ type InternalResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
-
+type GetAll struct {
+	ID     uint   `json:"id"`
+	Email  string `json:"email"`
+	Name   string `json:"name"`
+	Gender string `json:"gender"`
+	Phone  string `json:"phone"`
+	Role   string `json:"role"`
+}
 type CustomerResponse struct {
 	ID        uint      `json:"id"`
 	Email     string    `json:"email"`

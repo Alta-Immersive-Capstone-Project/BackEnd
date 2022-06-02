@@ -72,6 +72,7 @@ func (_m *CityRepo) GetAllCity() ([]entities.CityResponse, error) {
 }
 
 // GetIDCity provides a mock function with given fields: id
+<<<<<<< HEAD
 func (_m *CityRepo) GetIDCity(id uint) (entities.RespondRoom, error) {
 	ret := _m.Called(id)
 
@@ -80,6 +81,16 @@ func (_m *CityRepo) GetIDCity(id uint) (entities.RespondRoom, error) {
 		r0 = rf(id)
 	} else {
 		r0 = ret.Get(0).(entities.RespondRoom)
+=======
+func (_m *CityRepo) GetIDCity(id uint) (entities.CityResponse, error) {
+	ret := _m.Called(id)
+
+	var r0 entities.CityResponse
+	if rf, ok := ret.Get(0).(func(uint) entities.CityResponse); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Get(0).(entities.CityResponse)
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	}
 
 	var r1 error
@@ -93,6 +104,7 @@ func (_m *CityRepo) GetIDCity(id uint) (entities.RespondRoom, error) {
 }
 
 // UpdateCity provides a mock function with given fields: id, update
+<<<<<<< HEAD
 func (_m *CityRepo) UpdateCity(id uint, update entities.City) (entities.RespondRoom, error) {
 	ret := _m.Called(id, update)
 
@@ -105,6 +117,20 @@ func (_m *CityRepo) UpdateCity(id uint, update entities.City) (entities.RespondR
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(uint, entities.City) error); ok {
+=======
+func (_m *CityRepo) UpdateCity(id uint, update entities.AddCity) (entities.CityResponse, error) {
+	ret := _m.Called(id, update)
+
+	var r0 entities.CityResponse
+	if rf, ok := ret.Get(0).(func(uint, entities.AddCity) entities.CityResponse); ok {
+		r0 = rf(id, update)
+	} else {
+		r0 = ret.Get(0).(entities.CityResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint, entities.AddCity) error); ok {
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 		r1 = rf(id, update)
 	} else {
 		r1 = ret.Error(1)

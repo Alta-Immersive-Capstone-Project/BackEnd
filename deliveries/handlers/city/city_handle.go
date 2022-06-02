@@ -95,7 +95,7 @@ func (h *HandlersCity) UpdateCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
-		var update entities.City
+		var update entities.AddCity
 		if err := c.Bind(&update); err != nil {
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}

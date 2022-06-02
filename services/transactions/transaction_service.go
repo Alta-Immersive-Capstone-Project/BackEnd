@@ -1,36 +1,84 @@
 package transactions
 
 import (
+	"errors"
 	"fmt"
+	"kost/configs"
+	"kost/deliveries/helpers"
 	"kost/entities"
+	"kost/repositories/house"
 	repo "kost/repositories/transactions"
+	"kost/repositories/user"
+	"strconv"
 	"time"
 
 	"github.com/jinzhu/copier"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/snap"
 )
 
 type transactionService struct {
 	tm repo.TransactionModel
+	um user.UserRepositoryInterface
+	hm house.IRepoHouse
 }
 
-func NewTransactionService(tm repo.TransactionModel) *transactionService {
+func NewTransactionService(tm repo.TransactionModel, um user.UserRepositoryInterface, hm house.IRepoHouse) *transactionService {
 	return &transactionService{
 		tm: tm,
+		um: um,
+		hm: hm,
 	}
 }
 
 func (ts *transactionService) AddTransaction(customer_id uint, request entities.TransactionRequest) (entities.TransactionResponse, error) {
 	var response entities.TransactionResponse
+	booking_id := fmt.Sprintf("DM-%d", request.CheckinDate)
+
+	user, _ := ts.um.GetUserID(customer_id)
+	house, _ := ts.hm.GetHouseID(request.HouseID)
+	snapRequest := &snap.Request{
+		CustomerDetail: &midtrans.CustomerDetails{
+			FName: user.Name,
+			Email: user.Email,
+			Phone: user.Phone,
+		},
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  booking_id,
+			GrossAmt: request.TotalBill,
+		},
+		Items: &[]midtrans.ItemDetails{
+			{
+				ID:    strconv.Itoa(int(house.ID)),
+				Name:  house.Title,
+				Price: request.TotalBill,
+				Qty:   1,
+			},
+		},
+		EnabledPayments: snap.AllSnapPaymentType,
+		Gopay: &snap.GopayDetails{
+			EnableCallback: true,
+		},
+		Callbacks: &snap.Callbacks{
+			Finish: configs.Get().App.FrontURL,
+		},
+	}
+
+	snap, err := ts.tm.CreateSnap(snapRequest)
+	if err != nil {
+		return entities.TransactionResponse{}, err
+	}
 
 	transaction := entities.Transaction{
-		UserID:        customer_id,
-		RoomID:        request.RoomID,
-		CheckinDate:   time.Unix(0, request.CheckinDate*int64(time.Millisecond)),
-		RentDuration:  request.RentDuration,
-		BookingID:     fmt.Sprintf("DM-%d", request.CheckinDate),
-		TotalBill:     request.TotalBill,
-		PaymentMethod: request.PaymentMethod,
-		Status:        "pending",
+		UserID:            customer_id,
+		RoomID:            request.RoomID,
+		HouseID:           request.HouseID,
+		CheckinDate:       time.Unix(0, request.CheckinDate*int64(time.Millisecond)),
+		RentDuration:      request.RentDuration,
+		BookingID:         booking_id,
+		TotalBill:         request.TotalBill,
+		TransactionStatus: "processing",
+		Token:             snap.Token,
 	}
 
 	result, err := ts.tm.Create(transaction)
@@ -39,6 +87,35 @@ func (ts *transactionService) AddTransaction(customer_id uint, request entities.
 	}
 
 	copier.Copy(&response, &result)
+	copier.Copy(&response, &house)
+	copier.Copy(&response, &user)
+	copier.Copy(&response, &snap)
+	return response, nil
+}
+
+func (ts *transactionService) UpdateStatus(req entities.Callback) (entities.Callback, error) {
+	check := helpers.Hash512(req)
+	if !check {
+		return entities.Callback{}, errors.New("you are not allowed to access this resource")
+	}
+
+	transaction := entities.Callback{
+		TransactionStatus: req.TransactionStatus,
+		TransactionID:     req.TransactionID,
+		StatusCode:        req.StatusCode,
+		SignatureKey:      req.SignatureKey,
+		PaymentType:       req.PaymentType,
+		OrderID:           req.OrderID,
+		GrossAmount:       req.GrossAmount,
+		FraudStatus:       req.FraudStatus,
+		ApprovalCode:      req.ApprovalCode,
+	}
+
+	response, err := ts.tm.UpdateStatus(req.OrderID, transaction)
+	if err != nil {
+		return entities.Callback{}, err
+	}
+
 	return response, nil
 }
 
@@ -54,17 +131,8 @@ func (ts *transactionService) GetTransaction(booking_id string) (entities.Transa
 	return response, nil
 }
 
-func (ts *transactionService) GetAllTransactionbyCustomer(customer_id uint, status string) []entities.TransactionResponse {
-	var response []entities.TransactionResponse
-
-	results := ts.tm.GetAllbyCustomer(customer_id, status)
-
-	for _, r := range results {
-		var transaction entities.TransactionResponse
-		copier.Copy(&transaction, &r)
-		response = append(response, transaction)
-	}
-
+func (ts *transactionService) GetAllTransactionbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	response := ts.tm.GetAllbyCustomer(role, user, status, city, district)
 	return response
 }
 
@@ -86,8 +154,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	var response entities.TransactionUpdateResponse
 
 	transaction := entities.Transaction{
-		ConsultantID: customer_id,
-		TotalBill:    request.TotalBill,
+		ConsultantID:      customer_id,
+		TotalBill:         request.TotalBill,
+		TransactionStatus: "pending",
 	}
 
 	result, err := ts.tm.Update(booking_id, transaction)
@@ -97,4 +166,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	copier.Copy(&response, &result)
 	return response, nil
+}
+
+func (ts *transactionService) GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost {
+	response := ts.tm.GetAllbyKost(duration, status, name)
+	return response
 }

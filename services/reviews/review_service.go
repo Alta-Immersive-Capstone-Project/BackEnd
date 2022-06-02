@@ -36,6 +36,7 @@ func (rs *reviewService) AddComment(customer_id uint, request entities.ReviewReq
 	return response, nil
 }
 
+<<<<<<< HEAD
 func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse, error) {
 	var responses []entities.ReviewGetResponse
 
@@ -52,6 +53,12 @@ func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewGetResponse
 		response.Name = result.Name
 
 		responses = append(responses, response)
+=======
+func (rs *reviewService) GetByRoomID(room_id uint) ([]entities.ReviewJoin, error) {
+	responses, err := rs.rm.GetByRoomID(room_id)
+	if err != nil {
+		return []entities.ReviewJoin{}, err
+>>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
 	}
 
 	return responses, nil
