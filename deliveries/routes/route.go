@@ -74,7 +74,7 @@ func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmeni
 func RoomPath(e *echo.Echo, r *room.HandlersRoom) {
 	room := e.Group("/room")
 	room.POST("", r.CreateRoom(), middlewares.JWTMiddleware())
-	e.GET("/rooms/:id", r.GetAllRoom())
+	e.GET("/houses/:id/room", r.GetAllRoom())
 	room.GET("/:id", r.GetIDRoom())
 	room.PUT("/:id", r.UpdateRoom(), middlewares.JWTMiddleware())
 	room.DELETE("/:id", r.DeleteRoom(), middlewares.JWTMiddleware())
