@@ -58,9 +58,32 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 
 </details>
  <details>
-<summary>🏡Use Case Diagram</summary>
+<summary>🏃Use Case Diagram</summary>
   
 
+</details>
+  <details>
+<summary>🏡List of Features</summary>
+  
+<div>
+  
+| Feature Customer | Endpoint | Param | JWT Token | Fungsi |
+| --- | --- | --- | --- | --- |
+| POST | /api/customers  | - | NO | Melakukan proses registrasi customer |
+| POST | /api/auth | - | NO | Melakukan proses login customer |
+| GET | /api/auth/me | - | YES | Mendapatkan informasi customer yang sedang login |
+| PUT | /api/customers | - | YES | Melakukan update informasi customer yang sedang login | 
+| DEL | /api/customers | - | YES | Menghapus customer yang sedang login |
+| POST | /api/customers/orders | - | YES | Membuat sebuah order |
+| POST | /api/customers/orders/estimate | - | YES | Melihat perkiraan harga sebuah orderan |
+| GET | /api/customers/orders | status order | YES | Mendapatkan semua order berdasarkan status order customer |
+| GET | /api/customers/orders/{orderID} | orderID | YES | Mendapatkan detail sebuah order customer |
+| GET | /api/customers/orders/{orderID}/histories | orderID | YES | Mendapatkan timeline dari sebuah order |
+| POST | /api/customers/orders/{orderID}/confirm | orderID | YES | Mengkonfirmasi sebuah order jika terjadi penyesuaian harga dari admin |
+| POST | /api/customers/orders/{orderID}/cancel | orderID | YES | Membatalkan sebuah order |
+| POST | /api/customers/orders/{orderID}/payment | orderID | YES | Memilih jenis pembayaran yang akan digunakan |
+| POST | /api/customers/orders/{orderID}/payment/cancel | orderID | YES | Membatalkan jenis pembayaran |
+| GET | /api/customers/orders/{orderID}/payment | orderID | YES | Mendapatkan jenis pembayaran yang digunakan oleh customer |
 </details>
 <details>
 <summary>💎Testing</summary>
