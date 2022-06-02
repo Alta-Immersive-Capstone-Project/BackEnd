@@ -117,19 +117,32 @@ func (_m *TransactionService) GetTransaction(booking_id string) (entities.Transa
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // UpdateStatus provides a mock function with given fields: request
 func (_m *TransactionService) UpdateStatus(request entities.Callback) error {
 	ret := _m.Called(request)
+=======
+// UpdateStatus provides a mock function with given fields: req
+func (_m *TransactionService) UpdateStatus(req entities.Callback) (entities.Callback, error) {
+	ret := _m.Called(req)
+>>>>>>> f2eabcef3f188b4b1599da55dd2461ada6d17d95
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(entities.Callback) error); ok {
-		r0 = rf(request)
+	var r0 entities.Callback
+	if rf, ok := ret.Get(0).(func(entities.Callback) entities.Callback); ok {
+		r0 = rf(req)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(entities.Callback)
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(entities.Callback) error); ok {
+		r1 = rf(req)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 >>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9

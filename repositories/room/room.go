@@ -27,9 +27,9 @@ func (r *roomDB) CreateRoom(new entities.Room) (entities.Room, error) {
 	return new, nil
 }
 
-func (r *roomDB) GetAllRoom() ([]entities.Room, error) {
+func (r *roomDB) GetAllRoom(id uint) ([]entities.Room, error) {
 	var rooms []entities.Room
-	err := r.Db.Find(&rooms).Error
+	err := r.Db.Where("house_id=?", id).Find(&rooms).Error
 	if err != nil {
 		log.Warn(err)
 		return []entities.Room{}, err
