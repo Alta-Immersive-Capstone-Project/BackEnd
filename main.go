@@ -52,6 +52,10 @@ import (
 	facilityHandlers "kost/deliveries/handlers/facility"
 	roomHandlers "kost/deliveries/handlers/room"
 	userHandlers "kost/deliveries/handlers/user"
+
+	forgotHandler "kost/deliveries/handlers/forgot"
+	emailService "kost/services/email"
+	forgotService "kost/services/forgot"
 )
 
 func main() {
@@ -97,7 +101,8 @@ func main() {
 	districtService := districtServices.NewDistService(districtRepo)
 	houseService := houseServices.NewHouseService(houseRepo)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
-
+	emailService := emailService.NewEmailConfig()
+	forgotService := forgotService.NewforgotService(userRepository, validator.New())
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
 	userHandler := userHandlers.NewUserHandler(userService, s3Client, validation)
@@ -106,6 +111,7 @@ func main() {
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
 	cityHandler := cityHandlers.NewHandlersCity(cityService, validator.New())
+	forgotHandler := forgotHandler.NewForgotHandler(forgotService, *emailService, validation)
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
@@ -114,7 +120,7 @@ func main() {
 	middlewares.General(e)
 
 	// Routes
-	routes.AuthRoute(e, authHandler)
+	routes.AuthRoute(e, authHandler, forgotHandler)
 	routes.UserRoute(e, userHandler)
 	routes.Path(e, facilityHandler, amenitiesHandler, districtHandler, houseHandler)
 	routes.ReviewsPath(e, reviewsHandler)

@@ -38,6 +38,16 @@ type AppConfig struct {
 		DistanceMatrixAPIKey  string
 		DistanceMatrixBaseURL string
 	}
+
+	Email struct {
+		Domain string
+		ApiKey string
+	}
+
+	Frontend struct {
+		Domain    string
+		ResetPage string
+	}
 }
 
 var lock = &sync.Mutex{}
@@ -67,6 +77,12 @@ func initConfig() *AppConfig {
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "kost")
 
+	config.Email.Domain = GetEnv("EMAIL", "domain")
+	config.Email.ApiKey = GetEnv("API_KEY", "87979adhjhjbbb")
+
+	config.Frontend.Domain = GetEnv("FRONTEND_DOMAIN", "http://localhost:8001")
+	config.Frontend.ResetPage = GetEnv("FRONTEND_RESET_PAGE", "/password-confirmation")
+	// Info
 	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "")
 	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "")
 	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
@@ -81,6 +97,7 @@ func initConfig() *AppConfig {
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)
+	fmt.Println(config.Email)
 	fmt.Println(config.AwsS3)
 	fmt.Println(config.Payment)
 	fmt.Println(config.DistanceMatrix)

@@ -23,28 +23,33 @@ func NewAuthHandler(service *authService.AuthService, Valid validation.Validatio
 	}
 }
 
-func (handler AuthHandler) Login(c echo.Context) error {
-	// Populate request input
-	var userReq entities.AuthRequest
-	err := c.Bind(&userReq)
-	if err != nil {
-		log.Warn(err)
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
-	}
+func (handler AuthHandler) Login() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Populate request input
+		var userReq entities.AuthRequest
+		err := c.Bind(&userReq)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
+		}
 
-	err = handler.valid.Validation(userReq)
-	if err != nil {
-		log.Warn(err)
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
-	}
+		err = handler.valid.Validation(userReq)
+		if err != nil {
+			log.Warn(err)
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+		}
 
-	// define link hateoas
-	// call auth service login
-	authRes, err := handler.authService.Login(userReq)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
-	}
+		// define link hateoas
+		// call auth service login
+		authRes, err := handler.authService.Login(userReq)
+		if err != nil {
+			if err.Error() == "invalid username/password" {
+				return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
+			}
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
 
-	// send response
-	return c.JSON(http.StatusOK, helpers.LoginOK(authRes))
+		// send response
+		return c.JSON(http.StatusOK, helpers.LoginOK(authRes))
+	}
 }
