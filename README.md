@@ -19,32 +19,6 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Build App & Database</a></li>
-       <li><a href="#built-with">List of Features</a></li>
-       <li><a href="#built-with">ERD</a></li>
-        <li><a href="#built-with">Testing</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-       <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -54,6 +28,45 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 * Finishing OPEN API's carried out by division of tasks
 * Resolving from coding endpoint to unit test's carried out by division of tasks
 * Deployment
+
+
+<div>
+      <details>
+<summary>🧰 Build App & Database</summary>
+
+
+![JSON](https://img.shields.io/badge/-JSON-05122A?style=flat&logo=json&logoColor=000000)&nbsp;
+![GitHub](https://img.shields.io/badge/-GitHub-05122A?style=flat&logo=github)&nbsp;
+![Visual Studio Code](https://img.shields.io/badge/-Visual%20Studio%20Code-05122A?style=flat&logo=visual-studio-code&logoColor=007ACC)&nbsp;
+![MySQL](https://img.shields.io/badge/-MySQL-05122A?style=flat&logo=mysql&logoColor=4479A1)&nbsp;
+![Golang](https://img.shields.io/badge/-Golang-05122A?style=flat&logo=go&logoColor=4479A1)&nbsp;
+![Echo](https://img.shields.io/badge/-Echo-05122A?style=flat&logo=go)&nbsp;
+![Gorm](https://img.shields.io/badge/-Gorm-05122A?style=flat&logo=go)&nbsp;
+![AWS](https://img.shields.io/badge/-AWS-05122A?style=flat&logo=amazon)&nbsp;
+![Insomnia](https://img.shields.io/badge/-Insomnia-05122A?style=flat&logo=insomnia)&nbsp;
+![Docker](https://img.shields.io/badge/-Docker-05122A?style=flat&logo=docker)&nbsp;
+![Ubuntu](https://img.shields.io/badge/-Ubuntu-05122A?style=flat&logo=ubuntu)&nbsp;
+![Midtrans](https://img.shields.io/badge/-Midtrans-05122A?style=flat&logo=midtrans)&nbsp;
+![JWT](https://img.shields.io/badge/-JWT-05122A?style=flat&logo=jwt)&nbsp;
+![Swagger](https://img.shields.io/badge/-Swagger-05122A?style=flat&logo=swagger)&nbsp;
+ 
+</details>
+
+<details>
+<summary>🎨ERD</summary>
+  
+
+</details>
+ <details>
+<summary>🏡Use Case Diagram</summary>
+  
+
+</details>
+<details>
+<summary>💎Testing</summary>
+  
+
+</details>
 
 
 <!-- CONTACT -->
