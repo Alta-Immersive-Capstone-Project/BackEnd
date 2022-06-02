@@ -162,7 +162,6 @@ func TestDeleteFacility(t *testing.T) {
 		FacilityService := NewServiceFacility(FacilityRepo)
 		err := FacilityService.DeleteFacility(1)
 		assert.NoError(t, err)
-
 	})
 	t.Run("Error Access Database", func(t *testing.T) {
 		FacilityRepo := mocks.NewRepoFacility(t)

@@ -6,6 +6,7 @@ import (
 	city "kost/deliveries/handlers/city"
 	district "kost/deliveries/handlers/district"
 	facility "kost/deliveries/handlers/facility"
+	forgot "kost/deliveries/handlers/forgot"
 	house "kost/deliveries/handlers/house"
 	review "kost/deliveries/handlers/reviews"
 	room "kost/deliveries/handlers/room"
@@ -21,16 +22,20 @@ func UserRoute(e *echo.Echo, u user.HandleUser) {
 	internalGroup.POST("", u.CreateInternal, middlewares.JWTMiddleware())
 	internalGroup.DELETE("/:id", u.DeleteInternal, middlewares.JWTMiddleware())
 	internalGroup.PUT("/:id", u.UpdateInternal, middlewares.JWTMiddleware())
+	internalGroup.GET("", u.GetAllMember, middlewares.JWTMiddleware())
 
 	customerGroup := e.Group("/customer")
 
 	customerGroup.POST("", u.CreateCustomer)
+	customerGroup.GET("/:id", u.GetByID)
 	customerGroup.PUT("/:id", u.UpdateCustomer, middlewares.JWTMiddleware())
 	customerGroup.DELETE("/:id", u.DeleteCustomer, middlewares.JWTMiddleware())
 }
 
-func AuthRoute(e *echo.Echo, l *handlers.AuthHandler) {
-	e.POST("/login", l.Login)
+func AuthRoute(e *echo.Echo, l *handlers.AuthHandler, f *forgot.ForgotHandler) {
+	e.POST("/login", l.Login())
+	e.GET("/forgot", f.SendEmail())
+	e.POST("/forgot", f.ResetPassword(), middlewares.JWTMiddleware())
 }
 
 func Path(e *echo.Echo, f *facility.HandlersFacility, a *amenities.HandlersAmenities, d district.IDistrictHandler, h house.IHouseHandler) {
