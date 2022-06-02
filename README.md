@@ -75,8 +75,13 @@ This project is a collaborative project between Backend and Frontend in Immersiv
   | | Chat with Consultant about dealing room price or just asking some questions|
   | | Available various choices of payment methods |
   | | Review and Rate about customer's experience after renting |
-  |Consultant | Find list of the Kost |
-  | | Show list of nearby facilities from the Kost|
+  |Admin |Manage the management's profile|
+ | | Manage the Kost's Data and transaction's data|
+   |Supervisor | Manage The Kost's Data and upload some photos to figure the Kost|
+   | | Read history of transaction based on the Kost'ID|
+   | | Generate payment report each month|
+  |Consultant | Obtain list of the registered Kost |
+  | | Show list of nearby facilities from the Kost include the radius from the Kost|
   | | Generate a offering letter to customer and can be exported|
  | | Access history of sales activities|
  
