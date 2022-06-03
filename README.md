@@ -54,18 +54,16 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 
 <details>
 <summary>🎨ERD</summary>
-  
-
+ <div align="center">
+ <img src="https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/sewa%20kost.drawio%20(4).png" />
+ <div>
 </details>
- <details>
-<summary>🏃Use Case Diagram</summary>
-  
 
 </details>
   <details>
 <summary>🏡List of Features</summary>
   
-<div>
+ <div align="center">
   
 |  User | Action |
 | --- | --- |
@@ -90,9 +88,11 @@ This project is a collaborative project between Backend and Frontend in Immersiv
   | | Generate a offering letter to customer and can be exported|
  | | Access history of sales activities|
  
- 
- 
- 
+  
+</details>
+<details>
+ <summary>🏃Use Case Diagram</summary>
+   
 </details>
 <details>
 <summary>💎Testing</summary>
