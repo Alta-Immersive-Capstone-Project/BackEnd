@@ -15,4 +15,5 @@ type TransactionModel interface {
 	UpdateSnap(booking_id string, status entities.Callback) (entities.Callback, error)
 	GetAllbyUser(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin
 	GetAllbyKost(duration int, status string, name string) []entities.TransactionKost
+	GetTransactionByBookingID(BookingID string) (entities.DataReminder, error)
 }
