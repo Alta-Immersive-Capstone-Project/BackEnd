@@ -1,179 +1,192 @@
 package transactions_test
 
-// import (
-// 	"errors"
-// 	"kost/entities"
-// 	mockHouse "kost/mocks/repositories/house"
-// 	repoMock "kost/mocks/repositories/transactions"
-// 	mockUser "kost/mocks/repositories/user"
-// 	"kost/services/transactions"
-// 	"testing"
-// 	"time"
+import (
+	"errors"
+	"kost/entities"
+	repoMock "kost/mocks/repositories/transactions"
+	"kost/services/transactions"
+	"testing"
+	"time"
 
-// 	"github.com/midtrans/midtrans-go/snap"
-// 	"github.com/stretchr/testify/assert"
-// 	"github.com/stretchr/testify/mock"
-// 	"gorm.io/gorm"
-// )
+	"github.com/midtrans/midtrans-go/snap"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"gorm.io/gorm"
+)
 
-// func TestAddComment(t *testing.T) {
-// 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
+func TestAddComment(t *testing.T) {
+	repo := repoMock.NewTransactionModel(t)
 
-// 	insertData := entities.TransactionRequest{RoomID: 1, HouseID: 1, CheckinDate: 1653825446724, RentDuration: 7, TotalBill: 100000}
-// 	returnUser := entities.User{Model: gorm.Model{ID: uint(1)}, Name: "mock", Email: "mock@gmail.com", Phone: "081234567890", Role: "customer"}
-// 	returnHouse := entities.House{Model: gorm.Model{ID: uint(1)}, Title: "Kacau", Brief: "Kecamatan Kacau"}
-// 	returnSnap := &snap.Response{Token: "token", RedirectURL: "http://localhost:8080/transactions/callback", StatusCode: "200"}
-// 	insert := entities.Transaction{UserID: uint(1), RoomID: uint(1), HouseID: uint(1), CheckinDate: time.Unix(0, 1653825446724*int64(time.Millisecond)), RentDuration: 7, BookingID: "DM-1653825446724", TotalBill: 100000, TransactionStatus: "processing", Token: "token"}
-// 	returnData := entities.Transaction{Model: gorm.Model{ID: uint(1)}, UserID: uint(1), RoomID: 1, HouseID: uint(1), CheckinDate: time.Now(), RentDuration: 7, BookingID: "DM-1653825446724", TotalBill: 100000, TransactionStatus: "processing", Token: "token"}
+	requestData := entities.TransactionRequest{HouseID: uint(1), RoomID: uint(1), CheckIn: 1653825446724, Duration: 7, Price: 100000}
+	insertData := entities.Transaction{BookingID: "LK-1117-1653825446724", UserID: uint(1), HouseID: uint(1), RoomID: uint(1), CheckIn: time.Unix(0, 1653825446724*int64(time.Millisecond)), Duration: 7, Price: 100000, TransactionStatus: "processing"}
+	returnData := entities.TransactionResponse{BookingID: "LK-1117-1653825446724", Name: "test", Email: "test@test", Phone: "0812", Title: "testing", Address: "test", Price: 100000, CheckIn: time.Now(), Duration: 7, CreatedAt: time.Now()}
 
-// 	t.Run("Success Insert", func(t *testing.T) {
-// 		repoUser.On("GetUserID", uint(1)).Return(returnUser, nil).Once()
-// 		repoHouse.On("GetHouseID", uint(1)).Return(returnHouse, nil).Once()
-// 		repo.On("CreateSnap", mock.Anything).Return(returnSnap, nil).Once()
-// 		repo.On("Create", insert).Return(returnData, nil).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+	t.Run("Success Insert", func(t *testing.T) {
+		repo.On("Create", insertData).Return(insertData, nil).Once()
+		repo.On("Request", "LK-1117-1653825446724").Return(returnData, nil).Once()
+		srv := transactions.NewTransactionService(repo)
 
-// 		res, err := srv.AddTransaction(uint(1), insertData)
-// 		assert.NoError(t, err)
-// 		assert.Equal(t, returnUser.Name, res.Name)
-// 		assert.Equal(t, returnHouse.Title, res.Title)
-// 		assert.Equal(t, returnData.ID, res.ID)
-// 		assert.Equal(t, returnData.RoomID, res.RoomID)
-// 		repo.AssertExpectations(t)
-// 	})
+		res, err := srv.CreateTransaction(uint(1), requestData)
+		assert.NoError(t, err)
+		assert.Equal(t, returnData.BookingID, res.BookingID)
+		repo.AssertExpectations(t)
+	})
 
-// 	t.Run("Error Insert", func(t *testing.T) {
-// 		repoUser.On("GetUserID", uint(1)).Return(returnUser, nil).Once()
-// 		repoHouse.On("GetHouseID", uint(1)).Return(returnHouse, nil).Once()
-// 		repo.On("CreateSnap", mock.Anything).Return(nil, errors.New("there is some error")).Once()
-// 		// repo.On("Create", mock.Anything).Return(entities.TransactionResponse{}, errors.New("there is some error")).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+	t.Run("Error Insert Create", func(t *testing.T) {
+		repo.On("Create", insertData).Return(entities.Transaction{}, errors.New("there is some error")).Once()
+		repo.On("Request", "LK-1117-1653825446724").Return(entities.TransactionResponse{}, errors.New("there are some error"))
+		srv := transactions.NewTransactionService(repo)
 
-// 		_, err := srv.AddTransaction(1, insertData)
-// 		assert.Error(t, err)
-// 		assert.EqualError(t, err, "there is some error")
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+		_, err := srv.CreateTransaction(uint(1), requestData)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "there is some error")
+		repo.AssertExpectations(t)
+	})
 
-// func TestGetTransaction(t *testing.T) {
-// 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
+	t.Run("Error Insert Request", func(t *testing.T) {
+		repo.On("Create", insertData).Return(insertData, nil).Once()
+		repo.On("Request", "LK-1117-1653825446724").Return(entities.TransactionResponse{}, errors.New("there are some error"))
+		srv := transactions.NewTransactionService(repo)
 
-// 	insert := "DM-1653825446724"
-// 	returnData := entities.Transaction{Model: gorm.Model{ID: uint(1)}, BookingID: "DM-1653825446724", UserID: 1, RoomID: 1, CheckinDate: time.Now(), RentDuration: 7, TotalBill: 100000, TransactionStatus: "processing", Token: "token"}
+		_, err := srv.CreateTransaction(uint(1), requestData)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "there are some error")
+		repo.AssertExpectations(t)
+	})
+}
 
-// 	t.Run("Success Get", func(t *testing.T) {
-// 		repo.On("Get", insert).Return(returnData, nil).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+func TestUpdateTransaction(t *testing.T) {
+	repo := repoMock.NewTransactionModel(t)
 
-// 		res, err := srv.GetTransaction(insert)
-// 		assert.NoError(t, err)
-// 		assert.Equal(t, returnData.ID, res.ID)
-// 		assert.Equal(t, returnData.BookingID, res.BookingID)
-// 		assert.Equal(t, returnData.RoomID, res.RoomID)
-// 		repo.AssertExpectations(t)
-// 	})
+	updateData := entities.TransactionUpdateRequest{Price: 100000}
+	insertData := entities.TransactionResponse{BookingID: "LK-1117-1653825446724", Name: "test", Email: "test@test", Phone: "0812", Title: "testing", Address: "test", Price: 100000, CheckIn: time.Now(), Duration: 7, CreatedAt: time.Now()}
+	returnData := entities.Transaction{BookingID: "LK-1117-1653825446724", ConsultantID: 1, Duration: 7, Price: 100000, TransactionStatus: "pending", RedirectURL: "http://localhost:8080/transactions/pending"}
+	returnSnap := &snap.Response{Token: "token", RedirectURL: "http://localhost:8080/transactions/pending", StatusCode: "200"}
 
-// 	t.Run("Error Get", func(t *testing.T) {
-// 		repo.On("Get", insert).Return(entities.Transaction{}, errors.New("data not found")).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+	t.Run("Success Update", func(t *testing.T) {
+		repo.On("Request", "LK-1117-1653825446724").Return(insertData, nil).Once()
+		repo.On("CreateSnap", mock.Anything).Return(returnSnap, nil).Once()
+		repo.On("Update", "LK-1117-1653825446724", returnData).Return(returnData, nil).Once()
+		srv := transactions.NewTransactionService(repo)
 
-// 		res, err := srv.GetTransaction(insert)
-// 		assert.Error(t, err)
-// 		assert.EqualError(t, err, "data not found")
-// 		assert.Equal(t, entities.TransactionResponse{}, res)
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+		res, err := srv.UpdateTransaction(1, "LK-1117-1653825446724", updateData)
+		assert.NoError(t, err)
+		assert.Equal(t, returnData.Price, res.Price)
+		assert.Equal(t, returnData.UpdatedAt, res.UpdatedAt)
+		repo.AssertExpectations(t)
+	})
 
-// func TestGetByCustomer(t *testing.T) {
-// 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
-// 	role, user, status, city, district := "customer", uint(1), "active", uint(1), uint(1)
-// 	returnData := []entities.TransactionJoin{{BookingID: "DM-1653825446724", CheckinDate: time.Now(), RentDuration: 7, TotalBill: 100000, TransactionStatus: status, Url: "http://localhost:8080/transactions/1", Title: "Kacau"}}
+	t.Run("Error Update Request", func(t *testing.T) {
+		repo.On("Request", mock.Anything).Return(entities.TransactionResponse{}, errors.New("there is some error")).Once()
+		repo.On("CreateSnap", mock.Anything).Return(returnSnap, nil)
+		repo.On("Update", "LK-1117-1653825446724", returnData).Return(returnData, nil)
+		srv := transactions.NewTransactionService(repo)
 
-// 	t.Run("Success Get All", func(t *testing.T) {
-// 		repo.On("GetAllbyCustomer", mock.Anything, user, mock.Anything, city, district).Return(returnData, nil).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+		_, err := srv.UpdateTransaction(1, mock.Anything, updateData)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "there is some error")
+		repo.AssertExpectations(t)
+	})
 
-// 		res := srv.GetAllTransactionbyCustomer(role, user, status, city, district)
-// 		assert.Equal(t, returnData[0].BookingID, res[0].BookingID)
-// 		assert.Equal(t, returnData[0].CheckinDate, res[0].CheckinDate)
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+	t.Run("Error Update CreateSnap", func(t *testing.T) {
+		repo.On("Request", "LK-1117-1653825446724").Return(insertData, nil).Once()
+		repo.On("CreateSnap", mock.Anything).Return(&snap.Response{}, errors.New("there is some error"))
+		repo.On("Update", "LK-1117-1653825446724", mock.Anything).Return(entities.Transaction{}, errors.New("there is some error"))
+		srv := transactions.NewTransactionService(repo)
 
-// func TestGetByConsultant(t *testing.T) {
-// 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
+		_, err := srv.UpdateTransaction(1, mock.Anything, updateData)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "there is some error")
+		repo.AssertExpectations(t)
+	})
 
-// 	returnData := []entities.Transaction{{Model: gorm.Model{ID: uint(1)}, BookingID: "DM-1653825446724", UserID: 1, RoomID: 1, CheckinDate: time.Now(), RentDuration: 7, TotalBill: 100000}}
+	t.Run("Error Update", func(t *testing.T) {
+		repo.On("Request", "LK-1117-1653825446724").Return(insertData, nil).Once()
+		repo.On("CreateSnap", mock.Anything).Return(returnSnap, nil)
+		repo.On("Update", mock.Anything, mock.Anything).Return(entities.Transaction{}, errors.New("there is some error"))
+		srv := transactions.NewTransactionService(repo)
 
-// 	t.Run("Success Get All", func(t *testing.T) {
-// 		repo.On("GetAllbyConsultant").Return(returnData, nil).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+		_, err := srv.UpdateTransaction(1, mock.Anything, updateData)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "there is some error")
+		repo.AssertExpectations(t)
+	})
+}
 
-// 		res := srv.GetAllTransactionbyConsultant()
-// 		assert.Equal(t, returnData[0].ID, res[0].ID)
-// 		assert.Equal(t, returnData[0].RoomID, res[0].RoomID)
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+func TestGetByCustomer(t *testing.T) {
+	repo := repoMock.NewTransactionModel(t)
+	role, user, status, city, district := "customer", uint(1), "active", uint(1), uint(1)
+	returnData := []entities.TransactionJoin{{BookingID: "DM-1653825446724", CheckIn: time.Now(), Duration: 7, Price: 100000, TransactionStatus: status, Url: "http://localhost:8080/transactions/1", Title: "Kacau"}}
 
-// // func TestUpdateStatus(t *testing.T) {
-// // 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
+	t.Run("Success Get All", func(t *testing.T) {
+		repo.On("GetAllbyUser", mock.Anything, user, mock.Anything, city, district).Return(returnData, nil).Once()
+		srv := transactions.NewTransactionService(repo)
 
-// // 	returnData := entities.Callback{OrderID: "DM-1653825446724", StatusCode: "200", SignatureKey: "signature", GrossAmount: "10000.00", PaymentType: "credit_card", TransactionID: "123456789", TransactionStatus: "success", ApprovalCode: "", FraudStatus: ""}
+		res := srv.GetAllTransactionbyUser(role, user, status, city, district)
+		assert.Equal(t, returnData[0].BookingID, res[0].BookingID)
+		assert.Equal(t, returnData[0].CheckIn, res[0].CheckIn)
+		repo.AssertExpectations(t)
+	})
+}
 
-// // 	t.Run("Success Error", func(t *testing.T) {
-// // 		repo.On("UpdateStatus", "DM-1653825446724", returnData).Once()
-// // 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+func TestGetByConsultant(t *testing.T) {
+	repo := repoMock.NewTransactionModel(t)
 
-// // 		err := srv.UpdateStatus(returnData)
-// // 		assert.NoError(t, err)
-// // 		repo.AssertExpectations(t)
-// // 	})
-// // }
+	returnData := []entities.Transaction{{Model: gorm.Model{ID: uint(1)}, BookingID: "DM-1653825446724", UserID: 1, HouseID: 1, RoomID: 1, CheckIn: time.Now(), Duration: 7, Price: 100000, TransactionStatus: "processing"}}
+	returnRequest := entities.TransactionResponse{BookingID: "DM-1653825446724", Name: "test", Email: "test@test", Phone: "0812", Title: "testing", Address: "test", Price: 100000, CheckIn: time.Now(), Duration: 7, CreatedAt: time.Now()}
 
-// func TestUpdate(t *testing.T) {
-// 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
+	t.Run("Success Get All", func(t *testing.T) {
+		repo.On("GetAllbyConsultant").Return(returnData, nil).Once()
+		repo.On("Request", "DM-1653825446724").Return(returnRequest, nil).Once()
+		srv := transactions.NewTransactionService(repo)
 
-// 	insertData := entities.TransactionUpdateRequest{TotalBill: 100000}
-// 	returnData := entities.Transaction{Model: gorm.Model{ID: uint(1), UpdatedAt: time.Now()}, UserID: 1, ConsultantID: 1, RoomID: 1, CheckinDate: time.Now(), RentDuration: 7, TotalBill: 100000}
+		res := srv.GetAllTransactionbyConsultant()
+		assert.Equal(t, returnData[0].BookingID, res[0].BookingID)
+		assert.Equal(t, returnData[0].Price, res[0].Price)
+		repo.AssertExpectations(t)
+	})
+}
 
-// 	t.Run("Success Update", func(t *testing.T) {
-// 		repo.On("Update", "DM-123", mock.Anything).Return(returnData, nil).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+func TestUpdateCallback(t *testing.T) {
+	repo := repoMock.NewTransactionModel(t)
 
-// 		res, err := srv.UpdateTransaction(1, "DM-123", insertData)
-// 		assert.NoError(t, err)
-// 		assert.Equal(t, returnData.TotalBill, res.TotalBill)
-// 		assert.Equal(t, returnData.UpdatedAt, res.UpdatedAt)
-// 		repo.AssertExpectations(t)
-// 	})
+	returnData := entities.Callback{OrderID: "DM-1653825446724", StatusCode: "200", SignatureKey: "signature", GrossAmount: "10000.00", PaymentType: "credit_card", TransactionID: "123456789", TransactionStatus: "success", ApprovalCode: "", FraudStatus: ""}
 
-// 	t.Run("Error Insert", func(t *testing.T) {
-// 		repo.On("Update", "DM-123", mock.Anything).Return(entities.Transaction{}, errors.New("there is some error")).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+	t.Run("Success Callback", func(t *testing.T) {
+		repo.On("UpdateSnap", "DM-1653825446724", returnData).Return(returnData, nil).Once()
+		srv := transactions.NewTransactionService(repo)
 
-// 		_, err := srv.UpdateTransaction(1, "DM-123", insertData)
-// 		assert.Error(t, err)
-// 		assert.EqualError(t, err, "there is some error")
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+		res, err := srv.UpdateCallback(returnData)
+		assert.NoError(t, err)
+		assert.Equal(t, returnData.OrderID, res.OrderID)
+		assert.Equal(t, returnData.GrossAmount, res.GrossAmount)
+		repo.AssertExpectations(t)
+	})
 
-// func TestGetByKost(t *testing.T) {
-// 	repo, repoUser, repoHouse := repoMock.NewTransactionModel(t), mockUser.NewUserRepositoryInterface(t), mockHouse.NewIRepoHouse(t)
+	t.Run("Error Callback", func(t *testing.T) {
+		repo.On("UpdateSnap", "DM-1653825446724", returnData).Return(entities.Callback{}, errors.New("there are some error")).Once()
+		srv := transactions.NewTransactionService(repo)
 
-// 	duration, status, name := 7, "active", "mock"
-// 	returnData := []entities.TransactionKost{{BookingID: "DM-1653825446724", Name: "mock", RentDuration: 7, TotalBill: 100000, TransactionStatus: "status"}}
+		_, err := srv.UpdateCallback(returnData)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "there are some error")
+		repo.AssertExpectations(t)
+	})
+}
 
-// 	t.Run("Success Get All", func(t *testing.T) {
-// 		repo.On("GetAllbyKost", duration, mock.Anything, mock.Anything).Return(returnData, nil).Once()
-// 		srv := transactions.NewTransactionService(repo, repoUser, repoHouse)
+func TestGetByKost(t *testing.T) {
+	repo := repoMock.NewTransactionModel(t)
 
-// 		res := srv.GetAllTransactionbyKost(duration, status, name)
-// 		assert.Equal(t, returnData[0].BookingID, res[0].BookingID)
-// 		assert.Equal(t, returnData[0].Name, res[0].Name)
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+	duration, status, name := 7, "active", "mock"
+	returnData := []entities.TransactionKost{{BookingID: "DM-1653825446724", Name: "mock", Duration: 7, Price: 100000, TransactionStatus: "status", RedirectURL: "http://localhost:8080/transactions/1", CreatedAt: time.Now()}}
+
+	t.Run("Success Get All", func(t *testing.T) {
+		repo.On("GetAllbyKost", duration, mock.Anything, mock.Anything).Return(returnData, nil).Once()
+		srv := transactions.NewTransactionService(repo)
+
+		res := srv.GetAllTransactionbyKost(duration, status, name)
+		assert.Equal(t, returnData[0].BookingID, res[0].BookingID)
+		assert.Equal(t, returnData[0].Name, res[0].Name)
+		repo.AssertExpectations(t)
+	})
+}

@@ -8,6 +8,7 @@ import (
 	facility "kost/deliveries/handlers/facility"
 	forgot "kost/deliveries/handlers/forgot"
 	house "kost/deliveries/handlers/house"
+	reminder "kost/deliveries/handlers/reminder"
 	review "kost/deliveries/handlers/reviews"
 	room "kost/deliveries/handlers/room"
 	transaction "kost/deliveries/handlers/transactions"
@@ -97,6 +98,12 @@ func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 	// Customer
 	e.POST("/reviews", review.InsertComment, middlewares.JWTMiddleware())
 	e.GET("houses/:id/reviews", review.GetByHouseID)
+}
+
+func ReminderPath(e *echo.Echo, reminder reminder.ReminderHandler) {
+	e.POST("/auth/google/login", reminder.OauthLogin())
+	e.GET("/auth/google/callback", reminder.OauthCallback())
+	e.POST("/create-reminder", reminder.CreateReminder())
 }
 
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
