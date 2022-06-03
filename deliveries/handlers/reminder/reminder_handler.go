@@ -32,7 +32,6 @@ func (h *HandlerReminder) OauthLogin() echo.HandlerFunc {
 		}
 		authUrl := h.auth.GetLoginUrl("oauthstate")
 		return c.Redirect(http.StatusTemporaryRedirect, authUrl)
-
 	}
 }
 
