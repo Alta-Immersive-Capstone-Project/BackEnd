@@ -71,14 +71,14 @@ func initConfig() *AppConfig {
 	config.App.FrontURL = GetEnv("APP_FRONT_URL", "http://localhost:3000/transactions/finish")
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
-	config.Database.Host = GetEnv("DB_HOST", "dbt3be8.cddd6kuxwhuj.ap-southeast-1.rds.amazonaws.com")
+	config.Database.Host = GetEnv("DB_HOST", "localhost")
 	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
-	config.Database.Password = GetEnv("DB_PASSWORD", "huj4ng3rimis")
-	config.Database.Name = GetEnv("DB_NAME", "dbcapstone")
+	config.Database.Password = GetEnv("DB_PASSWORD", "")
+	config.Database.Name = GetEnv("DB_NAME", "")
 
-	config.Email.Domain = GetEnv("EMAIL", "domain")
-	config.Email.ApiKey = GetEnv("API_KEY", "87979adhjhjbbb")
+	config.Email.Domain = GetEnv("EMAIL", "")
+	config.Email.ApiKey = GetEnv("API_KEY", "")
 
 	config.Frontend.Domain = GetEnv("FRONTEND_DOMAIN", "http://localhost:8001")
 	config.Frontend.ResetPage = GetEnv("FRONTEND_RESET_PAGE", "/password-confirmation")
@@ -88,8 +88,8 @@ func initConfig() *AppConfig {
 	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
-	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "SB-Mid-server-YyE7uWSDeo-SBo5lNU6XUA4l")
-	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
+	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
+	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
