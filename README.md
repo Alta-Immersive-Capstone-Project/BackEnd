@@ -8,8 +8,9 @@
  </div>
  
 
-  <h1 align="center">Sewa Kost</h1>
-
+  <h1 align="center">SEWA KOST
+<p align="center"> "cari,booking,nego kost gampang banget"
+ </h1>
   <p align="center">
    :collision: Capstone Project  in Immersive Alterra Academy Batch 8 :collision:
     <br />
@@ -23,7 +24,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
+This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. Furthermore, this's the last project in our program towards graduation and placement section. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
 * Designing Entity Relation Design (ERD)'s together
 * Finishing OPEN API's carried out by division of tasks
 * Resolving from coding endpoint to unit test's carried out by division of tasks
@@ -54,18 +55,16 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 
 <details>
 <summary>🎨ERD</summary>
-  
-
+ <div align="center">
+ <img src="https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/sewa%20kost.drawio%20(4).png" />
+ <div>
 </details>
- <details>
-<summary>🏃Use Case Diagram</summary>
-  
 
 </details>
   <details>
 <summary>🏡List of Features</summary>
   
-<div>
+ <div align="center">
   
 |  User | Action |
 | --- | --- |
@@ -90,9 +89,11 @@ This project is a collaborative project between Backend and Frontend in Immersiv
   | | Generate a offering letter to customer and can be exported|
  | | Access history of sales activities|
  
- 
- 
- 
+  
+</details>
+<details>
+ <summary>🏃Use Case Diagram</summary>
+   
 </details>
 <details>
 <summary>💎Testing</summary>
@@ -127,7 +128,7 @@ Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Altera Academy Batch 8 :pray::pray:
+We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Alterra Academy Batch 8 :pray::pray:
 
 * [Jerry Young](https://github.com/jackthepanda96)
 * [Nada](https://github.com/nurfitriana87)
