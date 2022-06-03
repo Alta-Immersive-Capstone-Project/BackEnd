@@ -13,20 +13,20 @@ type TransactionService struct {
 	mock.Mock
 }
 
-// AddTransaction provides a mock function with given fields: customer_id, request
-func (_m *TransactionService) AddTransaction(customer_id uint, request entities.TransactionRequest) (entities.TransactionResponse, error) {
-	ret := _m.Called(customer_id, request)
+// CreateTransaction provides a mock function with given fields: customer_id, req
+func (_m *TransactionService) CreateTransaction(customer_id uint, req entities.TransactionRequest) (entities.TransactionResponse, error) {
+	ret := _m.Called(customer_id, req)
 
 	var r0 entities.TransactionResponse
 	if rf, ok := ret.Get(0).(func(uint, entities.TransactionRequest) entities.TransactionResponse); ok {
-		r0 = rf(customer_id, request)
+		r0 = rf(customer_id, req)
 	} else {
 		r0 = ret.Get(0).(entities.TransactionResponse)
 	}
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(uint, entities.TransactionRequest) error); ok {
-		r1 = rf(customer_id, request)
+		r1 = rf(customer_id, req)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -82,29 +82,8 @@ func (_m *TransactionService) GetAllTransactionbyKost(duration int, status strin
 	return r0
 }
 
-// GetTransaction provides a mock function with given fields: booking_id
-func (_m *TransactionService) GetTransaction(booking_id string) (entities.TransactionResponse, error) {
-	ret := _m.Called(booking_id)
-
-	var r0 entities.TransactionResponse
-	if rf, ok := ret.Get(0).(func(string) entities.TransactionResponse); ok {
-		r0 = rf(booking_id)
-	} else {
-		r0 = ret.Get(0).(entities.TransactionResponse)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(booking_id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// UpdateStatus provides a mock function with given fields: req
-func (_m *TransactionService) UpdateStatus(req entities.Callback) (entities.Callback, error) {
+// UpdateCallback provides a mock function with given fields: req
+func (_m *TransactionService) UpdateCallback(req entities.Callback) (entities.Callback, error) {
 	ret := _m.Called(req)
 
 	var r0 entities.Callback

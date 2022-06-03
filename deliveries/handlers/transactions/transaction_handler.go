@@ -41,7 +41,7 @@ func (th *transactionHandler) InsertTransaction(c echo.Context) error {
 
 	response, err := th.ts.CreateTransaction(user_id, req)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestDuplicate(err))
 	}
 
 	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Created Transaction", response))
