@@ -3,6 +3,7 @@ package house
 import (
 	"kost/entities"
 	"kost/repositories/house"
+	"kost/repositories/room"
 
 	"github.com/jinzhu/copier"
 	"github.com/labstack/gommon/log"
@@ -10,11 +11,13 @@ import (
 
 type HouseService struct {
 	repo house.IRepoHouse
+	room room.RoomRepo
 }
 
-func NewHouseService(Repo house.IRepoHouse) *HouseService {
+func NewHouseService(Repo house.IRepoHouse, Room room.RoomRepo) *HouseService {
 	return &HouseService{
 		repo: Repo,
+		room: Room,
 	}
 }
 
@@ -62,8 +65,15 @@ func (hs *HouseService) GetHouseID(id uint) (entities.HouseResponse, error) {
 	}
 
 	var result entities.HouseResponse
-
 	copier.Copy(&result, &res)
+
+	resul, err := hs.room.GetbyHouse(id)
+	if err != nil {
+		log.Warn(err)
+		return entities.HouseResponse{}, err
+	}
+	result.Rooms = resul
+
 	return result, nil
 }
 

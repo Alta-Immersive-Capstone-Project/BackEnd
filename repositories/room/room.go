@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kost/entities"
 
+	"github.com/jinzhu/copier"
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
@@ -25,6 +26,16 @@ func (r *roomDB) CreateRoom(new entities.Room) (entities.Room, error) {
 		return entities.Room{}, err
 	}
 	return new, nil
+}
+func (r *roomDB) GetbyHouse(id uint) ([]entities.RespondRoomJoin, error) {
+	var room []entities.Room
+	err := r.Db.Where("house_id = ?", id).Preload("Images").Preload("Amenities").Find(&room).Error
+	fmt.Println(err)
+	fmt.Println(room)
+
+	result := []entities.RespondRoomJoin{}
+	copier.Copy(&result, &room)
+	return result, nil
 }
 
 func (r *roomDB) GetAllRoom(id uint) ([]entities.Room, error) {

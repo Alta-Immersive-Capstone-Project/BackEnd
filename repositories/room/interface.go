@@ -8,4 +8,5 @@ type RoomRepo interface {
 	GetRoomID(id uint) (entities.Room, error)
 	UpdateRoom(id uint, new entities.Room) (entities.Room, error)
 	DeleteRoom(id uint) error
+	GetbyHouse(id uint) ([]entities.RespondRoomJoin, error)
 }

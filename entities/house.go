@@ -62,6 +62,7 @@ type HouseResponse struct {
 	Latitude   float64 `json:"latitude"`
 	Longitude  float64 `json:"longitude"`
 	DistrictID uint    `json:"district_id"`
+	Rooms      []RespondRoomJoin
 }
 
 type HouseResponseJoin struct {
