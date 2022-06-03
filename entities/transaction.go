@@ -96,3 +96,14 @@ type TransactionUpdateResponse struct {
 	TotalBill int64     `json:"total_bill"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type Reminder struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Year        string `json:"year"`
+	Month       string `json:"month"`
+	Day         string `json:"day"`
+	Start       string `json:"start"`
+	End         string `json:"end"`
+	Attendees   string `json:"attendees"`
+}

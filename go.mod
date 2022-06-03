@@ -17,6 +17,7 @@ require (
 	github.com/midtrans/midtrans-go v1.3.0
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
+	google.golang.org/api v0.82.0
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.5
 )
@@ -27,7 +28,6 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	google.golang.org/api v0.82.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220601144221-27df5f98adab // indirect
 	google.golang.org/grpc v1.47.0 // indirect

@@ -24,6 +24,7 @@ import (
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
+	"kost/utils/gcal"
 	utils "kost/utils/rds"
 	"kost/utils/s3"
 
@@ -41,9 +42,11 @@ import (
 	reviewRepo "kost/repositories/reviews"
 	transactionRepo "kost/repositories/transactions"
 
+	reminderService "kost/services/reminder"
 	reviewService "kost/services/reviews"
 	transactionService "kost/services/transactions"
 
+	reminderHandlers "kost/deliveries/handlers/reminder"
 	reviewHandlers "kost/deliveries/handlers/reviews"
 	transactionHandlers "kost/deliveries/handlers/transactions"
 
@@ -68,9 +71,10 @@ func main() {
 
 	// Init S3
 	s3Client := s3.NewS3Client(config)
+	gcal := gcal.NewAuthClient(config)
 
 	// Migrate
-	utils.Migrate(DB)
+	// utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -103,6 +107,7 @@ func main() {
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
 	forgotService := forgotService.NewforgotService(userRepository, validator.New())
+	reminderService := reminderService.NewReminderServices(gcal)
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
 	userHandler := userHandlers.NewUserHandler(userService, s3Client, validation)
@@ -115,6 +120,7 @@ func main() {
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
+	reminderHandler := reminderHandlers.NewHandlersReminder(reminderService)
 
 	// Middlewares
 	middlewares.General(e)
@@ -127,6 +133,7 @@ func main() {
 	routes.TransactionPath(e, transactionsHandler)
 	routes.CityPath(e, cityHandler)
 	routes.RoomPath(e, roomHandler)
+	routes.ReminderPath(e, reminderHandler)
 
 	// e.Logger.Fatal(e.Start(":" + config.App.Port))
 	e.Logger.Fatal(e.Start(":8000"))
