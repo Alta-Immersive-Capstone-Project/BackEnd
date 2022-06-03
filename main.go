@@ -24,7 +24,7 @@ import (
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
-	"kost/utils/gcal"
+	"kost/utils/gcalendar"
 	midtrans "kost/utils/midtrans"
 	utils "kost/utils/rds"
 	"kost/utils/s3"
@@ -72,7 +72,7 @@ func main() {
 
 	// Init S3
 	s3Client := s3.NewS3Client(config)
-	gcal := gcal.NewAuthClient(config)
+	gcal := gcalendar.NewAuthConfig(config)
 
 	// Migrate
 	// utils.Migrate(DB)
@@ -108,7 +108,7 @@ func main() {
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
 	forgotService := forgotService.NewforgotService(userRepository, validator.New())
-	reminderService := reminderService.NewReminderServices(gcal)
+	reminderService := reminderService.NewReminderServices(gcal, transactionsRepo)
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
 	userHandler := userHandlers.NewUserHandler(userService, s3Client, validation)

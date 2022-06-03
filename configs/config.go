@@ -46,7 +46,7 @@ type AppConfig struct {
 		AuthUri      string
 		AuthProvider string
 		TokenUri     string
-		RedirectUri  string
+		RedirectUrl  string
 	}
 
 	Email struct {
@@ -85,7 +85,7 @@ func initConfig() *AppConfig {
 	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "")
+	config.Database.Name = GetEnv("DB_NAME", "Trial")
 
 	config.Email.Domain = GetEnv("EMAIL", "")
 	config.Email.ApiKey = GetEnv("API_KEY", "")
@@ -104,15 +104,9 @@ func initConfig() *AppConfig {
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
 
-	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "350091276191-i1bcs17inok4p2ehmmmfk4s29rohag3o.apps.googleusercontent.com")
-	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "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")
-	// config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "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")
-	config.GCalendar.ProjectID = GetEnv("GCAL_PROJECT_ID", "capstone-be")
-	config.GCalendar.AuthUri = GetEnv("GCAL_AUTH_URI", "https://accounts.google.com/o/oauth2/auth")
-	config.GCalendar.TokenUri = GetEnv("GCAL_TOKEN_URI", "https://oauth2.googleapis.com/token")
-	config.GCalendar.AuthProvider = GetEnv("GCAL_AUTH_PROVIDER", "https://www.googleapis.com/oauth2/v1/certs")
-	config.GCalendar.RedirectUri = GetEnv("GCAL_REDIRECT_URI", "http://localhost:8000/auth/google/callback")
-	// config.GCalendar.RedirectUri = GetEnv("GCAL_REDIRECT_URI", "https://galihgpr.cloud.okteto.net")
+	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
+	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "")
+	config.GCalendar.RedirectUrl = GetEnv("GCAL_REDIRECT_URL", "")
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)
