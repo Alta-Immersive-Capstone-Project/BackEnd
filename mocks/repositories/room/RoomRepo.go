@@ -92,6 +92,29 @@ func (_m *RoomRepo) GetRoomID(id uint) (entities.Room, error) {
 	return r0, r1
 }
 
+// GetbyHouse provides a mock function with given fields: id
+func (_m *RoomRepo) GetbyHouse(id uint) ([]entities.RespondRoomJoin, error) {
+	ret := _m.Called(id)
+
+	var r0 []entities.RespondRoomJoin
+	if rf, ok := ret.Get(0).(func(uint) []entities.RespondRoomJoin); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.RespondRoomJoin)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateRoom provides a mock function with given fields: id, new
 func (_m *RoomRepo) UpdateRoom(id uint, new entities.Room) (entities.Room, error) {
 	ret := _m.Called(id, new)

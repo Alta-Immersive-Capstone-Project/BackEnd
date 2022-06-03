@@ -8,8 +8,9 @@
  </div>
  
 
-  <h1 align="center">Sewa Kost</h1>
-
+  <h1 align="center">SEWA KOST
+<p align="center"> "cari,booking,nego kost gampang banget"
+ </h1>
   <p align="center">
    :collision: Capstone Project  in Immersive Alterra Academy Batch 8 :collision:
     <br />
@@ -23,7 +24,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
+This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. Furthermore, this's the last project in our program towards graduation and placement section. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
 * Designing Entity Relation Design (ERD)'s together
 * Finishing OPEN API's carried out by division of tasks
 * Resolving from coding endpoint to unit test's carried out by division of tasks
@@ -54,45 +55,46 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 
 <details>
 <summary>🎨ERD</summary>
-  
-
+ <div align="center">
+ <img src="https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/sewa%20kost.drawio%20(4).png" />
+ <div>
 </details>
- <details>
-<summary>🏃Use Case Diagram</summary>
-  
 
 </details>
   <details>
 <summary>🏡List of Features</summary>
   
-<div>
+ <div align="center">
   
 |  User | Action |
 | --- | --- |
-| Customer| Manage customer's profile |
+| Customer| Manage customer's profile include upload or update profile picture|
 |         | Reset password if forgot |
  | | Find the Kosts in a city, district, or house by Map Visualization|
-  | | Gain list of the Kosts based on the lowest's or highest price|
+  | | Obtain list of the Kosts based on the lowest's or highest price|
  | | Comprehensive information about available room include the amenities, rules, and location on the Map|
-  | | Chat with Consultant about dealing room price or just asking some questions|
+  | | Chat with consultant about dealing room price or just asking some questions|
   | | Available various choices of payment methods |
-  | | Review and Rate about customer's experience after renting |
-  |Admin |Manage the management's profile|
- | | Manage the Kost's Data and transaction's data|
+   | | Discover list of customer's booking history|
+  | | Review and rate about customer's experience after renting |
+  |Admin |Manage the management's profile include upload or update profile picture|
+ | | Manage the Kost's data and transaction's data|
  | | Interaction with customer about dealing price or just reply message|
    |Supervisor | Manage The Kost's Data and upload some photos to figure the Kost|
  | | Interaction with customer about dealing price or just reply message|
-   | | Read history of transaction based on the Kost'ID|
+   | | Read history of transaction based on the Kost|
    | | Generate payment report each month|
   |Consultant | Obtain list of the registered Kost |
   | | Interaction with customer about dealing price or just reply message|
-  | | Find list of nearby facilities from the Kost include the radius from the Kost|
+  | | Find list of nearby facilities include the distance from the Kost|
   | | Generate a offering letter to customer and can be exported|
  | | Access history of sales activities|
  
- 
- 
- 
+  
+</details>
+<details>
+ <summary>🏃Use Case Diagram</summary>
+   
 </details>
 <details>
 <summary>💎Testing</summary>
@@ -127,7 +129,7 @@ Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Altera Academy Batch 8 :pray::pray:
+We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Alterra Academy Batch 8 :pray::pray:
 
 * [Jerry Young](https://github.com/jackthepanda96)
 * [Nada](https://github.com/nurfitriana87)

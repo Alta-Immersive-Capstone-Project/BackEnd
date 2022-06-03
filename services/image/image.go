@@ -27,7 +27,7 @@ func NewServiceImage(Repo room.RoomRepo, image image.ImageRepo, S3 s3.S3Control)
 }
 
 func (i *ServiceImage) InsertImage(files []*multipart.FileHeader, id uint) error {
-	for index, fileU := range files {
+	for _, fileU := range files {
 		src, err := fileU.Open()
 		defer src.Close()
 		if err != nil {
@@ -39,9 +39,9 @@ func (i *ServiceImage) InsertImage(files []*multipart.FileHeader, id uint) error
 		if err != nil {
 			return err
 		}
-		if index == 0 {
-			i.repo.UpdateRoom(id, entities.Room{Image: res})
-		}
+		// if index == 0 {
+		// 	i.repo.UpdateRoom(id, entities.Room{Image: res})
+		// }
 
 		img := entities.Image{
 			RoomID: id,

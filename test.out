@@ -1,9 +1,58 @@
 mode: set
 <<<<<<< HEAD
+kost/services/city/city_service.go:15.54,19.2 1 1
+kost/services/city/city_service.go:21.90,27.16 4 1
+kost/services/city/city_service.go:31.2,34.17 3 1
+kost/services/city/city_service.go:27.16,30.3 2 1
+kost/services/city/city_service.go:37.69,40.16 2 1
+kost/services/city/city_service.go:45.2,48.20 3 1
+kost/services/city/city_service.go:40.16,43.3 2 1
+kost/services/city/city_service.go:50.73,53.16 2 1
+kost/services/city/city_service.go:58.2,61.20 3 1
+kost/services/city/city_service.go:53.16,56.3 2 1
+kost/services/city/city_service.go:64.99,70.16 4 1
+kost/services/city/city_service.go:75.2,78.20 3 1
+kost/services/city/city_service.go:70.16,73.3 2 1
+kost/services/city/city_service.go:81.49,84.16 2 1
+kost/services/city/city_service.go:89.2,89.12 1 1
+kost/services/city/city_service.go:84.16,87.3 2 1
+=======
+<<<<<<< HEAD
+>>>>>>> 7adbe6eb0e4dc8e1574fd705f0ddc06f1d7d423b
 kost/services/amenities/amenities_service.go:16.74,20.2 1 1
 kost/services/amenities/amenities_service.go:23.109,29.16 4 1
 kost/services/amenities/amenities_service.go:34.2,36.20 3 1
 kost/services/amenities/amenities_service.go:29.16,32.3 2 1
+<<<<<<< HEAD
+kost/services/amenities/amenities_service.go:40.91,43.16 2 1
+kost/services/amenities/amenities_service.go:47.2,51.20 3 1
+kost/services/amenities/amenities_service.go:43.16,46.3 2 1
+kost/services/amenities/amenities_service.go:55.125,61.16 4 1
+kost/services/amenities/amenities_service.go:65.2,69.20 3 1
+kost/services/amenities/amenities_service.go:61.16,64.3 2 1
+kost/services/amenities/amenities_service.go:73.63,76.16 2 1
+kost/services/amenities/amenities_service.go:80.2,80.12 1 1
+kost/services/amenities/amenities_service.go:76.16,79.3 2 1
+kost/services/district/district_service.go:15.66,19.2 1 1
+kost/services/district/district_service.go:21.102,25.16 4 1
+kost/services/district/district_service.go:29.2,31.20 3 1
+kost/services/district/district_service.go:25.16,28.3 2 1
+kost/services/district/district_service.go:34.114,38.16 4 1
+kost/services/district/district_service.go:42.2,45.20 3 1
+kost/services/district/district_service.go:38.16,41.3 2 1
+kost/services/district/district_service.go:47.54,49.16 2 1
+kost/services/district/district_service.go:53.2,53.12 1 1
+kost/services/district/district_service.go:49.16,52.3 2 1
+kost/services/district/district_service.go:55.85,57.16 2 1
+kost/services/district/district_service.go:61.2,64.20 3 1
+kost/services/district/district_service.go:57.16,60.3 2 1
+kost/services/district/district_service.go:66.81,68.16 2 1
+kost/services/district/district_service.go:73.2,76.20 3 1
+kost/services/district/district_service.go:68.16,71.3 2 1
+kost/services/district/district_service.go:78.84,80.16 2 1
+kost/services/district/district_service.go:85.2,87.20 3 1
+kost/services/district/district_service.go:80.16,83.3 2 1
+=======
 kost/services/amenities/amenities_service.go:40.95,43.16 2 1
 kost/services/amenities/amenities_service.go:47.2,49.20 3 1
 kost/services/amenities/amenities_service.go:43.16,46.3 2 1
@@ -18,6 +67,7 @@ kost/services/amenities/amenities_service.go:93.2,93.12 1 1
 kost/services/amenities/amenities_service.go:89.16,92.3 2 1
 =======
 >>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
+>>>>>>> 7adbe6eb0e4dc8e1574fd705f0ddc06f1d7d423b
 kost/services/facility/facility_service.go:15.70,19.2 1 1
 kost/services/facility/facility_service.go:22.108,27.16 4 1
 kost/services/facility/facility_service.go:32.2,36.20 3 1
@@ -43,4 +93,79 @@ kost/services/facility/facility_service.go:89.16,92.3 2 1
 kost/services/facility/facility_service.go:96.90,98.16 2 1
 kost/services/facility/facility_service.go:102.2,102.20 1 1
 kost/services/facility/facility_service.go:98.16,101.3 2 1
+<<<<<<< HEAD
+kost/services/room/room_service.go:17.77,22.2 1 0
+kost/services/room/room_service.go:24.103,32.16 6 0
+kost/services/room/room_service.go:37.2,40.20 3 0
+kost/services/room/room_service.go:32.16,35.3 2 0
+kost/services/room/room_service.go:43.68,46.16 2 0
+kost/services/room/room_service.go:51.2,54.20 3 0
+kost/services/room/room_service.go:46.16,49.3 2 0
+kost/services/room/room_service.go:56.65,59.16 2 0
+kost/services/room/room_service.go:64.2,64.17 1 0
+kost/services/room/room_service.go:59.16,62.3 2 0
+kost/services/room/room_service.go:67.101,73.16 4 0
+kost/services/room/room_service.go:78.2,81.20 3 0
+kost/services/room/room_service.go:73.16,76.3 2 0
+kost/services/room/room_service.go:84.49,87.16 2 0
+kost/services/room/room_service.go:92.2,92.12 1 0
+kost/services/room/room_service.go:87.16,90.3 2 0
+kost/services/reviews/review_service.go:14.59,18.2 1 1
+kost/services/reviews/review_service.go:20.120,31.16 4 1
+kost/services/reviews/review_service.go:35.2,36.22 2 1
+kost/services/reviews/review_service.go:31.16,33.3 1 1
+kost/services/reviews/review_service.go:39.83,41.16 2 1
+kost/services/reviews/review_service.go:45.2,45.23 1 1
+kost/services/reviews/review_service.go:41.16,43.3 1 1
+kost/services/reviews/review_service.go:48.67,50.16 2 1
+kost/services/reviews/review_service.go:54.2,54.21 1 1
+kost/services/reviews/review_service.go:50.16,52.3 1 1
+kost/services/house/house_service.go:15.59,19.2 1 1
+kost/services/house/house_service.go:21.95,25.16 4 1
+kost/services/house/house_service.go:29.2,31.20 3 1
+kost/services/house/house_service.go:25.16,28.3 2 1
+kost/services/house/house_service.go:34.107,38.16 4 1
+kost/services/house/house_service.go:42.2,45.20 3 1
+kost/services/house/house_service.go:38.16,41.3 2 1
+kost/services/house/house_service.go:48.52,50.16 2 1
+kost/services/house/house_service.go:54.2,54.12 1 1
+kost/services/house/house_service.go:50.16,53.3 2 1
+kost/services/house/house_service.go:57.77,59.16 2 1
+kost/services/house/house_service.go:64.2,67.20 3 1
+kost/services/house/house_service.go:59.16,62.3 2 1
+kost/services/house/house_service.go:70.95,72.16 2 1
+kost/services/house/house_service.go:76.2,79.20 3 1
+kost/services/house/house_service.go:72.16,75.3 2 1
+kost/services/house/house_service.go:82.100,84.16 2 1
+kost/services/house/house_service.go:88.2,90.20 3 1
+kost/services/house/house_service.go:84.16,87.3 2 1
+kost/services/house/house_service.go:93.94,95.16 2 1
+kost/services/house/house_service.go:99.2,101.20 3 1
+kost/services/house/house_service.go:95.16,98.3 2 1
+kost/services/house/house_service.go:103.111,105.16 2 1
+kost/services/house/house_service.go:109.2,111.20 3 1
+kost/services/house/house_service.go:105.16,108.3 2 1
+kost/services/house/house_service.go:113.80,115.16 2 1
+kost/services/house/house_service.go:119.2,121.20 3 1
+kost/services/house/house_service.go:115.16,118.3 2 1
+kost/services/house/house_service.go:123.94,125.16 2 1
+kost/services/house/house_service.go:129.2,131.20 3 1
+kost/services/house/house_service.go:125.16,128.3 2 1
+kost/services/transactions/transaction_service.go:16.74,20.2 1 1
+kost/services/transactions/transaction_service.go:22.139,37.16 4 1
+kost/services/transactions/transaction_service.go:41.2,42.22 2 1
+kost/services/transactions/transaction_service.go:37.16,39.3 1 1
+kost/services/transactions/transaction_service.go:45.103,49.16 3 1
+kost/services/transactions/transaction_service.go:53.2,54.22 2 1
+kost/services/transactions/transaction_service.go:49.16,51.3 1 1
+kost/services/transactions/transaction_service.go:57.151,60.2 2 1
+kost/services/transactions/transaction_service.go:62.94,67.28 3 1
+kost/services/transactions/transaction_service.go:73.2,73.17 1 1
+kost/services/transactions/transaction_service.go:67.28,71.3 3 1
+kost/services/transactions/transaction_service.go:76.173,85.16 4 1
+kost/services/transactions/transaction_service.go:89.2,90.22 2 1
+kost/services/transactions/transaction_service.go:85.16,87.3 1 1
+kost/services/transactions/transaction_service.go:93.124,96.2 2 1
+=======
 >>>>>>> 3d2f172cae4224571053c1b5658836fe1402c6a9
+>>>>>>> 7adbe6eb0e4dc8e1574fd705f0ddc06f1d7d423b

@@ -71,7 +71,7 @@ func main() {
 	s3Client := s3.NewS3Client(config)
 
 	// Migrate
-	// utils.Migrate(DB)
+	utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -100,7 +100,7 @@ func main() {
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
-	houseService := houseServices.NewHouseService(houseRepo)
+	houseService := houseServices.NewHouseService(houseRepo, roomRepo)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
 	forgotService := forgotService.NewforgotService(userRepository, validator.New())
