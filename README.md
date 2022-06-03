@@ -23,7 +23,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
+This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. Furthermore, this's the last project in our program towards graduation and placement section. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
 * Designing Entity Relation Design (ERD)'s together
 * Finishing OPEN API's carried out by division of tasks
 * Resolving from coding endpoint to unit test's carried out by division of tasks
@@ -127,7 +127,7 @@ Open API Documentation :  [https://app.swaggerhub.com/apis/galihgpr/sewa_kost/1.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Altera Academy Batch 8 :pray::pray:
+We are very grateful for suggestion and encouragement from mentors and frontend's team in Immersive Alterra Academy Batch 8 :pray::pray:
 
 * [Jerry Young](https://github.com/jackthepanda96)
 * [Nada](https://github.com/nurfitriana87)
