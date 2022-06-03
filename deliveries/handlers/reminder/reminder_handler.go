@@ -26,10 +26,7 @@ func NewHandlersReminder(auth reminder.ReminderService) *HandlerReminder {
 
 func (h *HandlerReminder) OauthLogin() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		role := middlewares.ExtractTokenRole(c)
-		if role == "customer" {
-			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
-		}
+
 		authUrl := h.auth.GetLoginUrl("oauthstate")
 		return c.Redirect(http.StatusTemporaryRedirect, authUrl)
 	}
