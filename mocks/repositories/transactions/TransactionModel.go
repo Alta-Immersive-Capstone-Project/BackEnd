@@ -106,6 +106,27 @@ func (_m *TransactionModel) GetAllbyUser(role string, user uint, status string, 
 	return r0
 }
 
+// GetTransactionByBookingID provides a mock function with given fields: BookingID
+func (_m *TransactionModel) GetTransactionByBookingID(BookingID string) (entities.DataReminder, error) {
+	ret := _m.Called(BookingID)
+
+	var r0 entities.DataReminder
+	if rf, ok := ret.Get(0).(func(string) entities.DataReminder); ok {
+		r0 = rf(BookingID)
+	} else {
+		r0 = ret.Get(0).(entities.DataReminder)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(BookingID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Request provides a mock function with given fields: booking_id
 func (_m *TransactionModel) Request(booking_id string) (entities.TransactionResponse, error) {
 	ret := _m.Called(booking_id)
