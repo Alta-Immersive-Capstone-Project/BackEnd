@@ -39,6 +39,16 @@ type AppConfig struct {
 		DistanceMatrixBaseURL string
 	}
 
+	GCalendar struct {
+		ClientID     string
+		ClientSecret string
+		ProjectID    string
+		AuthUri      string
+		AuthProvider string
+		TokenUri     string
+		RedirectUrl  string
+	}
+
 	Email struct {
 		Domain string
 		ApiKey string
@@ -75,7 +85,7 @@ func initConfig() *AppConfig {
 	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "")
+	config.Database.Name = GetEnv("DB_NAME", "Trial")
 
 	config.Email.Domain = GetEnv("EMAIL", "")
 	config.Email.ApiKey = GetEnv("API_KEY", "")
@@ -94,6 +104,9 @@ func initConfig() *AppConfig {
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
 
+	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
+	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "")
+	config.GCalendar.RedirectUrl = GetEnv("GCAL_REDIRECT_URL", "")
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)

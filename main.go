@@ -24,6 +24,7 @@ import (
 	roomsService "kost/services/room"
 	userService "kost/services/user"
 
+	"kost/utils/gcalendar"
 	midtrans "kost/utils/midtrans"
 	utils "kost/utils/rds"
 	"kost/utils/s3"
@@ -42,9 +43,11 @@ import (
 	reviewRepo "kost/repositories/reviews"
 	transactionRepo "kost/repositories/transactions"
 
+	reminderService "kost/services/reminder"
 	reviewService "kost/services/reviews"
 	transactionService "kost/services/transactions"
 
+	reminderHandlers "kost/deliveries/handlers/reminder"
 	reviewHandlers "kost/deliveries/handlers/reviews"
 	transactionHandlers "kost/deliveries/handlers/transactions"
 
@@ -69,9 +72,10 @@ func main() {
 
 	// Init S3
 	s3Client := s3.NewS3Client(config)
+	gcal := gcalendar.NewAuthConfig(config)
 
 	// Migrate
-	utils.Migrate(DB)
+	// utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -96,7 +100,7 @@ func main() {
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
-	transactionsService := transactionService.NewTransactionService(transactionsRepo, userRepository, houseRepo)
+	transactionsService := transactionService.NewTransactionService(transactionsRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
@@ -104,6 +108,7 @@ func main() {
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
 	forgotService := forgotService.NewforgotService(userRepository, validator.New())
+	reminderService := reminderService.NewReminderServices(gcal, transactionsRepo)
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
 	userHandler := userHandlers.NewUserHandler(userService, s3Client, validation)
@@ -116,6 +121,7 @@ func main() {
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
+	reminderHandler := reminderHandlers.NewHandlersReminder(reminderService)
 
 	// Middlewares
 	middlewares.General(e)
@@ -128,6 +134,7 @@ func main() {
 	routes.TransactionPath(e, transactionsHandler)
 	routes.CityPath(e, cityHandler)
 	routes.RoomPath(e, roomHandler)
+	routes.ReminderPath(e, reminderHandler)
 
 	// e.Logger.Fatal(e.Start(":" + config.App.Port))
 	e.Logger.Fatal(e.Start(":8000"))

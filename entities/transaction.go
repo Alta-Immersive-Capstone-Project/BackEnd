@@ -103,3 +103,16 @@ type TransactionKost struct {
 	RedirectURL       string    `json:"redirect_url"`
 	CreatedAt         time.Time `json:"created_at"`
 }
+
+type AddReminderPay struct {
+	BookingID string `json:"booking_id"`
+}
+
+type DataReminder struct {
+	BookingID   string `json:"booking_id"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	Title       string `json:"title"`
+	Price       int64  `json:"price"`
+	RedirectURL string `json:"redirect_url"`
+}
