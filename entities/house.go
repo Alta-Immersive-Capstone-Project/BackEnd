@@ -17,6 +17,7 @@ type House struct {
 	Available  int      `json:"available" gorm:"type:int(3);not null"`
 	Latitude   float64  `json:"latitude" gorm:"not null"`
 	Longitude  float64  `json:"longitude" gorm:"not null"`
+	Image      string   `json:"image"`
 	Room       []Room   `gorm:"foreingkey:HouseID"`
 	Review     []Review `gorm:"foreingkey:HouseID"`
 }
@@ -29,6 +30,7 @@ type AddHouse struct {
 	OwnerPhone string  `json:"owner_phone" validate:"required"`
 	Address    string  `json:"address" validate:"required"`
 	Type       string  `json:"type" validate:"required"`
+	Image      string  `json:"image"`
 	SlotRoom   int     `json:"slot_room" validate:"required"`
 	Available  int     `json:"available" validate:"required"`
 	Latitude   float64 `json:"latitude" validate:"required"`
@@ -43,6 +45,7 @@ type UpdateHouse struct {
 	OwnerPhone string  `json:"owner_phone"`
 	Address    string  `json:"address"`
 	Type       string  `json:"type"`
+	Image      string  `json:"image"`
 	SlotRoom   int     `json:"slot_room"`
 	Available  int     `json:"available"`
 	Latitude   float64 `json:"latitude"`
@@ -58,6 +61,7 @@ type HouseResponse struct {
 	Address    string  `json:"address"`
 	SlotRoom   int     `json:"slot_room"`
 	Type       string  `json:"type"`
+	Image      string  `json:"image"`
 	Available  int     `json:"available"`
 	Latitude   float64 `json:"latitude"`
 	Longitude  float64 `json:"longitude"`
@@ -74,6 +78,7 @@ type HouseResponseJoin struct {
 	Address    string  `json:"address"`
 	Available  int     `json:"available"`
 	Type       string  `json:"type"`
+	Image      string  `json:"image"`
 	RoomID     uint    `json:"room_id"`
 	RoomType   string  `json:"room_type"`
 	Price      int32   `json:"price"`
