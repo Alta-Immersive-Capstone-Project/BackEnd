@@ -13,7 +13,6 @@ import (
 	// "net/http"
 	"github.com/labstack/gommon/log"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	calendar "google.golang.org/api/calendar/v3"
 )
 
@@ -27,7 +26,7 @@ func NewAuthConfig(config *configs.AppConfig) *AuthConfig {
 		ClientSecret: config.GCalendar.ClientSecret,
 		RedirectURL:  config.GCalendar.RedirectUrl,
 		Scopes:       []string{calendar.CalendarScope, calendar.CalendarEventsScope},
-		Endpoint:     google.Endpoint,
+		Endpoint:     oauth2.Endpoint{AuthURL: "https://accounts.google.com/o/oauth2/auth", TokenURL: "https://oauth2.googleapis.com/token"},
 	}
 
 	return &AuthConfig{
