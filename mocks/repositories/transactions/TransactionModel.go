@@ -74,22 +74,6 @@ func (_m *TransactionModel) GetAllbyConsultant() []entities.Transaction {
 	return r0
 }
 
-// GetAllbyCustomer provides a mock function with given fields: role, user, status, city, district
-func (_m *TransactionModel) GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
-	ret := _m.Called(role, user, status, city, district)
-
-	var r0 []entities.TransactionJoin
-	if rf, ok := ret.Get(0).(func(string, uint, string, uint, uint) []entities.TransactionJoin); ok {
-		r0 = rf(role, user, status, city, district)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]entities.TransactionJoin)
-		}
-	}
-
-	return r0
-}
-
 // GetAllbyKost provides a mock function with given fields: duration, status, name
 func (_m *TransactionModel) GetAllbyKost(duration int, status string, name string) []entities.TransactionKost {
 	ret := _m.Called(duration, status, name)
@@ -100,6 +84,22 @@ func (_m *TransactionModel) GetAllbyKost(duration int, status string, name strin
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.TransactionKost)
+		}
+	}
+
+	return r0
+}
+
+// GetAllbyUser provides a mock function with given fields: role, user, status, city, district
+func (_m *TransactionModel) GetAllbyUser(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	ret := _m.Called(role, user, status, city, district)
+
+	var r0 []entities.TransactionJoin
+	if rf, ok := ret.Get(0).(func(string, uint, string, uint, uint) []entities.TransactionJoin); ok {
+		r0 = rf(role, user, status, city, district)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.TransactionJoin)
 		}
 	}
 

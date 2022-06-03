@@ -102,7 +102,7 @@ func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {
 	// Customer
 	e.POST("/transactions", transaction.InsertTransaction, middlewares.JWTMiddleware())
-	e.GET("/transactions", transaction.GetAllTransactionbyCustomer, middlewares.JWTMiddleware())
+	e.GET("/transactions", transaction.GetAllTransactionbyUser, middlewares.JWTMiddleware())
 	e.POST("/transactions/callbacks", transaction.UpdateCallback)
 
 	// Admin
