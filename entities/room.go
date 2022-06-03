@@ -8,7 +8,6 @@ type Room struct {
 	Type                   string        `json:"type"`
 	UserID                 uint          `json:"userid"`
 	Price                  int64         `json:"price"`
-	Image                  string        `json:"image"`
 	Additional_description string        `json:"additional_description"`
 	Transactions           []Transaction `gorm:"foreingkey:RoomID"`
 	Images                 []Image       `gorm:"foreingkey:RoomID"`
@@ -25,7 +24,6 @@ type UpdateRoom struct {
 	Type                   string `gorm:"type:varchar(100);not null" json:"type" form:"type"`
 	Price                  int64  `gorm:"type:int;not null" json:"price" form:"price"`
 	Additional_description string `gorm:"type:varchar(100);not null" json:"additional_description" form:"additional_description"`
-	Image                  string `json:"image"`
 }
 type RespondRoom struct {
 	ID                     uint   `json:"id"`
@@ -33,7 +31,6 @@ type RespondRoom struct {
 	Type                   string `json:"type"`
 	Price                  int64  `json:"price"`
 	Additional_description string `json:"additional_description"`
-	Image                  string `json:"image"`
 }
 type RespondRoomcreat struct {
 	ID                     uint   `json:"id"`

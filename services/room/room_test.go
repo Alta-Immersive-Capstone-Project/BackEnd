@@ -25,7 +25,6 @@ func TestCreateRoom(t *testing.T) {
 		Type:                   "4x3",
 		UserID:                 1,
 		Price:                  2000000,
-		Image:                  "",
 		Additional_description: "free wifi",
 	}
 
@@ -61,7 +60,6 @@ func TestGetAllRoom(t *testing.T) {
 		Type:                   "4x3",
 		UserID:                 1,
 		Price:                  2000000,
-		Image:                  "image",
 		Additional_description: "free wifi",
 	}}
 
@@ -96,7 +94,6 @@ func TestGetIDRoom(t *testing.T) {
 		Type:                   "4x3",
 		UserID:                 1,
 		Price:                  2000000,
-		Image:                  "image",
 		Additional_description: "free wifi",
 	}
 
@@ -137,7 +134,6 @@ func TestUpdateRoom(t *testing.T) {
 		Type:                   "4x3",
 		UserID:                 1,
 		Price:                  2000000,
-		Image:                  "",
 		Additional_description: "free wifi",
 	}
 
