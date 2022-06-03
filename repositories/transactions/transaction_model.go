@@ -79,17 +79,69 @@ func (m *transactionModel) UpdateSnap(booking_id string, status entities.Callbac
 	return status, nil
 }
 
-func (m *transactionModel) GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+func (m *transactionModel) GetAllbyUser(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
 	var transactions []entities.TransactionJoin
-
-	query := "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? and c.id = ? and h.district_id = ?"
+	var player string
+	var query string
 	if role == "customer" {
-		query += " and t.user_id = ?"
-	} else {
-		query += " and t.consultant_id = ?"
+		player = "t.user_id = ?"
+	} else if role == "t.consultant" {
+		player = "consultant_id = ?"
+	}
+	if role != "supervisor" && role != "admin" {
+		if status == "" && city == 0 && district == 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where " + player
+			m.db.Raw(query, user).Scan(&transactions)
+		} else if status != "" && city == 0 && district == 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND " + player
+			m.db.Raw(query, status, user).Scan(&transactions)
+		} else if status != "" && city != 0 && district == 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND c.id = ? AND " + player
+			m.db.Raw(query, status, city, user).Scan(&transactions)
+		} else if status != "" && city != 0 && district != 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND c.id = ? AND h.district_id = ? AND " + player
+			m.db.Raw(query, status, city, district, user).Scan(&transactions)
+		} else if status == "" && city != 0 && district == 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where c.id = ? AND " + player
+			m.db.Raw(query, city, user).Scan(&transactions)
+		} else if status == "" && city != 0 && district != 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where c.id = ? AND h.district_id = ? AND " + player
+			m.db.Raw(query, city, district, user).Scan(&transactions)
+		} else if status != "" && city == 0 && district != 0 {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND h.district_id = ? AND " + player
+			m.db.Raw(query, status, district, user).Scan(&transactions)
+		} else {
+			query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where h.district_id = ? AND " + player
+			m.db.Raw(query, district, user).Scan(&transactions)
+		}
+		return transactions
 	}
 
-	m.db.Raw(query, status, city, district, user).Scan(&transactions)
+	if status == "" && city == 0 && district == 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id"
+		m.db.Raw(query).Scan(&transactions)
+	} else if status != "" && city == 0 && district == 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ?"
+		m.db.Raw(query, status).Scan(&transactions)
+	} else if status != "" && city != 0 && district == 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND c.id = ?"
+		m.db.Raw(query, status, city).Scan(&transactions)
+	} else if status != "" && city != 0 && district != 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND c.id = ? AND h.district_id = ?"
+		m.db.Raw(query, status, city, district).Scan(&transactions)
+	} else if status == "" && city != 0 && district == 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where c.id = ?"
+		m.db.Raw(query, city).Scan(&transactions)
+	} else if status == "" && city != 0 && district != 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where c.id = ? AND h.district_id = ?"
+		m.db.Raw(query, city, district).Scan(&transactions)
+	} else if status != "" && city == 0 && district != 0 {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? AND h.district_id = ?"
+		m.db.Raw(query, status, district).Scan(&transactions)
+	} else {
+		query = "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where h.district_id = ?"
+		m.db.Raw(query, district).Scan(&transactions)
+	}
 	return transactions
 }
 

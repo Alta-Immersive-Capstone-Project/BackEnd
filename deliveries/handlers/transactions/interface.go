@@ -7,6 +7,6 @@ type TransactionHandler interface {
 	GetAllTransactionbyConsultant(c echo.Context) error
 	UpdateTransaction(c echo.Context) error
 	UpdateCallback(c echo.Context) error
-	GetAllTransactionbyCustomer(c echo.Context) error
+	GetAllTransactionbyUser(c echo.Context) error
 	GetAllTransactionbyKost(c echo.Context) error
 }
