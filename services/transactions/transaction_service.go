@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"kost/configs"
 	"kost/entities"
-	"kost/repositories/house"
 	repo "kost/repositories/transactions"
-	"kost/repositories/user"
 	"time"
 
 	"github.com/jinzhu/copier"
@@ -16,15 +14,11 @@ import (
 
 type transactionService struct {
 	tm repo.TransactionModel
-	um user.UserRepositoryInterface
-	hm house.IRepoHouse
 }
 
-func NewTransactionService(tm repo.TransactionModel, um user.UserRepositoryInterface, hm house.IRepoHouse) *transactionService {
+func NewTransactionService(tm repo.TransactionModel) *transactionService {
 	return &transactionService{
 		tm: tm,
-		um: um,
-		hm: hm,
 	}
 }
 

@@ -96,7 +96,7 @@ func main() {
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
-	transactionsService := transactionService.NewTransactionService(transactionsRepo, userRepository, houseRepo)
+	transactionsService := transactionService.NewTransactionService(transactionsRepo)
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
