@@ -119,10 +119,10 @@ func TestGetByCustomer(t *testing.T) {
 	returnData := []entities.TransactionJoin{{BookingID: "DM-1653825446724", CheckIn: time.Now(), Duration: 7, Price: 100000, TransactionStatus: status, Url: "http://localhost:8080/transactions/1", Title: "Kacau"}}
 
 	t.Run("Success Get All", func(t *testing.T) {
-		repo.On("GetAllbyCustomer", mock.Anything, user, mock.Anything, city, district).Return(returnData, nil).Once()
+		repo.On("GetAllbyUser", mock.Anything, user, mock.Anything, city, district).Return(returnData, nil).Once()
 		srv := transactions.NewTransactionService(repo)
 
-		res := srv.GetAllTransactionbyCustomer(role, user, status, city, district)
+		res := srv.GetAllTransactionbyUser(role, user, status, city, district)
 		assert.Equal(t, returnData[0].BookingID, res[0].BookingID)
 		assert.Equal(t, returnData[0].CheckIn, res[0].CheckIn)
 		repo.AssertExpectations(t)
