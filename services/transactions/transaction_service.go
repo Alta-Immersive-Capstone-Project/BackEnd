@@ -141,8 +141,8 @@ func (ts *transactionService) UpdateCallback(req entities.Callback) (entities.Ca
 	return response, nil
 }
 
-func (ts *transactionService) GetAllTransactionbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
-	response := ts.tm.GetAllbyCustomer(role, user, status, city, district)
+func (ts *transactionService) GetAllTransactionbyUser(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	response := ts.tm.GetAllbyUser(role, user, status, city, district)
 	return response
 }
 

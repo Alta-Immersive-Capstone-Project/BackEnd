@@ -111,14 +111,14 @@ func (th *transactionHandler) UpdateCallback(c echo.Context) error {
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", response))
 }
 
-func (th *transactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
-	customer_id, role := middlewares.ExtractTokenRoleID(c)
+func (th *transactionHandler) GetAllTransactionbyUser(c echo.Context) error {
+	user_id, role := middlewares.ExtractTokenRoleID(c)
 
 	status := c.QueryParam("status")
 	city, _ := strconv.Atoi(c.QueryParam("city"))
 	district, _ := strconv.Atoi(c.QueryParam("district"))
 
-	response := th.ts.GetAllTransactionbyCustomer(role, uint(customer_id), status, uint(city), uint(district))
+	response := th.ts.GetAllTransactionbyUser(role, uint(user_id), status, uint(city), uint(district))
 	fmt.Println(response)
 	if len(response) == 0 {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
