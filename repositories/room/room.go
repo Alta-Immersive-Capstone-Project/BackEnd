@@ -50,7 +50,7 @@ func (r *roomDB) GetAllRoom(id uint) ([]entities.Room, error) {
 
 func (r *roomDB) GetRoomID(id uint) (entities.Room, error) {
 	var room entities.Room
-	err := r.Db.Where("id = ?", id).Preload("Images").Preload("Amenities").Preload("Reviews").First(&room).Error
+	err := r.Db.Where("id = ?", id).Preload("Images").Preload("Amenities").First(&room).Error
 	if err != nil {
 		log.Warn(err)
 		return entities.Room{}, err
