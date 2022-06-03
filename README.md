@@ -68,7 +68,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
   
 |  User | Action |
 | --- | --- |
-| Customer| Manage customer's profile |
+| Customer| Manage customer's profile include upload or update profile picture|
 |         | Reset password if forgot |
  | | Find the Kosts in a city, district, or house by Map Visualization|
   | | Obtain list of the Kosts based on the lowest's or highest price|
