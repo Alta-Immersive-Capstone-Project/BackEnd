@@ -71,10 +71,11 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 | Customer| Manage customer's profile |
 |         | Reset password if forgot |
  | | Find the Kosts in a city, district, or house by Map Visualization|
-  | | Gain list of the Kosts based on the lowest's or highest price|
+  | | Obtain list of the Kosts based on the lowest's or highest price|
  | | Comprehensive information about available room include the amenities, rules, and location on the Map|
   | | Chat with Consultant about dealing room price or just asking some questions|
   | | Available various choices of payment methods |
+   | | Discover list of customer's booking history|
   | | Review and Rate about customer's experience after renting |
   |Admin |Manage the management's profile|
  | | Manage the Kost's Data and transaction's data|
