@@ -105,7 +105,7 @@ func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalReq
 
 	// Hanya hash password jika password juga diganti (tidak kosong)
 	if internalRequest.Password != "" {
-		hashedPassword, _ := helpers.HashPassword(user.Password)
+		hashedPassword, _ := helpers.HashPassword(internalRequest.Password)
 		user.Password = hashedPassword
 	}
 	if url != "" {
@@ -114,6 +114,9 @@ func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalReq
 
 	// Update via repository
 	user, err = us.userRepo.UpdateUser(id, user)
+	if err != nil {
+		return entities.InternalResponse{}, err
+	}
 	// Konversi user domain menjadi user response
 	userRes := entities.InternalResponse{}
 	copier.Copy(&userRes, &user)
@@ -125,7 +128,7 @@ func (us *UserService) UpdateCustomer(customerRequest entities.UpdateCustomerReq
 
 	// Get user by ID via repository
 	user, err := us.userRepo.GetUserID(id)
-	if err != nil || user.Role != "customer" {
+	if err != nil {
 		return entities.CustomerResponse{}, err
 	}
 

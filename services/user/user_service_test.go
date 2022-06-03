@@ -86,6 +86,37 @@ func TestCreateUser(t *testing.T) {
 	})
 }
 
+func TestGetAllMember(t *testing.T) {
+
+	t.Run("Success", func(t *testing.T) {
+
+		userRepo := repo.NewUserRepositoryInterface(t)
+		userRepo.On("GetAllUser", mock.Anything).Return(MockUser, nil).Once()
+
+		UserService := user.NewUserService(userRepo)
+
+		res, err := UserService.GetAllMember()
+
+		assert.NoError(t, err)
+		assert.Equal(t, MockUser[1].Name, res[1].Name)
+		assert.Equal(t, MockUser[1].Role, res[1].Role)
+		userRepo.AssertExpectations(t)
+	})
+
+	t.Run("Error Access Database", func(t *testing.T) {
+
+		userRepo := repo.NewUserRepositoryInterface(t)
+		userRepo.On("GetAllUser", mock.Anything).Return(MockUser, errors.New("error access database")).Once()
+
+		srv := user.NewUserService(userRepo)
+
+		res, err := srv.GetAllMember()
+		assert.Error(t, err)
+		assert.Len(t, res, 0)
+		userRepo.AssertExpectations(t)
+	})
+}
+
 func TestGetByID(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
@@ -130,15 +161,22 @@ func TestUpdateInternal(t *testing.T) {
 	var internalRequest = entities.UpdateInternalRequest{
 		Name: "kiki Saputri",
 	}
-	var userInternalRequest = entities.User{
+
+	var internalRequestWithPassword = entities.UpdateInternalRequest{
 		Name:     "kiki Saputri",
+		Password: "susi",
+	}
+
+	var userDataWithPassword = entities.User{
 		Email:    "kiki@gmail.com",
-		Password: "#$%$$$!!#@",
+		Password: "$2a$04$pPQj0kmfwt1LLcN7SPPm4.cUBKBydWKMYMpvXNRjNG6swfrq.H/OS",
+		Name:     "kiki Saputri",
 		Gender:   "girl",
-		Phone:    "0811345456",
 		Avatar:   "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png",
+		Phone:    "0811345456",
 		Role:     "admin",
 	}
+
 	var userData = entities.User{
 		Email:    "kikifatmala@gmail.com",
 		Password: "$2a$04$aFJ./S730/7TWneKFiS0ruCHNs9g97yumrB5RNx53gRqTDThpeQLa",
@@ -151,8 +189,8 @@ func TestUpdateInternal(t *testing.T) {
 	Url := "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png"
 	t.Run("Success", func(t *testing.T) {
 
-		userRepo.On("GetUserID", uint(1)).Return(MockUser[0], nil)
-		userRepo.On("UpdateUser", uint(1), userInternalRequest).Return(userData, nil).Once()
+		userRepo.On("GetUserID", uint(1)).Return(MockUser[0], nil).Once()
+		userRepo.On("UpdateUser", uint(1), mock.Anything).Return(userData, nil).Once()
 		UserService := user.NewUserService(userRepo)
 
 		res, err := UserService.UpdateInternal(internalRequest, 1, Url)
@@ -163,10 +201,34 @@ func TestUpdateInternal(t *testing.T) {
 		userRepo.AssertExpectations(t)
 	})
 
+	t.Run("Success with password", func(t *testing.T) {
+
+		userRepo.On("GetUserID", uint(1)).Return(MockUser[0], nil).Once()
+		userRepo.On("UpdateUser", uint(1), mock.Anything).Return(userDataWithPassword, nil).Once()
+		UserService := user.NewUserService(userRepo)
+
+		res, err := UserService.UpdateInternal(internalRequestWithPassword, 1, Url)
+
+		assert.NoError(t, err)
+		assert.Equal(t, userDataWithPassword.Name, res.Name)
+		assert.Equal(t, userDataWithPassword.Email, res.Email)
+		userRepo.AssertExpectations(t)
+	})
+
+	t.Run("Error Get ID", func(t *testing.T) {
+		userRepo.On("GetUserID", uint(1)).Return(entities.User{}, errors.New("Error Get ID")).Once()
+		UserService := user.NewUserService(userRepo)
+
+		_, err := UserService.UpdateInternal(internalRequest, 1, Url)
+
+		assert.Error(t, err)
+		userRepo.AssertExpectations(t)
+	})
+
 	t.Run("Error Update User", func(t *testing.T) {
 
-		userRepo.On("GetUserID", uint(1)).Return(MockUser[0], nil)
-		userRepo.On("UpdateUser", uint(1), userInternalRequest).Return(entities.User{}, errors.New("Error Update Data")).Once()
+		userRepo.On("GetUserID", uint(1)).Return(MockUser[0], nil).Once()
+		userRepo.On("UpdateUser", uint(1), mock.Anything).Return(entities.User{}, errors.New("Error Update Data")).Once()
 
 		UserService := user.NewUserService(userRepo)
 
@@ -180,6 +242,7 @@ func TestUpdateInternal(t *testing.T) {
 }
 
 func TestUpdateCustomer(t *testing.T) {
+	userRepo := repo.NewUserRepositoryInterface(t)
 	var respon = entities.CustomerResponse{
 
 		Email: "boy@gmail.com",
@@ -192,19 +255,23 @@ func TestUpdateCustomer(t *testing.T) {
 	var customerRequest = entities.UpdateCustomerRequest{
 		Name: "Boy William",
 	}
-	var userCustomerRequest = entities.User{
+	var customerRequestWithPassword = entities.UpdateCustomerRequest{
 		Name:     "Boy William",
-		Email:    "boy@gmail.com",
-		Password: "#$%$$9876@",
-
-		Gender: "man",
-		Phone:  "08117855450",
-		Avatar: "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png",
-		Role:   "customer",
+		Password: "susi",
 	}
+	var userDataWithPassword = entities.User{
+		Email:    "boy@gmail.com",
+		Password: "$2a$04$yRAN5vClxfY4abOFiya5/On9g0lrDS.aoowraZVHDtm.DiabsGm8q",
+		Name:     "Boy William",
+		Gender:   "man",
+		Avatar:   "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png",
+		Phone:    "0811345456",
+		Role:     "customer",
+	}
+
 	var userData = entities.User{
 		Email:    "boy@gmail.com",
-		Password: "#$%$$9876@",
+		Password: "$2a$04$yRAN5vClxfY4abOFiya5/On9g0lrDS.aoowraZVHDtm.DiabsGm8q",
 		Name:     "Boy William",
 		Gender:   "man",
 		Phone:    "08117855450",
@@ -215,9 +282,8 @@ func TestUpdateCustomer(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
 
-		userRepo := repo.NewUserRepositoryInterface(t)
-		userRepo.On("GetUserID", uint(2)).Return(MockUser[1], nil)
-		userRepo.On("UpdateUser", uint(2), userCustomerRequest).Return(userData, nil).Once()
+		userRepo.On("GetUserID", uint(2)).Return(MockUser[1], nil).Once()
+		userRepo.On("UpdateUser", uint(2), mock.Anything).Return(userData, nil).Once()
 		UserService := user.NewUserService(userRepo)
 
 		res, err := UserService.UpdateCustomer(customerRequest, 2, Url)
@@ -228,11 +294,36 @@ func TestUpdateCustomer(t *testing.T) {
 		userRepo.AssertExpectations(t)
 	})
 
+	t.Run("Success with password", func(t *testing.T) {
+
+		userRepo.On("GetUserID", uint(2)).Return(MockUser[1], nil).Once()
+		userRepo.On("UpdateUser", uint(2), mock.Anything).Return(userDataWithPassword, nil).Once()
+		UserService := user.NewUserService(userRepo)
+
+		res, err := UserService.UpdateCustomer(customerRequestWithPassword, 2, Url)
+
+		assert.NoError(t, err)
+		assert.Equal(t, userDataWithPassword.Name, res.Name)
+		assert.Equal(t, userDataWithPassword.Email, res.Email)
+		userRepo.AssertExpectations(t)
+	})
+
+	t.Run("Error Get ID", func(t *testing.T) {
+		userRepo.On("GetUserID", uint(2)).Return(entities.User{}, errors.New("Error Get ID")).Once()
+
+		UserService := user.NewUserService(userRepo)
+
+		_, err := UserService.UpdateCustomer(customerRequest, 2, Url)
+
+		assert.Error(t, err)
+		userRepo.AssertExpectations(t)
+	})
+
 	t.Run("Error Update User", func(t *testing.T) {
 
 		userRepo := repo.NewUserRepositoryInterface(t)
-		userRepo.On("GetUserID", uint(2)).Return(MockUser[1], nil)
-		userRepo.On("UpdateUser", uint(2), userCustomerRequest).Return(entities.User{}, errors.New("Error Update Data")).Once()
+		userRepo.On("GetUserID", uint(2)).Return(MockUser[1], nil).Once()
+		userRepo.On("UpdateUser", uint(2), mock.Anything).Return(entities.User{}, errors.New("Error Update Data")).Once()
 		UserService := user.NewUserService(userRepo)
 
 		res, err := UserService.UpdateCustomer(customerRequest, 2, Url)
@@ -249,7 +340,7 @@ func TestDeleteInternal(t *testing.T) {
 	t.Run("Success Delete Data", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
 
-		userR.On("DeleteUser", uint(2)).Return(nil)
+		userR.On("DeleteUser", uint(2)).Return(nil).Once()
 
 		srvDelete := user.NewUserService(userR)
 
@@ -263,7 +354,7 @@ func TestDeleteInternal(t *testing.T) {
 	t.Run("Error Access Database", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
 
-		userR.On("DeleteUser", uint(2)).Return(errors.New("Error Access Database"))
+		userR.On("DeleteUser", uint(2)).Return(errors.New("Error Access Database")).Once()
 		srvDelete := user.NewUserService(userR)
 
 		err := srvDelete.DeleteInternal(2)
@@ -279,7 +370,7 @@ func TestDeleteCustomer(t *testing.T) {
 	t.Run("Success Delete Data", func(t *testing.T) {
 		userR := repo.NewUserRepositoryInterface(t)
 
-		userR.On("DeleteUser", uint(1)).Return(nil)
+		userR.On("DeleteUser", uint(1)).Return(nil).Once()
 
 		srvDelete := user.NewUserService(userR)
 

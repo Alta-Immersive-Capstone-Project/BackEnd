@@ -69,8 +69,8 @@ func (_m *TransactionHandler) InsertTransaction(c echo.Context) error {
 	return r0
 }
 
-// UpdateStatus provides a mock function with given fields: c
-func (_m *TransactionHandler) UpdateStatus(c echo.Context) error {
+// UpdateCallback provides a mock function with given fields: c
+func (_m *TransactionHandler) UpdateCallback(c echo.Context) error {
 	ret := _m.Called(c)
 
 	var r0 error
