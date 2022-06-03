@@ -57,6 +57,14 @@ func StatusBadRequest(err error) map[string]interface{} {
 	}
 }
 
+func StatusBadRequestDuplicate(err error) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    http.StatusBadRequest,
+		"message": err.Error(),
+		"data":    nil,
+	}
+}
+
 func LoginOK(data interface{}) map[string]interface{} {
 	return map[string]interface{}{
 		"code":    http.StatusOK,

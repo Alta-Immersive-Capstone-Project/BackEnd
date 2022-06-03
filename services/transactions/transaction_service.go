@@ -30,7 +30,7 @@ func NewTransactionService(tm repo.TransactionModel, um user.UserRepositoryInter
 
 func (ts *transactionService) CreateTransaction(customer_id uint, req entities.TransactionRequest) (entities.TransactionResponse, error) {
 	transaction := entities.Transaction{
-		BookingID:         fmt.Sprintf("DM-%d", req.CheckIn),
+		BookingID:         fmt.Sprintf("LK-%d%d%d%d-%d", customer_id, req.HouseID, req.RoomID, req.Duration, req.CheckIn),
 		UserID:            customer_id,
 		RoomID:            req.RoomID,
 		HouseID:           req.HouseID,
