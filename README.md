@@ -86,7 +86,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
    | | Generate payment report each month|
   |Consultant | Obtain list of the registered Kost |
   | | Interaction with customer about dealing price or just reply message|
-  | | Find list of nearby facilities from the Kost include the distance from the Kost|
+  | | Find list of nearby facilities include the distance from the Kost|
   | | Generate a offering letter to customer and can be exported|
  | | Access history of sales activities|
  
