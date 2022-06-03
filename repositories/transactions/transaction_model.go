@@ -82,7 +82,7 @@ func (m *transactionModel) UpdateSnap(booking_id string, status entities.Callbac
 func (m *transactionModel) GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
 	var transactions []entities.TransactionJoin
 
-	query := "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.city_id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? and c.id = ? and h.district_id = ?"
+	query := "select distinct t.id, t.check_in, t.duration, t.booking_id, t.price, t.transaction_status, t.redirect_url, i.url, h.title from transactions as t left join rooms r on r.id = t.room_id left join images i on i.room_id = t.room_id left join houses h on h.id = r.house_id left join districts d on d.id = h.district_id left join cities c on c.id = d.city_id where t.transaction_status = ? and c.id = ? and h.district_id = ?"
 	if role == "customer" {
 		query += " and t.user_id = ?"
 	} else {
