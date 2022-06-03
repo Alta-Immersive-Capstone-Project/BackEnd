@@ -8,12 +8,12 @@ import (
 
 type Transaction struct {
 	gorm.Model
-	BookingID         string    `gorm:"type:varchar(100);not null"`
+	BookingID         string    `gorm:"type:varchar(100);not null;unique"`
 	UserID            uint      `gorm:"type:int;not null"`
 	ConsultantID      uint      `gorm:"type:int"`
 	HouseID           uint      `json:"house_id" gorm:"type:int;not null"`
 	RoomID            uint      `json:"room_id" gorm:"type:int;not null"`
-	CheckIn           time.Time `json:"check_in" gorm:"type:date;not null"`
+	CheckIn           time.Time `json:"check_in" gorm:"type:timestamp;not null"`
 	Duration          int       `json:"duration" gorm:"type:int;not null"`
 	Price             int64     `gorm:"type:int;not null"`
 	TransactionStatus string    `gorm:"type:varchar(100);not null"`
