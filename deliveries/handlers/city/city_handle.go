@@ -125,7 +125,7 @@ func (h *HandlersCity) DeleteCity() echo.HandlerFunc {
 
 		err = h.service.DeleteCity(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound(""))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}
