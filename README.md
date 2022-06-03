@@ -82,7 +82,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
  | | Interaction with customer about dealing price or just reply message|
    |Supervisor | Manage The Kost's Data and upload some photos to figure the Kost|
  | | Interaction with customer about dealing price or just reply message|
-   | | Read history of transaction based on the Kost'ID|
+   | | Read history of transaction based on the Kost|
    | | Generate payment report each month|
   |Consultant | Obtain list of the registered Kost |
   | | Interaction with customer about dealing price or just reply message|
