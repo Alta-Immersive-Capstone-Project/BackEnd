@@ -23,7 +23,7 @@ func NewReminderServices(config *oauth2.Config) *ServiceReminder {
 
 func (sr *ServiceReminder) GetLoginUrl(state string) string {
 	// oauthState := gcal.GenerateStateOauthCookie(w)
-	authUrl := sr.gapi.AuthCodeURL(state, oauth2.AccessTypeOnline)
+	authUrl := sr.gapi.AuthCodeURL(state, oauth2.AccessTypeOffline)
 	return authUrl
 }
 

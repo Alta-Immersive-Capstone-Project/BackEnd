@@ -35,13 +35,14 @@ func (h *HandlerReminder) OauthLogin() echo.HandlerFunc {
 		cookie := http.Cookie{Name: "oauthstate", Value: "token-state", Expires: time.Now().Add(365 * 24 * time.Hour)}
 		c.SetCookie(&cookie)
 		authUrl := h.auth.GetLoginUrl(cookie.Value)
+
 		return c.Redirect(http.StatusTemporaryRedirect, authUrl)
 	}
 }
 
 func (h *HandlerReminder) OauthCallback() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		oauthState, _ := c.Cookie("oauthstate")
+		oauthState, _ := c.Request().Cookie("oauthstate")
 		if c.QueryParam("state") != oauthState.Value {
 			log.Warn("invalid oauth google state")
 			return c.Redirect(http.StatusTemporaryRedirect, "/")
@@ -60,13 +61,24 @@ func (h *HandlerReminder) OauthCallback() echo.HandlerFunc {
 
 func (h *HandlerReminder) CreateReminder() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		oauthState, _ := c.Request().Cookie("oauthstate")
+		if c.QueryParam("state") != oauthState.Value {
+			log.Warn("invalid oauth google state")
+			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		}
+
 		ctx := context.Background()
-		code := c.QueryParams().Get("code")
+		code := c.QueryParam("code")
 		token, err := config.Exchange(ctx, code)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
+
+		oauthCode := new(http.Cookie)
+		oauthCode.Name = "oauthtoken"
+		oauthCode.Value = code
+		c.SetCookie(oauthCode)
 
 		client := config.Client(ctx, token)
 		service, err := calendar.NewService(ctx, option.WithHTTPClient(client))
