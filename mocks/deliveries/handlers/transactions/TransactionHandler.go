@@ -27,8 +27,8 @@ func (_m *TransactionHandler) GetAllTransactionbyConsultant(c echo.Context) erro
 	return r0
 }
 
-// GetAllTransactionbyCustomer provides a mock function with given fields: c
-func (_m *TransactionHandler) GetAllTransactionbyCustomer(c echo.Context) error {
+// GetAllTransactionbyKost provides a mock function with given fields: c
+func (_m *TransactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 	ret := _m.Called(c)
 
 	var r0 error
@@ -41,8 +41,8 @@ func (_m *TransactionHandler) GetAllTransactionbyCustomer(c echo.Context) error 
 	return r0
 }
 
-// GetAllTransactionbyKost provides a mock function with given fields: c
-func (_m *TransactionHandler) GetAllTransactionbyKost(c echo.Context) error {
+// GetAllTransactionbyUser provides a mock function with given fields: c
+func (_m *TransactionHandler) GetAllTransactionbyUser(c echo.Context) error {
 	ret := _m.Called(c)
 
 	var r0 error
@@ -69,8 +69,8 @@ func (_m *TransactionHandler) InsertTransaction(c echo.Context) error {
 	return r0
 }
 
-// UpdateStatus provides a mock function with given fields: c
-func (_m *TransactionHandler) UpdateStatus(c echo.Context) error {
+// UpdateCallback provides a mock function with given fields: c
+func (_m *TransactionHandler) UpdateCallback(c echo.Context) error {
 	ret := _m.Called(c)
 
 	var r0 error

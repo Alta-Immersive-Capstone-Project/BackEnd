@@ -58,27 +58,6 @@ func (_m *TransactionModel) CreateSnap(req *snap.Request) (*snap.Response, error
 	return r0, r1
 }
 
-// Get provides a mock function with given fields: booking_id
-func (_m *TransactionModel) Get(booking_id string) (entities.Transaction, error) {
-	ret := _m.Called(booking_id)
-
-	var r0 entities.Transaction
-	if rf, ok := ret.Get(0).(func(string) entities.Transaction); ok {
-		r0 = rf(booking_id)
-	} else {
-		r0 = ret.Get(0).(entities.Transaction)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(booking_id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // GetAllbyConsultant provides a mock function with given fields:
 func (_m *TransactionModel) GetAllbyConsultant() []entities.Transaction {
 	ret := _m.Called()
@@ -89,22 +68,6 @@ func (_m *TransactionModel) GetAllbyConsultant() []entities.Transaction {
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entities.Transaction)
-		}
-	}
-
-	return r0
-}
-
-// GetAllbyCustomer provides a mock function with given fields: role, user, status, city, district
-func (_m *TransactionModel) GetAllbyCustomer(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
-	ret := _m.Called(role, user, status, city, district)
-
-	var r0 []entities.TransactionJoin
-	if rf, ok := ret.Get(0).(func(string, uint, string, uint, uint) []entities.TransactionJoin); ok {
-		r0 = rf(role, user, status, city, district)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]entities.TransactionJoin)
 		}
 	}
 
@@ -125,6 +88,43 @@ func (_m *TransactionModel) GetAllbyKost(duration int, status string, name strin
 	}
 
 	return r0
+}
+
+// GetAllbyUser provides a mock function with given fields: role, user, status, city, district
+func (_m *TransactionModel) GetAllbyUser(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin {
+	ret := _m.Called(role, user, status, city, district)
+
+	var r0 []entities.TransactionJoin
+	if rf, ok := ret.Get(0).(func(string, uint, string, uint, uint) []entities.TransactionJoin); ok {
+		r0 = rf(role, user, status, city, district)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entities.TransactionJoin)
+		}
+	}
+
+	return r0
+}
+
+// Request provides a mock function with given fields: booking_id
+func (_m *TransactionModel) Request(booking_id string) (entities.TransactionResponse, error) {
+	ret := _m.Called(booking_id)
+
+	var r0 entities.TransactionResponse
+	if rf, ok := ret.Get(0).(func(string) entities.TransactionResponse); ok {
+		r0 = rf(booking_id)
+	} else {
+		r0 = ret.Get(0).(entities.TransactionResponse)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(booking_id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // Update provides a mock function with given fields: booking_id, transaction
@@ -148,8 +148,8 @@ func (_m *TransactionModel) Update(booking_id string, transaction entities.Trans
 	return r0, r1
 }
 
-// UpdateStatus provides a mock function with given fields: booking_id, status
-func (_m *TransactionModel) UpdateStatus(booking_id string, status entities.Callback) (entities.Callback, error) {
+// UpdateSnap provides a mock function with given fields: booking_id, status
+func (_m *TransactionModel) UpdateSnap(booking_id string, status entities.Callback) (entities.Callback, error) {
 	ret := _m.Called(booking_id, status)
 
 	var r0 entities.Callback

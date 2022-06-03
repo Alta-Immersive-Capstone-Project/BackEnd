@@ -7,19 +7,16 @@ import (
 	"kost/entities"
 	userRepository "kost/repositories/user"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/jinzhu/copier"
 )
 
 type UserService struct {
 	userRepo userRepository.UserRepositoryInterface
-	validate *validator.Validate
 }
 
-func NewUserService(repository userRepository.UserRepositoryInterface, valid *validator.Validate) *UserService {
+func NewUserService(repository userRepository.UserRepositoryInterface) *UserService {
 	return &UserService{
 		userRepo: repository,
-		validate: valid,
 	}
 }
 
@@ -108,7 +105,7 @@ func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalReq
 
 	// Hanya hash password jika password juga diganti (tidak kosong)
 	if internalRequest.Password != "" {
-		hashedPassword, _ := helpers.HashPassword(user.Password)
+		hashedPassword, _ := helpers.HashPassword(internalRequest.Password)
 		user.Password = hashedPassword
 	}
 	if url != "" {
@@ -117,6 +114,9 @@ func (us *UserService) UpdateInternal(internalRequest entities.UpdateInternalReq
 
 	// Update via repository
 	user, err = us.userRepo.UpdateUser(id, user)
+	if err != nil {
+		return entities.InternalResponse{}, err
+	}
 	// Konversi user domain menjadi user response
 	userRes := entities.InternalResponse{}
 	copier.Copy(&userRes, &user)
@@ -128,7 +128,7 @@ func (us *UserService) UpdateCustomer(customerRequest entities.UpdateCustomerReq
 
 	// Get user by ID via repository
 	user, err := us.userRepo.GetUserID(id)
-	if err != nil || user.Role != "customer" {
+	if err != nil {
 		return entities.CustomerResponse{}, err
 	}
 
@@ -156,25 +156,17 @@ func (us *UserService) UpdateCustomer(customerRequest entities.UpdateCustomerReq
 func (us *UserService) DeleteInternal(id uint) error {
 
 	// Cari user berdasarkan ID via repo
-	user, err := us.userRepo.GetUserID(id)
-	if err != nil || user.Role == "customer" {
-		return err
-	}
 
 	// Delete via repository
-	err = us.userRepo.DeleteUser(id)
+	err := us.userRepo.DeleteUser(id)
 	return err
 }
 
 func (us *UserService) DeleteCustomer(id uint) error {
 
 	// Cari user berdasarkan ID via repo
-	user, err := us.userRepo.GetUserID(id)
-	if err != nil || user.Role != "customer" {
-		return err
-	}
 
 	// Delete via repository
-	err = us.userRepo.DeleteUser(id)
+	err := us.userRepo.DeleteUser(id)
 	return err
 }

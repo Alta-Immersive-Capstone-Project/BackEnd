@@ -85,10 +85,10 @@ func initConfig() *AppConfig {
 	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "kost")
+	config.Database.Name = GetEnv("DB_NAME", "")
 
-	config.Email.Domain = GetEnv("EMAIL", "domain")
-	config.Email.ApiKey = GetEnv("API_KEY", "87979adhjhjbbb")
+	config.Email.Domain = GetEnv("EMAIL", "")
+	config.Email.ApiKey = GetEnv("API_KEY", "")
 
 	config.Frontend.Domain = GetEnv("FRONTEND_DOMAIN", "http://localhost:8001")
 	config.Frontend.ResetPage = GetEnv("FRONTEND_RESET_PAGE", "/password-confirmation")
@@ -99,7 +99,7 @@ func initConfig() *AppConfig {
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
 	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
-	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
+	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")

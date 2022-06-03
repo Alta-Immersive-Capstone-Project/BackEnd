@@ -14,14 +14,14 @@ type AuthServiceInterface struct {
 }
 
 // Login provides a mock function with given fields: AuthReq
-func (_m *AuthServiceInterface) Login(AuthReq entities.AuthRequest) (string, error) {
+func (_m *AuthServiceInterface) Login(AuthReq entities.AuthRequest) (entities.LoginResponse, error) {
 	ret := _m.Called(AuthReq)
 
-	var r0 string
-	if rf, ok := ret.Get(0).(func(entities.AuthRequest) string); ok {
+	var r0 entities.LoginResponse
+	if rf, ok := ret.Get(0).(func(entities.AuthRequest) entities.LoginResponse); ok {
 		r0 = rf(AuthReq)
 	} else {
-		r0 = ret.Get(0).(string)
+		r0 = ret.Get(0).(entities.LoginResponse)
 	}
 
 	var r1 error

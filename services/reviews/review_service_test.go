@@ -15,8 +15,8 @@ import (
 
 func TestAddComment(t *testing.T) {
 	repo := repoMock.NewReviewModel(t)
-	insertData := entities.ReviewRequest{RoomID: 1, Comment: "test", Rating: 5}
-	returnData := entities.Review{Model: gorm.Model{ID: uint(1), CreatedAt: time.Now()}, UserID: 1, RoomID: 1, Comment: "test", Rating: 5}
+	insertData := entities.ReviewRequest{HouseID: 1, Comment: "test", Rating: 5}
+	returnData := entities.Review{Model: gorm.Model{ID: uint(1), CreatedAt: time.Now()}, UserID: 1, HouseID: 1, Comment: "test", Rating: 5}
 
 	t.Run("Success Insert", func(t *testing.T) {
 		repo.On("Create", mock.Anything).Return(returnData, nil).Once()
@@ -25,7 +25,7 @@ func TestAddComment(t *testing.T) {
 		res, err := srv.AddComment(1, insertData)
 		assert.NoError(t, err)
 		assert.Equal(t, returnData.ID, res.ID)
-		assert.Equal(t, returnData.RoomID, res.RoomID)
+		assert.Equal(t, returnData.HouseID, res.HouseID)
 		assert.Equal(t, returnData.Comment, res.Comment)
 		assert.Equal(t, returnData.Rating, res.Rating)
 		assert.Equal(t, returnData.CreatedAt, res.CreatedAt)
@@ -43,15 +43,15 @@ func TestAddComment(t *testing.T) {
 	})
 }
 
-func TestGetByRoomID(t *testing.T) {
+func TestGetByHouseID(t *testing.T) {
 	repo := new(repoMock.ReviewModel)
 	returnData := []entities.ReviewJoin{{Name: "test", Comment: "test", Rating: 5, CreatedAt: time.Now()}}
 
 	t.Run("Success Get All", func(t *testing.T) {
-		repo.On("GetByRoomID", uint(1)).Return(returnData, nil).Once()
+		repo.On("GetByHouseID", uint(1)).Return(returnData, nil).Once()
 		srv := review.NewReviewService(repo)
 
-		res, err := srv.GetByRoomID(uint(1))
+		res, err := srv.GetByHouseID(uint(1))
 		assert.NoError(t, err)
 		assert.Equal(t, returnData[0].Name, res[0].Name)
 		assert.Equal(t, returnData[0].Comment, res[0].Comment)
@@ -61,10 +61,10 @@ func TestGetByRoomID(t *testing.T) {
 	})
 
 	t.Run("Error Get All", func(t *testing.T) {
-		repo.On("GetByRoomID", uint(1)).Return(nil, errors.New("data not found")).Once()
+		repo.On("GetByHouseID", uint(1)).Return(nil, errors.New("data not found")).Once()
 		srv := review.NewReviewService(repo)
 
-		res, err := srv.GetByRoomID(uint(1))
+		res, err := srv.GetByHouseID(uint(1))
 		assert.Error(t, err)
 		assert.EqualError(t, err, "data not found")
 		assert.Equal(t, []entities.ReviewJoin{}, res)
