@@ -27,7 +27,7 @@ func NewHandlersReminder(auth reminder.ReminderService) *HandlerReminder {
 func (h *HandlerReminder) OauthLogin() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		authUrl := h.auth.GetLoginUrl("oauthstate")
+		authUrl := h.auth.GetLoginUrl("state-token")
 		return c.Redirect(http.StatusTemporaryRedirect, authUrl)
 	}
 }
@@ -36,7 +36,7 @@ func (h *HandlerReminder) OauthCallback() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		code := c.FormValue("code")
 		fmt.Println(code)
-		if c.QueryParam("state") != "oauthstate" {
+		if c.QueryParam("state") != "state-token" {
 			log.Warn("invalid oauth google state")
 			return c.JSON(http.StatusBadRequest, "Error Oauth")
 		}
