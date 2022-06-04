@@ -71,7 +71,7 @@ func (ts *transactionService) GetAllTransactionbyConsultant() []entities.Transac
 }
 
 func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
-	req, err := ts.tm.Request(booking_id)
+	req, err := ts.tm.GetTransactionByBookingID(booking_id)
 	if err != nil {
 		return entities.TransactionUpdateResponse{}, errors.New("Booking ID Not Found")
 	}
@@ -112,9 +112,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	}
 
 	transaction := entities.Transaction{
-		BookingID:    booking_id,
-		ConsultantID: customer_id,
-		// Duration:          req.Duration,
+		BookingID:         booking_id,
+		ConsultantID:      customer_id,
+		Duration:          req.Duration,
 		Price:             request.Price,
 		TransactionStatus: "pending",
 		RedirectURL:       snap.RedirectURL,

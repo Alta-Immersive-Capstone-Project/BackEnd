@@ -113,10 +113,14 @@ type AddReminderPay struct {
 }
 
 type DataReminder struct {
-	BookingID   string `json:"booking_id"`
-	Name        string `json:"name"`
-	Email       string `json:"email"`
-	Title       string `json:"title"`
-	Price       int64  `json:"price"`
-	RedirectURL string `json:"redirect_url"`
+	BookingID   string    `json:"booking_id"`
+	Name        string    `json:"name"`
+	Email       string    `json:"email"`
+	Title       string    `json:"title"`
+	Price       int64     `json:"price"`
+	RedirectURL string    `json:"redirect_url"`
+	Phone       string    `json:"phone"`
+	Address     string    `json:"address"`
+	CheckIn     time.Time `json:"check_in"`
+	Duration    int       `json:"duration"`
 }
