@@ -1,14 +1,18 @@
 package house
 
 import (
+	"fmt"
 	"kost/deliveries/helpers"
 	"kost/deliveries/middlewares"
 	"kost/deliveries/validations"
 	"kost/entities"
 	"kost/services/house"
+	"kost/utils/s3"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
@@ -16,12 +20,14 @@ import (
 type HouseHandler struct {
 	Service house.IHouseService
 	Valid   validations.Validation
+	s3      s3.S3Control
 }
 
-func NewHouseHandler(service house.IHouseService, valid validations.Validation) *HouseHandler {
+func NewHouseHandler(service house.IHouseService, valid validations.Validation, S3 s3.S3Control) *HouseHandler {
 	return &HouseHandler{
 		Service: service,
 		Valid:   valid,
+		s3:      S3,
 	}
 }
 
@@ -46,7 +52,20 @@ func (hh *HouseHandler) Store() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
-		result, err := hh.Service.CreateHouse(request)
+		avatar, _ := c.FormFile("avatar")
+		url := ""
+		if avatar != nil {
+			msg, err := validations.ValidationAvatar(avatar)
+			if err != nil {
+				log.Warn(err)
+				return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+			}
+
+			filename := "room/" + strconv.Itoa(int(time.Now().Unix())) + ".png"
+			url, _ = hh.s3.UploadFileToS3(filename, *avatar)
+		}
+
+		result, err := hh.Service.CreateHouse(request, url)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
@@ -68,16 +87,46 @@ func (hh *HouseHandler) Update() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, helpers.ErrorConvertID())
 		}
+
 		var update entities.UpdateHouse
 		if err := c.Bind(&update); err != nil {
 			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestBind(err))
 		}
 
-		result, err := hh.Service.UpdateHouse(uint(houseID), update)
+		image, _ := c.FormFile("avatar")
+		if image != nil {
+			msg, err := validations.ValidationAvatar(image)
+			if err != nil {
+				log.Warn(err)
+				return c.JSON(http.StatusBadRequest, helpers.StatusBadImage(msg))
+			}
+		}
+		var UpdateHouse entities.House
+		copier.Copy(&UpdateHouse, &update)
+		fmt.Println(update)
+		fmt.Println(UpdateHouse)
+
+		result, err := hh.Service.UpdateHouse(uint(houseID), UpdateHouse)
 		if err != nil {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
 		}
+
+		if image != nil {
+			var notImage string = "https://belajar-be.s3.ap-southeast-1.amazonaws.com/room/1653973008.png"
+			var filename string
+			if result.Image == notImage {
+				filename = "room/" + result.Title + "_" + strconv.Itoa(int(time.Now().Unix())) + ".png"
+			} else {
+				filename = result.Image
+			}
+			file, _ := hh.s3.UploadFileToS3(filename, *image)
+			if result.Image == notImage {
+				_, err = hh.Service.UpdateHouse(uint(houseID), entities.House{Image: file})
+				result.Image = file
+			}
+		}
+
 		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update House", result))
 	}
 }

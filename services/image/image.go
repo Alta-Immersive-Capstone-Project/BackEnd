@@ -39,9 +39,6 @@ func (i *ServiceImage) InsertImage(files []*multipart.FileHeader, id uint) error
 		if err != nil {
 			return err
 		}
-		// if index == 0 {
-		// 	i.repo.UpdateRoom(id, entities.Room{Image: res})
-		// }
 
 		img := entities.Image{
 			RoomID: id,
