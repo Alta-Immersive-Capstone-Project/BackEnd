@@ -21,6 +21,7 @@ type Transaction struct {
 	PaymentType       string    `gorm:"type:varchar(100)"`
 	Acquirer          string    `gorm:"type:varchar(100)"`
 	RedirectURL       string    `gorm:"type:varchar(100)"`
+	PDFInvoicesURL    string    `json:"url_invoices"`
 }
 
 type TransactionRequest struct {
@@ -59,8 +60,8 @@ type TransactionUpdateResponse struct {
 	CheckIn           time.Time `json:"check_in"`
 	Duration          int       `json:"duration"`
 	TransactionStatus string    `json:"transaction_status"`
-	RedirectURL       string    `json:"redirect_url"`
 	UpdatedAt         time.Time `json:"updated_at"`
+	RedirectURL       string    `json:"redirect_url"`
 	PDFInvoicesURL    string    `json:"url_invoices"`
 }
 
@@ -93,6 +94,7 @@ type TransactionJoin struct {
 	Price             int64     `json:"price"`
 	TransactionStatus string    `json:"transaction_status"`
 	RedirectURL       string    `json:"redirect_url"`
+	PDFInvoicesURL    string    `json:"url_invoices"`
 }
 
 type TransactionKost struct {
