@@ -6,9 +6,11 @@ import (
 	"kost/entities"
 	"kost/repositories/invoice"
 	repo "kost/repositories/transactions"
+	"kost/utils/s3"
 	"time"
 
 	"github.com/jinzhu/copier"
+	"github.com/labstack/gommon/log"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
 )
@@ -16,12 +18,14 @@ import (
 type transactionService struct {
 	tm repo.TransactionModel
 	im invoice.InvoiceModel
+	s3 s3.S3Control
 }
 
-func NewTransactionService(tm repo.TransactionModel, im invoice.InvoiceModel) *transactionService {
+func NewTransactionService(tm repo.TransactionModel, im invoice.InvoiceModel, S3 s3.S3Control) *transactionService {
 	return &transactionService{
 		tm: tm,
 		im: im,
+		s3: S3,
 	}
 }
 
@@ -122,8 +126,13 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	copier.Copy(&response, &result)
 
 	generate := ts.im.CreateInvoice("logo.png", response)
-	fmt.Println(generate)
 
+	urlS3, err := ts.s3.UploadInvoiceToS3(response.BookingID, generate)
+	if err != nil {
+		log.Warn(err)
+		return entities.TransactionUpdateResponse{}, err
+	}
+	response.PDFInvoicesURL = urlS3
 	return response, nil
 }
 

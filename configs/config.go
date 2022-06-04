@@ -84,10 +84,10 @@ func initConfig() *AppConfig {
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3307")
+	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "kost")
+	config.Database.Name = GetEnv("DB_NAME", "NewSewa")
 
 	config.Email.Domain = GetEnv("EMAIL", "")
 	config.Email.ApiKey = GetEnv("API_KEY", "")
@@ -100,8 +100,8 @@ func initConfig() *AppConfig {
 	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
-	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "SB-Mid-server-YyE7uWSDeo-SBo5lNU6XUA4l")
-	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
+	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
+	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
@@ -110,7 +110,7 @@ func initConfig() *AppConfig {
 	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "")
 	config.GCalendar.RedirectUrl = GetEnv("GCAL_REDIRECT_URL", "")
 
-	config.UniPdfLicense = GetEnv("UNIPDF_LICENSE", "78622a5dcd592e42d78f02436dab655038d184390fbc8bd75f903e422d9b1af2")
+	config.UniPdfLicense = GetEnv("UNIPDF_LICENSE", "")
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)

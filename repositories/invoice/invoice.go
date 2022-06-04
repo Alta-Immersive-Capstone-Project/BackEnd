@@ -74,7 +74,7 @@ func (m *invoiceModel) CreateInvoice(path string, transaction entities.Transacti
 		fmt.Println(err)
 	}
 
-	return "Berhasil Generate Invoice"
+	return transaction.BookingID + ".pdf"
 }
 
 func (m *invoiceModel) CustomizeColor(i *creator.Invoice) {

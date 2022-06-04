@@ -78,7 +78,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/stretchr/objx v0.1.0 // indirect
-	github.com/unidoc/unidoc v2.2.0+incompatible
 	github.com/unidoc/unipdf/v3 v3.34.0
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect

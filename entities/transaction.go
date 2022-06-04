@@ -61,6 +61,7 @@ type TransactionUpdateResponse struct {
 	TransactionStatus string    `json:"transaction_status"`
 	RedirectURL       string    `json:"redirect_url"`
 	UpdatedAt         time.Time `json:"updated_at"`
+	PDFInvoicesURL    string    `json:"url_invoices"`
 }
 
 type Callback struct {

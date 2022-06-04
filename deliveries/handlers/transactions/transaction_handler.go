@@ -86,7 +86,6 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 	}
-
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Transaction", response))
 }
 

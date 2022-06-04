@@ -80,7 +80,7 @@ func main() {
 	lisence := unipdf.NewInitPdf(config)
 
 	// Migrate
-	// utils.Migrate(DB)
+	utils.Migrate(DB)
 
 	// Initiate Echo
 	e := echo.New()
@@ -107,7 +107,7 @@ func main() {
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
-	transactionsService := transactionService.NewTransactionService(transactionsRepo, invoiceRepo)
+	transactionsService := transactionService.NewTransactionService(transactionsRepo, invoiceRepo, s3Client)
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
