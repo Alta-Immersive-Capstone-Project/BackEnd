@@ -63,8 +63,8 @@ func ValidationImage(files []*multipart.FileHeader) (string, error) {
 		}
 		fileByte, _ := ioutil.ReadAll(src)
 		fileType := http.DetectContentType(fileByte)
-		if fileType != "image/png" {
-			return "type file image " + strconv.Itoa(i+1) + " not PNG", errors.New("file image " + strconv.Itoa(i+1) + " type not PNG")
+		if fileType != "image/png" && fileType != "image/jpeg" {
+			return "type file image " + strconv.Itoa(i+1) + " not PNG or JPEG", errors.New("file image " + strconv.Itoa(i+1) + " type not PNG or JPEG")
 		}
 	}
 	return "", nil
@@ -82,8 +82,8 @@ func ValidationAvatar(file *multipart.FileHeader) (string, error) {
 	}
 	fileByte, _ := ioutil.ReadAll(src)
 	fileType := http.DetectContentType(fileByte)
-	if fileType != "image/png" {
-		return "type file image not PNG", errors.New("file image type not PNG")
+	if fileType != "image/png" && fileType != "image/jpeg" {
+		return "type file image not PNG or JPEG", errors.New("file image type not PNG or JPEG")
 	}
 	return "", nil
 }

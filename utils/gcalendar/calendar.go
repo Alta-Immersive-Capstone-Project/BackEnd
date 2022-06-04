@@ -35,7 +35,7 @@ func NewAuthConfig(config *configs.AppConfig) *AuthConfig {
 }
 
 func (a *AuthConfig) Login(state string) string {
-	authUrl := a.authconfig.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	authUrl := a.authconfig.AuthCodeURL(state, oauth2.AccessTypeOnline)
 	return authUrl
 }
 

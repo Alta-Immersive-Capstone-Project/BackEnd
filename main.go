@@ -111,7 +111,7 @@ func main() {
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
-	houseService := houseServices.NewHouseService(houseRepo, roomRepo)
+	houseService := houseServices.NewHouseService(houseRepo, roomRepo, s3Client)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
 	forgotService := forgotService.NewforgotService(userRepository, validator.New())
@@ -127,7 +127,7 @@ func main() {
 	forgotHandler := forgotHandler.NewForgotHandler(forgotService, *emailService, validation)
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
-	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
+	houseHandler := houseHandlers.NewHouseHandler(houseService, validation, s3Client)
 	reminderHandler := reminderHandlers.NewHandlersReminder(reminderService)
 
 	// Middlewares
