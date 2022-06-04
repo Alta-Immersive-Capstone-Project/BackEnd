@@ -77,7 +77,7 @@ func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 		result, err := h.service.GetIDCity(uint(id))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data room", result))
 	}
@@ -103,7 +103,7 @@ func (h *HandlersCity) UpdateCity() echo.HandlerFunc {
 		result, err := h.service.UpdateCity(uint(id), update)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Facility", result))
 	}
@@ -125,7 +125,7 @@ func (h *HandlersCity) DeleteCity() echo.HandlerFunc {
 
 		err = h.service.DeleteCity(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}
