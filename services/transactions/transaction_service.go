@@ -70,16 +70,16 @@ func (ts *transactionService) GetAllTransactionbyConsultant() []entities.Transac
 }
 
 func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
-	req, err := ts.tm.Request(booking_id)
+	req, err := ts.tm.GetTransactionByBookingID(booking_id)
 	if err != nil {
 		return entities.TransactionUpdateResponse{}, err
 	}
-
+	fmt.Println(req)
 	snapRequest := &snap.Request{
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: req.Name,
 			Email: req.Email,
-			Phone: req.Phone,
+			// Phone: req.Phone,
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  booking_id,
@@ -103,13 +103,14 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
+		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
 
 	transaction := entities.Transaction{
-		BookingID:         booking_id,
-		ConsultantID:      customer_id,
-		Duration:          req.Duration,
+		BookingID:    booking_id,
+		ConsultantID: customer_id,
+		// Duration:          req.Duration,
 		Price:             request.Price,
 		TransactionStatus: "pending",
 		RedirectURL:       snap.RedirectURL,
@@ -117,6 +118,7 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	result, err := ts.tm.Update(booking_id, transaction)
 	if err != nil {
+		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
 

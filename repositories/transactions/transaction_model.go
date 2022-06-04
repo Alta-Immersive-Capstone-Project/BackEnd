@@ -31,16 +31,15 @@ func (m *transactionModel) Create(transaction entities.Transaction) (entities.Tr
 	return transaction, nil
 }
 
-func (m *transactionModel) Request(booking_id string) (entities.TransactionResponse, error) {
-	var transaction entities.TransactionResponse
+func (m *transactionModel) Request(BookingID string) (entities.TransactionResponse, error) {
+	var response entities.TransactionResponse
 
-	record := m.db.Raw("select t.booking_id, t.check_in, t.duration, u.name, u.email, u.phone, h.title, h.address, r.price from transactions t left join users u on u.id = t.user_id left join rooms r on r.id = t.room_id left join houses h on h.id = r.house_id where t.booking_id = ?", booking_id).Scan(&transaction)
-
-	if record.RowsAffected == 0 {
-		return entities.TransactionResponse{}, record.Error
+	if err := m.db.Raw("select t.booking_id, t.check_in, t.duration, u.name, u.email, h.title, u.phone, t.price, h.address from transactions as t left join houses h on h.id = t.house_id left join users u on u.id = t.user_id where t.booking_id = ?", BookingID).First(&response).Error; err != nil {
+		log.Warn(err)
+		return response, err
 	}
+	return response, nil
 
-	return transaction, nil
 }
 
 func (m *transactionModel) CreateSnap(req *snap.Request) (*snap.Response, error) {
@@ -65,6 +64,7 @@ func (m *transactionModel) Update(booking_id string, transaction entities.Transa
 	record := m.db.Where("booking_id = ?", booking_id).Updates(&transaction)
 
 	if record.RowsAffected == 0 {
+		log.Warn(record.RowsAffected)
 		return entities.Transaction{}, record.Error
 	}
 
@@ -75,6 +75,7 @@ func (m *transactionModel) UpdateSnap(booking_id string, status entities.Callbac
 
 	record := m.db.Model(entities.Transaction{}).Where("booking_id = ?", booking_id).Updates(&status)
 	if record.RowsAffected == 0 {
+		log.Warn(record.RowsAffected)
 		return entities.Callback{}, record.Error
 	}
 
