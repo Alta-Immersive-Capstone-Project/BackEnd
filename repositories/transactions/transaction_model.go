@@ -34,7 +34,7 @@ func (m *transactionModel) Create(transaction entities.Transaction) (entities.Tr
 func (m *transactionModel) Request(BookingID string) (entities.TransactionResponse, error) {
 	var response entities.TransactionResponse
 
-	if err := m.db.Raw("select t.booking_id, t.check_in, t.duration, u.name, u.email, h.title, u.phone, t.price, h.address from transactions as t left join houses h on h.id = t.house_id left join users u on u.id = t.user_id where t.booking_id = ?", BookingID).First(&response).Error; err != nil {
+	if err := m.db.Raw("select t.booking_id, t.check_in, t.redirect_url, t.duration, u.name, u.email, h.title, u.phone, t.price, h.address from transactions as t left join houses h on h.id = t.house_id left join users u on u.id = t.user_id where t.booking_id = ?", BookingID).First(&response).Error; err != nil {
 		log.Warn(err)
 		return response, err
 	}
