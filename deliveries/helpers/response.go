@@ -200,3 +200,10 @@ func StatusUpdate(message string, data interface{}) map[string]interface{} {
 		"data":    data,
 	}
 }
+
+func StatusBadRequestTrans(message string) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    http.StatusBadRequest,
+		"message": message,
+	}
+}

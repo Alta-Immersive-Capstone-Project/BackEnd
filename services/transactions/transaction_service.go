@@ -75,10 +75,9 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	if err != nil {
 		return entities.TransactionUpdateResponse{}, errors.New("Booking ID Not Found")
 	}
-	if req.RedirectURL == "" {
+	if req.RedirectURL != "" {
 		return entities.TransactionUpdateResponse{}, errors.New("Duplicate Booking ID to Midtrans")
 	}
-	fmt.Println(req)
 	snapRequest := &snap.Request{
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: req.Name,
@@ -104,7 +103,7 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 			Finish: configs.Get().App.FrontURL,
 		},
 	}
-
+	fmt.Println(snapRequest)
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
 		log.Warn(err)

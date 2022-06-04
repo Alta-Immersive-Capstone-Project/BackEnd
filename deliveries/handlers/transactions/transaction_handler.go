@@ -11,6 +11,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type transactionHandler struct {
@@ -84,7 +85,8 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 
 	response, err := th.ts.UpdateTransaction(user_id, booking_id, request)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestTrans(err.Error()))
 	}
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Transaction", response))
 }

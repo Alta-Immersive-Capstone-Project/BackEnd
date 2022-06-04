@@ -146,9 +146,10 @@ func (m *transactionModel) GetAllbyKost(duration int, status string, name string
 
 func (m *transactionModel) GetTransactionByBookingID(BookingID string) (entities.DataReminder, error) {
 	var response entities.DataReminder
-	if err := m.db.Raw("select t.booking_id, u.name, u.email, u.phone, h.title, h.address, t.duration, t.price, t.redirect_url, t.check_in,  from transactions as t left join houses h on h.id = t.house_id left join users u on u.id = t.user_id  where t.booking_id = ?", BookingID).First(&response).Error; err != nil {
+	if err := m.db.Raw("select t.booking_id, u.name, u.email, u.phone, h.title, h.address, t.duration, t.price, t.redirect_url, t.check_in from transactions t left join houses h on h.id = t.house_id left join users u on u.id = t.user_id where t.booking_id = ?", BookingID).First(&response).Error; err != nil {
 		log.Warn(err)
 		return response, err
 	}
+	fmt.Println(response)
 	return response, nil
 }
