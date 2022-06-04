@@ -144,5 +144,5 @@ func main() {
 	routes.ReminderPath(e, reminderHandler)
 
 	// e.Logger.Fatal(e.Start(":" + config.App.Port))
-	e.Logger.Fatal(e.Start(":8000"))
+	e.Logger.Fatal(e.Start("localhost:8000"))
 }

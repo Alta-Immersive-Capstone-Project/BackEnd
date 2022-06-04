@@ -177,3 +177,11 @@ func (ts *transactionService) GetAllTransactionbyKost(duration int, status strin
 	response := ts.tm.GetAllbyKost(duration, status, name)
 	return response
 }
+
+func (ts *transactionService) GetReport(transactions []entities.TransactionKost) string {
+	generate := ts.im.CreateReport("logo.png", transactions)
+	if generate == "" {
+		return "GAGAL GENERATE REPORT"
+	}
+	return generate
+}
