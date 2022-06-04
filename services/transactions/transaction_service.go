@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kost/configs"
 	"kost/entities"
+	"kost/repositories/invoice"
 	repo "kost/repositories/transactions"
 	"time"
 
@@ -14,11 +15,13 @@ import (
 
 type transactionService struct {
 	tm repo.TransactionModel
+	im invoice.InvoiceModel
 }
 
-func NewTransactionService(tm repo.TransactionModel) *transactionService {
+func NewTransactionService(tm repo.TransactionModel, im invoice.InvoiceModel) *transactionService {
 	return &transactionService{
 		tm: tm,
+		im: im,
 	}
 }
 
@@ -117,6 +120,10 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	copier.Copy(&response, &req)
 	copier.Copy(&response, &snap)
 	copier.Copy(&response, &result)
+
+	generate := ts.im.CreateInvoice("logo.png", response)
+	fmt.Println(generate)
+
 	return response, nil
 }
 
