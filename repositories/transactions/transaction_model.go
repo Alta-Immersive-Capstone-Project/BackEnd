@@ -86,9 +86,9 @@ func (m *transactionModel) GetAllbyUser(role string, user uint, status string, c
 	var filter string
 	var query string
 	if role == "customer" {
-		filter += fmt.Sprintf("t.user_id = %d", user)
+		filter += fmt.Sprintf(" t.user_id = %d", user)
 	} else if role == "t.consultant" {
-		filter += fmt.Sprintf("t.user_id = %d", user)
+		filter += fmt.Sprintf(" t.user_id = %d", user)
 	}
 	if role != "supervisor" && role != "admin" {
 		if status != "" {
