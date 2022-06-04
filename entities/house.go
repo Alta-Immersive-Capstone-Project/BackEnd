@@ -87,6 +87,43 @@ type HouseResponseGetByID struct {
 	CityID     uint    `json:"city_id"`
 	City       string  `json:"city"`
 }
+type HouseResponseGet struct {
+	ID         uint    `json:"house_id"`
+	Title      string  `json:"title"`
+	Brief      string  `json:"brief"`
+	OwnerName  string  `json:"owner_name"`
+	OwnerPhone string  `json:"owner_phone"`
+	Address    string  `json:"address"`
+	SlotRoom   int     `json:"slot_room"`
+	Type       string  `json:"type"`
+	Image      string  `json:"image"`
+	Available  int     `json:"available"`
+	Latitude   float64 `json:"latitude"`
+	Longitude  float64 `json:"longitude"`
+	DistrictID uint    `json:"district_id"`
+	District   string  `json:"district"`
+	CityID     uint    `json:"city_id"`
+	City       string  `json:"city"`
+	Price      int32   `json:"price"`
+	Rating     float32 `json:"rating"`
+}
+type HouseResponseGetAll struct {
+	ID         uint    `json:"house_id"`
+	Title      string  `json:"title"`
+	Address    string  `json:"address"`
+	SlotRoom   int     `json:"slot_room"`
+	Type       string  `json:"type"`
+	Image      string  `json:"image"`
+	Available  int     `json:"available"`
+	Latitude   float64 `json:"latitude"`
+	Longitude  float64 `json:"longitude"`
+	DistrictID uint    `json:"district_id"`
+	District   string  `json:"district"`
+	CityID     uint    `json:"city_id"`
+	City       string  `json:"city"`
+	Price      int32   `json:"price"`
+	Rating     float32 `json:"rating"`
+}
 
 type HouseResponseJoin struct {
 	ID         uint    `json:"house_id"`

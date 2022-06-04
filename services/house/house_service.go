@@ -106,66 +106,66 @@ func (hs *HouseService) GetHouseID(id uint) (entities.HouseResponse, error) {
 	return result, nil
 }
 
-func (hs *HouseService) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponse, error) {
+func (hs *HouseService) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseGetAll, error) {
 	res, err := hs.repo.GetAllHouseByDist(dist_id)
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponse{}, err
+		return []entities.HouseResponseGetAll{}, err
 	}
-	var result []entities.HouseResponse
+	var result []entities.HouseResponseGetAll
 
 	copier.Copy(&result, &res)
 	return result, nil
 }
 
-func (hs *HouseService) FindAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseJoin, error) {
+func (hs *HouseService) FindAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseGetAll, error) {
 	res, err := hs.repo.GetAllHouseByDistrict(dist_id)
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseJoin{}, err
+		return []entities.HouseResponseGetAll{}, err
 	}
-	var result []entities.HouseResponseJoin
+	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)
 	return result, nil
 }
 
-func (hs *HouseService) FindAllHouseByCities(cid uint) ([]entities.HouseResponseJoin, error) {
+func (hs *HouseService) FindAllHouseByCities(cid uint) ([]entities.HouseResponseGetAll, error) {
 	res, err := hs.repo.GetAllHouseByCities(cid)
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseJoin{}, err
+		return []entities.HouseResponseGetAll{}, err
 	}
-	var result []entities.HouseResponseJoin
+	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)
 	return result, nil
 }
-func (hs *HouseService) FindAllHouseByCtyAndDst(cid uint, dist_id uint) ([]entities.HouseResponseJoin, error) {
+func (hs *HouseService) FindAllHouseByCtyAndDst(cid uint, dist_id uint) ([]entities.HouseResponseGetAll, error) {
 	res, err := hs.repo.GetAllHouseByDstAndCty(cid, dist_id)
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseJoin{}, err
+		return []entities.HouseResponseGetAll{}, err
 	}
-	var result []entities.HouseResponseJoin
+	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)
 	return result, nil
 }
-func (hs *HouseService) SelectAllHouse() ([]entities.HouseResponseJoin, error) {
+func (hs *HouseService) SelectAllHouse() ([]entities.HouseResponseGetAll, error) {
 	res, err := hs.repo.SelectAllHouse()
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseJoin{}, err
+		return []entities.HouseResponseGetAll{}, err
 	}
-	var result []entities.HouseResponseJoin
+	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)
 	return result, nil
 }
-func (hs *HouseService) FindHouseByTitle(title string) ([]entities.HouseResponseJoin, error) {
+func (hs *HouseService) FindHouseByTitle(title string) ([]entities.HouseResponseGetAll, error) {
 	res, err := hs.repo.FindHouseByTitle(title)
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseJoin{}, err
+		return []entities.HouseResponseGetAll{}, err
 	}
-	var result []entities.HouseResponseJoin
+	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)
 	return result, nil
 }

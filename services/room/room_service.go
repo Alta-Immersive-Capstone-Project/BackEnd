@@ -23,7 +23,6 @@ func (r *ServiceRoom) CreateRoom(id uint, Insert entities.AddRoom) (entities.Res
 	newRoom := entities.Room{}
 	copier.Copy(&newRoom, &Insert)
 	newRoom.UserID = id
-	// newRoom.Image = "https://belajar-be.s3.ap-southeast-1.amazonaws.com/room/1653973008.png"
 
 	res, err := r.repo.CreateRoom(newRoom)
 	if err != nil {
