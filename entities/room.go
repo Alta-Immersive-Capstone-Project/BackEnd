@@ -38,6 +38,7 @@ type RespondRoomcreat struct {
 	Type                   string `json:"type"`
 	Price                  int64  `json:"price"`
 	Additional_description string `json:"additional_description"`
+	Images                 []Images
 }
 type RespondRoomJoin struct {
 	ID                     uint   `json:"id"`

@@ -95,10 +95,10 @@ func initConfig() *AppConfig {
 	config.Frontend.Domain = GetEnv("FRONTEND_DOMAIN", "http://localhost:8001")
 	config.Frontend.ResetPage = GetEnv("FRONTEND_RESET_PAGE", "/password-confirmation")
 	// Info
-	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "")
-	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "")
-	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
-	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
+	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "belajar-be")
+	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")
+	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "AKIAWEUURQ3T37U2Y2GF")
+	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "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")
 
 	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
 	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
