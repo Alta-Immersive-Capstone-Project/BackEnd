@@ -5,4 +5,5 @@ import "mime/multipart"
 type S3Control interface {
 	UploadFileToS3(filename string, file multipart.FileHeader) (string, error)
 	DeleteFromS3(filename string) error
+	UploadInvoiceToS3(filename string, url string) (string, error)
 }

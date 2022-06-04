@@ -49,6 +49,8 @@ type AppConfig struct {
 		RedirectUrl  string
 	}
 
+	UniPdfLicense string
+
 	Email struct {
 		Domain string
 		ApiKey string
@@ -85,7 +87,7 @@ func initConfig() *AppConfig {
 	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "kost1")
+	config.Database.Name = GetEnv("DB_NAME", "NewSewa")
 
 	config.Email.Domain = GetEnv("EMAIL", "")
 	config.Email.ApiKey = GetEnv("API_KEY", "")
@@ -107,6 +109,8 @@ func initConfig() *AppConfig {
 	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
 	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "")
 	config.GCalendar.RedirectUrl = GetEnv("GCAL_REDIRECT_URL", "")
+
+	config.UniPdfLicense = GetEnv("UNIPDF_LICENSE", "")
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)
