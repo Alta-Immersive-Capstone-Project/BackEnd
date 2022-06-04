@@ -3,8 +3,8 @@ package house
 import "kost/entities"
 
 type IHouseService interface {
-	CreateHouse(Insert entities.AddHouse) (entities.HouseResponse, error)
-	UpdateHouse(id uint, update entities.UpdateHouse) (entities.HouseResponse, error)
+	CreateHouse(Insert entities.AddHouse, url string) (entities.HouseResponse, error)
+	UpdateHouse(id uint, update entities.House) (entities.HouseResponse, error)
 	DeleteHouse(id uint) error
 	GetHouseID(id uint) (entities.HouseResponse, error)
 	GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponse, error)

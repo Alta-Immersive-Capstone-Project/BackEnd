@@ -72,7 +72,7 @@ func initConfig() *AppConfig {
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3306")
+	config.Database.Port = GetEnv("DB_PORT", "3307")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
 	config.Database.Name = GetEnv("DB_NAME", "")

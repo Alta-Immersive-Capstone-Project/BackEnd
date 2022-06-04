@@ -29,7 +29,7 @@ func (hr *HouseRepo) CreateHouse(addNew entities.House) (entities.House, error) 
 
 func (hr *HouseRepo) UpdateHouse(id uint, update entities.House) (entities.House, error) {
 	var house entities.House
-	err := hr.Db.Where("id = ?", id).First(&house).Updates(&house).Error
+	err := hr.Db.Where("id = ?", id).First(&house).Updates(&update).Error
 	if err != nil {
 		log.Warn("Update Error", err)
 		return house, err
@@ -57,15 +57,16 @@ func (hr *HouseRepo) GetAllHouseByDist(dist_id uint) ([]entities.House, error) {
 	return houses, nil
 }
 
-func (hr *HouseRepo) GetHouseID(id uint) (entities.House, error) {
-	var house entities.House
-	err := hr.Db.Where("id = ?", id).First(&house).Error
+func (hr *HouseRepo) GetHouseID(id uint) (entities.HouseResponseGetByID, error) {
+	var house entities.HouseResponseGetByID
+	err := hr.Db.Table("houses").Select("houses.*,districts.name as district,districts.city_id as city_id,cities.city as city").Joins("LEFT JOIN districts ON districts.id = houses.district_id").Joins("LEFT JOIN cities ON districts.city_id = cities.id").Where("houses.id = ?", id).First(&house).Error
 	if err != nil {
 		log.Warn("Error Get By ID", err)
 		return house, err
 	}
 	return house, nil
 }
+
 func (hr *HouseRepo) GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseJoin, error) {
 	var houses []entities.HouseResponseJoin
 	err := hr.Db.Table("houses").Select("houses.id, houses.title, houses.brief, houses.owner_name, houses.owner_phone, houses.address, houses.type, houses.available,houses.image, houses.district_id, districts.name as district, rooms.id as room_id, MIN(rooms.price) as price, rooms.type as room_type, AVG(reviews.rating) as rating").Group("title").Joins("JOIN districts ON districts.id = houses.district_id").Joins("LEFT JOIN rooms ON rooms.house_id = houses.id").Joins("LEFT JOIN reviews ON reviews.house_id = houses.id").Where("houses.district_id = ?", dist_id).Scan(&houses).Error

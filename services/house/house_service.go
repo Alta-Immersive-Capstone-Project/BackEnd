@@ -1,9 +1,12 @@
 package house
 
 import (
+	"fmt"
 	"kost/entities"
 	"kost/repositories/house"
 	"kost/repositories/room"
+	"kost/utils/s3"
+	"strings"
 
 	"github.com/jinzhu/copier"
 	"github.com/labstack/gommon/log"
@@ -12,18 +15,27 @@ import (
 type HouseService struct {
 	repo house.IRepoHouse
 	room room.RoomRepo
+	s3   s3.S3Control
 }
 
-func NewHouseService(Repo house.IRepoHouse, Room room.RoomRepo) *HouseService {
+func NewHouseService(Repo house.IRepoHouse, Room room.RoomRepo, S3 s3.S3Control) *HouseService {
 	return &HouseService{
 		repo: Repo,
 		room: Room,
+		s3:   S3,
 	}
 }
 
-func (hs *HouseService) CreateHouse(Insert entities.AddHouse) (entities.HouseResponse, error) {
+var ImagesDefault string = "https://belajar-be.s3.ap-southeast-1.amazonaws.com/room/1653973008.png"
+
+func (hs *HouseService) CreateHouse(Insert entities.AddHouse, url string) (entities.HouseResponse, error) {
 	var house entities.House
 	copier.Copy(&house, &Insert)
+	if url == "" {
+		house.Image = ImagesDefault
+	} else {
+		house.Image = url
+	}
 	res, err := hs.repo.CreateHouse(house)
 	if err != nil {
 		log.Warn(err)
@@ -34,14 +46,15 @@ func (hs *HouseService) CreateHouse(Insert entities.AddHouse) (entities.HouseRes
 	return result, nil
 }
 
-func (hs *HouseService) UpdateHouse(id uint, update entities.UpdateHouse) (entities.HouseResponse, error) {
-	var UpdateHouse entities.House
-	copier.Copy(&UpdateHouse, &update)
-	res, err := hs.repo.UpdateHouse(id, UpdateHouse)
+func (hs *HouseService) UpdateHouse(id uint, update entities.House) (entities.HouseResponse, error) {
+	// var UpdateHouse entities.House
+	// copier.Copy(&UpdateHouse, &update)
+	res, err := hs.repo.UpdateHouse(id, update)
 	if err != nil {
 		log.Warn(err)
 		return entities.HouseResponse{}, err
 	}
+	fmt.Println(res)
 	var result entities.HouseResponse
 
 	copier.Copy(&result, &res)
@@ -49,7 +62,23 @@ func (hs *HouseService) UpdateHouse(id uint, update entities.UpdateHouse) (entit
 }
 
 func (hs *HouseService) DeleteHouse(id uint) error {
-	err := hs.repo.DeleteHouse(id)
+
+	res, err := hs.repo.GetHouseID(id)
+	if err != nil {
+		log.Warn(err)
+		return err
+	}
+	fmt.Println(res.Image)
+	if res.Image != ImagesDefault {
+		file := strings.Replace(res.Image, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
+		fmt.Println(file)
+		err = hs.s3.DeleteFromS3(file)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = hs.repo.DeleteHouse(id)
 	if err != nil {
 		log.Warn(err)
 		return err

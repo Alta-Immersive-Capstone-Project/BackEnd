@@ -7,7 +7,7 @@ type IRepoHouse interface {
 	UpdateHouse(id uint, update entities.House) (entities.House, error)
 	DeleteHouse(id uint) error
 	GetAllHouseByDist(dist_id uint) ([]entities.House, error)
-	GetHouseID(id uint) (entities.House, error)
+	GetHouseID(id uint) (entities.HouseResponseGetByID, error)
 	GetAllHouseByDistrict(dist_id uint) ([]entities.HouseResponseJoin, error)
 	GetAllHouseByCities(cid uint) ([]entities.HouseResponseJoin, error)
 	GetAllHouseByDstAndCty(cid uint, dist_id uint) ([]entities.HouseResponseJoin, error)
