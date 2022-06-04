@@ -44,6 +44,7 @@ type UpdateHouse struct {
 	OwnerPhone string  `json:"owner_phone" form:"owner_phone"`
 	Address    string  `json:"address" form:"address"`
 	Type       string  `json:"type" form:"type"`
+	Image      string  `json:"image"`
 	SlotRoom   int     `json:"slot_room" form:"slot_room"`
 	Available  int     `json:"available" form:"available"`
 	Latitude   float64 `json:"latitude" form:"latitude"`
