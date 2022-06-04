@@ -101,7 +101,7 @@ func initConfig() *AppConfig {
 	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
 
 	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
-	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "1")
+	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
 
 	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
 	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")

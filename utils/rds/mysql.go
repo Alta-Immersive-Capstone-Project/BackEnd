@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kost/configs"
 
+	"github.com/labstack/gommon/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -20,7 +21,7 @@ func NewMysqlGorm(config *configs.AppConfig) *gorm.DB {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		log.Warn(err)
 	}
 	return db
 }
