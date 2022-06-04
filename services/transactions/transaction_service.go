@@ -132,7 +132,12 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
-	response.PDFInvoicesURL = urlS3
+	PDFInvoicesURL := entities.Transaction{PDFInvoicesURL: urlS3}
+	Invoices, err := ts.tm.Update(response.BookingID, PDFInvoicesURL)
+	if err != nil {
+		return entities.TransactionUpdateResponse{}, err
+	}
+	response.PDFInvoicesURL = Invoices.PDFInvoicesURL
 	return response, nil
 }
 
