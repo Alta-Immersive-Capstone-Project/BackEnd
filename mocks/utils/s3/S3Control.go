@@ -48,6 +48,27 @@ func (_m *S3Control) UploadFileToS3(filename string, file multipart.FileHeader) 
 	return r0, r1
 }
 
+// UploadInvoiceToS3 provides a mock function with given fields: filename, url
+func (_m *S3Control) UploadInvoiceToS3(filename string, url string) (string, error) {
+	ret := _m.Called(filename, url)
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func(string, string) string); ok {
+		r0 = rf(filename, url)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, string) error); ok {
+		r1 = rf(filename, url)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type NewS3ControlT interface {
 	mock.TestingT
 	Cleanup(func())
