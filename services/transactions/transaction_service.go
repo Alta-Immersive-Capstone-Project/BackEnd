@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"errors"
 	"fmt"
 	"kost/configs"
 	"kost/entities"
@@ -72,9 +73,12 @@ func (ts *transactionService) GetAllTransactionbyConsultant() []entities.Transac
 func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
 	req, err := ts.tm.Request(booking_id)
 	if err != nil {
-		return entities.TransactionUpdateResponse{}, err
+		return entities.TransactionUpdateResponse{}, errors.New("Booking ID Not Found")
 	}
-
+	if req.RedirectURL == "" {
+		return entities.TransactionUpdateResponse{}, errors.New("Duplicate Booking ID to Midtrans")
+	}
+	fmt.Println(req)
 	snapRequest := &snap.Request{
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: req.Name,
@@ -103,13 +107,14 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
+		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
 
 	transaction := entities.Transaction{
-		BookingID:         booking_id,
-		ConsultantID:      customer_id,
-		Duration:          req.Duration,
+		BookingID:    booking_id,
+		ConsultantID: customer_id,
+		// Duration:          req.Duration,
 		Price:             request.Price,
 		TransactionStatus: "pending",
 		RedirectURL:       snap.RedirectURL,
@@ -117,6 +122,7 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	result, err := ts.tm.Update(booking_id, transaction)
 	if err != nil {
+		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
 

@@ -43,6 +43,7 @@ type TransactionResponse struct {
 	CheckIn           time.Time `json:"check_in"`
 	Duration          int       `json:"duration"`
 	TransactionStatus string    `json:"transaction_status"`
+	RedirectURL       string    `json:"redirect_url"`
 	CreatedAt         time.Time `json:"created_at"`
 }
 
