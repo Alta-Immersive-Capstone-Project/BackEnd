@@ -74,8 +74,9 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
+		result.Images, _ = h.image.GetImage(result.ID)
 
-		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Facility", result))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create room", result))
 	}
 }
 
@@ -156,7 +157,7 @@ func (h *HandlersRoom) UpdateRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
 		}
-		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update room", result))
 	}
 }
 

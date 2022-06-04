@@ -52,7 +52,7 @@ func (h *HandlersCity) CreateCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Facility", result))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create city", result))
 	}
 }
 
@@ -63,7 +63,7 @@ func (h *HandlersCity) GetAllCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusGetAll("Success get room", result))
+		return c.JSON(http.StatusCreated, helpers.StatusGetAll("Success get city", result))
 	}
 }
 func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
@@ -79,7 +79,7 @@ func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data room", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data city", result))
 	}
 }
 
@@ -105,7 +105,7 @@ func (h *HandlersCity) UpdateCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update city", result))
 	}
 }
 

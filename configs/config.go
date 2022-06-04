@@ -82,10 +82,10 @@ func initConfig() *AppConfig {
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
 	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3307")
+	config.Database.Port = GetEnv("DB_PORT", "3306")
 	config.Database.Username = GetEnv("DB_USERNAME", "root")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "Trial")
+	config.Database.Name = GetEnv("DB_NAME", "kost1")
 
 	config.Email.Domain = GetEnv("EMAIL", "")
 	config.Email.ApiKey = GetEnv("API_KEY", "")
@@ -93,10 +93,10 @@ func initConfig() *AppConfig {
 	config.Frontend.Domain = GetEnv("FRONTEND_DOMAIN", "http://localhost:8001")
 	config.Frontend.ResetPage = GetEnv("FRONTEND_RESET_PAGE", "/password-confirmation")
 	// Info
-	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "")
-	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "")
-	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "")
-	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "")
+	config.AwsS3.Bucket = GetEnv("AWS_S3_BUCKET", "belajar-be")
+	config.AwsS3.Region = GetEnv("AWS_S3_REGION", "ap-southeast-1")
+	config.AwsS3.AccessKey = GetEnv("AWS_S3_ACCESS_KEY", "AKIAWEUURQ3T37U2Y2GF")
+	config.AwsS3.SecretKey = GetEnv("AWS_S3_SECRET_KEY", "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")
 
 	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
 	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
