@@ -131,6 +131,7 @@ func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 	status := c.QueryParam("status")
 	duration, _ := strconv.Atoi(c.QueryParam("duration"))
 	name := c.QueryParam("name")
+	generate := c.QueryParam("generate")
 
 	if role == "customer" {
 		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
@@ -139,6 +140,11 @@ func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 	response := th.ts.GetAllTransactionbyKost(duration, status, name)
 	if len(response) == 0 {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
+	}
+
+	if generate == "true" {
+		link := th.ts.GetReport(response)
+		return c.JSON(http.StatusOK, helpers.StatusOKReport("Success Get All Transaction", response, link))
 	}
 
 	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))

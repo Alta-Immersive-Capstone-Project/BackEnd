@@ -9,4 +9,5 @@ type TransactionService interface {
 	UpdateCallback(req entities.Callback) (entities.Callback, error)
 	GetAllTransactionbyUser(role string, user uint, status string, city uint, district uint) []entities.TransactionJoin
 	GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost
+	GetReport(transactions []entities.TransactionKost) string
 }
