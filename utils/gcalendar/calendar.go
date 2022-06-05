@@ -13,7 +13,6 @@ import (
 	// "net/http"
 	"github.com/labstack/gommon/log"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	calendar "google.golang.org/api/calendar/v3"
 )
 
@@ -27,7 +26,7 @@ func NewAuthConfig(config *configs.AppConfig) *AuthConfig {
 		ClientSecret: config.GCalendar.ClientSecret,
 		RedirectURL:  config.GCalendar.RedirectUrl,
 		Scopes:       []string{calendar.CalendarScope, calendar.CalendarEventsScope},
-		Endpoint:     google.Endpoint,
+		Endpoint:     oauth2.Endpoint{AuthURL: "https://accounts.google.com/o/oauth2/auth", TokenURL: "https://oauth2.googleapis.com/token"},
 	}
 
 	return &AuthConfig{
@@ -36,7 +35,7 @@ func NewAuthConfig(config *configs.AppConfig) *AuthConfig {
 }
 
 func (a *AuthConfig) Login(state string) string {
-	authUrl := a.authconfig.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	authUrl := a.authconfig.AuthCodeURL(state, oauth2.AccessTypeOnline)
 	return authUrl
 }
 
@@ -56,11 +55,12 @@ func (a *AuthConfig) CreateReminder(code string, data entities.DataReminder) (ca
 		return calendar.Event{}, err
 	}
 	var now = time.Now()
+	loc, _ := time.LoadLocation("Asia/Jakarta")
 	newEvent := &calendar.Event{
 		Summary:     fmt.Sprintf("Reminder Pembayaran Sewa Kost %s", data.Title),
 		Description: fmt.Sprintf("Harap Segera Membayar Tagihan dengan kode Booking ID %s, Total Tagihan %d, Silahkan Klik Link Diberikut untuk Melakukan Pembayaran %s", data.BookingID, data.Price, data.RedirectURL),
-		Start:       &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 2, 0, time.UTC).Format(time.RFC3339)},
-		End:         &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day()+1, now.Hour(), 0, 2, 0, time.UTC).Format(time.RFC3339)},
+		Start:       &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 2, 0, loc).Format(time.RFC3339)},
+		End:         &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day()+1, now.Hour(), 0, 2, 0, loc).Format(time.RFC3339)},
 		Attendees: []*calendar.EventAttendee{
 			{Email: data.Email},
 		},

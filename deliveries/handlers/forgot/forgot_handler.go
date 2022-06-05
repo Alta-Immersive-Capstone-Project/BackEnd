@@ -37,7 +37,7 @@ func (h *ForgotHandler) SendEmail() echo.HandlerFunc {
 		token, err := h.forgotService.GetToken(email)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Token Email Not Found"))
 		}
 
 		id, err := h.emailService.SendEmail("admin@sewakost.com", "reset password", generateBodyEmailForgotPassword(token.User.Name, token.Token), email)

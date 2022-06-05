@@ -1,10 +1,13 @@
 package s3
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"kost/configs"
 	"mime/multipart"
 	"net/http"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
@@ -41,7 +44,8 @@ func (s *S3Client) UploadFileToS3(filename string, file multipart.FileHeader) (s
 	uploader := manager.NewUploader(s.s3)
 	src, err := file.Open()
 	if err != nil {
-		log.Info(err)
+		log.Warn(err)
+		return "", err
 	}
 	defer src.Close()
 	buffer := make([]byte, file.Size)
@@ -54,6 +58,7 @@ func (s *S3Client) UploadFileToS3(filename string, file multipart.FileHeader) (s
 		Body:        body,
 	})
 	if err != nil {
+		log.Warn(err)
 		return "", err
 	}
 	return result.Location, nil
@@ -67,11 +72,44 @@ func (s *S3Client) DeleteFromS3(filename string) error {
 		Key:    aws.String(filename),
 	})
 	if err != nil {
+		log.Warn(err)
 		return err
 	}
 	return nil
 }
 
-// upload()
+func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error) {
+	// s3 Client
+	uploader := manager.NewUploader(s.s3)
+	dir, err := os.Getwd()
+	fmt.Println("CEEEEEEKK", dir, url)
+	file, err := os.Open(fmt.Sprintf("%s/%s", dir, url))
+	if err != nil {
+		log.Warn(err)
+		fmt.Println("OPEN ERROR")
+		return "", err
+	}
 
-// DELETE
+	upFileInfo, _ := file.Stat()
+	var fileSize int64 = upFileInfo.Size()
+	fileBuffer := make([]byte, fileSize)
+	file.Read(fileBuffer)
+
+	result, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
+		Bucket:      aws.String(configs.Get().AwsS3.Bucket),
+		ContentType: aws.String(http.DetectContentType(fileBuffer)),
+		Key:         aws.String(filename),
+		Body:        bytes.NewReader(fileBuffer),
+	})
+	if err != nil {
+		log.Warn(err)
+		return "", err
+	}
+	err = os.Remove(fmt.Sprintf("%s/%s", dir, url))
+	if err != nil {
+		fmt.Println("DELETE ERROR")
+		log.Warn(err)
+		return "", err
+	}
+	return result.Location, nil
+}

@@ -1,24 +1,32 @@
 package transactions
 
 import (
+	"errors"
 	"fmt"
 	"kost/configs"
 	"kost/entities"
+	"kost/repositories/invoice"
 	repo "kost/repositories/transactions"
+	"kost/utils/s3"
 	"time"
 
 	"github.com/jinzhu/copier"
+	"github.com/labstack/gommon/log"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
 )
 
 type transactionService struct {
 	tm repo.TransactionModel
+	im invoice.InvoiceModel
+	s3 s3.S3Control
 }
 
-func NewTransactionService(tm repo.TransactionModel) *transactionService {
+func NewTransactionService(tm repo.TransactionModel, im invoice.InvoiceModel, S3 s3.S3Control) *transactionService {
 	return &transactionService{
 		tm: tm,
+		im: im,
+		s3: S3,
 	}
 }
 
@@ -63,11 +71,13 @@ func (ts *transactionService) GetAllTransactionbyConsultant() []entities.Transac
 }
 
 func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id string, request entities.TransactionUpdateRequest) (entities.TransactionUpdateResponse, error) {
-	req, err := ts.tm.Request(booking_id)
+	req, err := ts.tm.GetTransactionByBookingID(booking_id)
 	if err != nil {
-		return entities.TransactionUpdateResponse{}, err
+		return entities.TransactionUpdateResponse{}, errors.New("Booking ID Not Found")
 	}
-
+	if req.RedirectURL != "" {
+		return entities.TransactionUpdateResponse{}, errors.New("Duplicate Booking ID to Midtrans")
+	}
 	snapRequest := &snap.Request{
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: req.Name,
@@ -93,9 +103,10 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 			Finish: configs.Get().App.FrontURL,
 		},
 	}
-
+	fmt.Println(snapRequest)
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
+		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
 
@@ -110,6 +121,7 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 
 	result, err := ts.tm.Update(booking_id, transaction)
 	if err != nil {
+		log.Warn(err)
 		return entities.TransactionUpdateResponse{}, err
 	}
 
@@ -117,6 +129,20 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 	copier.Copy(&response, &req)
 	copier.Copy(&response, &snap)
 	copier.Copy(&response, &result)
+
+	generate := ts.im.CreateInvoice("logo.png", response)
+
+	urlS3, err := ts.s3.UploadInvoiceToS3(response.BookingID, generate)
+	if err != nil {
+		log.Warn(err)
+		return entities.TransactionUpdateResponse{}, err
+	}
+	PDFInvoicesURL := entities.Transaction{PDFInvoicesURL: urlS3}
+	Invoices, err := ts.tm.Update(response.BookingID, PDFInvoicesURL)
+	if err != nil {
+		return entities.TransactionUpdateResponse{}, err
+	}
+	response.PDFInvoicesURL = Invoices.PDFInvoicesURL
 	return response, nil
 }
 
@@ -149,4 +175,12 @@ func (ts *transactionService) GetAllTransactionbyUser(role string, user uint, st
 func (ts *transactionService) GetAllTransactionbyKost(duration int, status string, name string) []entities.TransactionKost {
 	response := ts.tm.GetAllbyKost(duration, status, name)
 	return response
+}
+
+func (ts *transactionService) GetReport(transactions []entities.TransactionKost) string {
+	generate := ts.im.CreateReport("logo.png", transactions)
+	if generate == "" {
+		return "GAGAL GENERATE REPORT"
+	}
+	return generate
 }

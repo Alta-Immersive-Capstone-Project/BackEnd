@@ -46,7 +46,7 @@ func (handler AuthHandler) Login() echo.HandlerFunc {
 			if err.Error() == "invalid username/password" {
 				return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 			}
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User Not Found"))
 		}
 
 		// send response

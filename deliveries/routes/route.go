@@ -101,9 +101,9 @@ func ReviewsPath(e *echo.Echo, review review.ReviewHandler) {
 }
 
 func ReminderPath(e *echo.Echo, reminder reminder.ReminderHandler) {
-	e.POST("/auth/google/login", reminder.OauthLogin())
+	e.GET("/auth/google/login", reminder.OauthLogin())
 	e.GET("/auth/google/callback", reminder.OauthCallback())
-	e.POST("/create-reminder", reminder.CreateReminder())
+	e.POST("/create-reminder", reminder.CreateReminder(), middlewares.JWTMiddleware())
 }
 
 func TransactionPath(e *echo.Echo, transaction transaction.TransactionHandler) {

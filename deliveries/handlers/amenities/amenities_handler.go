@@ -74,9 +74,9 @@ func (h *HandlersAmenities) GetAmenitiesID() echo.HandlerFunc {
 		result, err := h.service.GetAmenitiesID(uint(RoomID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data Amenities By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data Amenities", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data Amenities", result))
 	}
 }
 
@@ -102,7 +102,7 @@ func (h *HandlersAmenities) UpdateAmenities() echo.HandlerFunc {
 		result, err := h.service.UpdateAmenities(uint(RoomID), update)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data Amenities By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Amenities", result))
 	}
@@ -126,7 +126,7 @@ func (h *HandlersAmenities) DeleteAmenities() echo.HandlerFunc {
 
 		errDelete := h.service.DeleteAmenities(uint(RoomID))
 		if errDelete != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data Amenities By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}

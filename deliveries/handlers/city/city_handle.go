@@ -52,7 +52,7 @@ func (h *HandlersCity) CreateCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Facility", result))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create city", result))
 	}
 }
 
@@ -63,9 +63,10 @@ func (h *HandlersCity) GetAllCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusGetAll("Success get room", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All City", result))
 	}
 }
+
 func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id, err := strconv.Atoi(c.Param("id"))
@@ -77,9 +78,9 @@ func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 		result, err := h.service.GetIDCity(uint(id))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data room", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data city", result))
 	}
 }
 
@@ -103,9 +104,9 @@ func (h *HandlersCity) UpdateCity() echo.HandlerFunc {
 		result, err := h.service.UpdateCity(uint(id), update)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update city", result))
 	}
 }
 
@@ -125,7 +126,7 @@ func (h *HandlersCity) DeleteCity() echo.HandlerFunc {
 
 		err = h.service.DeleteCity(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusNotFound, helpers.StatusNotFound(""))
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}

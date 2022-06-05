@@ -94,6 +94,15 @@ func StatusOKReview(message string, data ...interface{}) map[string]interface{} 
 	}
 }
 
+func StatusOKReport(message string, data ...interface{}) map[string]interface{} {
+	return map[string]interface{}{
+		"code":        http.StatusOK,
+		"message":     message,
+		"data":        data[0],
+		"link_report": data[1],
+	}
+}
+
 func ErrorConvertID() map[string]interface{} {
 	return map[string]interface{}{
 		"code":    http.StatusNotAcceptable,
@@ -170,7 +179,7 @@ func StatusCreate(message string, data interface{}) map[string]interface{} {
 
 func StatusGetAll(message string, data interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		"code":    http.StatusOK,
+		"code":    http.StatusFound,
 		"message": message,
 		"data":    data,
 	}
@@ -178,7 +187,7 @@ func StatusGetAll(message string, data interface{}) map[string]interface{} {
 
 func StatusGetDataID(message string, data interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		"code":    http.StatusOK,
+		"code":    http.StatusFound,
 		"message": message,
 		"data":    data,
 	}
@@ -189,5 +198,19 @@ func StatusUpdate(message string, data interface{}) map[string]interface{} {
 		"code":    http.StatusOK,
 		"message": message,
 		"data":    data,
+	}
+}
+
+func StatusBadRequestTrans(message string) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    http.StatusBadRequest,
+		"message": message,
+	}
+}
+
+func ErrorRegister(message string) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    http.StatusBadRequest,
+		"message": message,
 	}
 }

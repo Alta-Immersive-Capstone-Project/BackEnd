@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jinzhu/copier"
 )
 
 type ServiceImage struct {
@@ -39,9 +41,6 @@ func (i *ServiceImage) InsertImage(files []*multipart.FileHeader, id uint) error
 		if err != nil {
 			return err
 		}
-		// if index == 0 {
-		// 	i.repo.UpdateRoom(id, entities.Room{Image: res})
-		// }
 
 		img := entities.Image{
 			RoomID: id,
@@ -93,4 +92,13 @@ func (i *ServiceImage) DeleteImagebyID(id_room []uint) error {
 		}
 	}
 	return nil
+}
+func (i *ServiceImage) GetImage(id_room uint) ([]entities.Images, error) {
+	res, err := i.image.GetAllImage(uint(id_room))
+	if err != nil {
+		return []entities.Images{}, err
+	}
+	result := []entities.Images{}
+	copier.Copy(&result, &res)
+	return result, nil
 }

@@ -78,7 +78,7 @@ func (handler *UserHandler) CreateInternal(c echo.Context) error {
 	// registrasi user via call user service
 	userRes, err := handler.userService.CreateUser(userReq, url)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusBadRequest, helpers.ErrorRegister("Email Be Registered"))
 	}
 
 	// response
@@ -118,7 +118,7 @@ func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 	// registrasi user via call user service
 	userRes, err := handler.userService.CreateUser(userReq, url)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusBadRequest, helpers.ErrorRegister("Email Be Registered"))
 	}
 
 	// response
@@ -131,11 +131,11 @@ func (handler *UserHandler) GetByID(c echo.Context) error {
 
 	userRes, err := handler.userService.GetbyID(uint(idUser))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 
 	// response
-	return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data"+userRes.Name, userRes))
+	return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data"+userRes.Name, userRes))
 
 }
 
@@ -153,7 +153,7 @@ func (handler *UserHandler) GetAllMember(c echo.Context) error {
 	userRes, err := handler.userService.GetAllMember()
 	if err != nil {
 		log.Warn("")
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User Not Found"))
 	}
 
 	// response
@@ -199,7 +199,7 @@ func (handler *UserHandler) UpdateInternal(c echo.Context) error {
 		}
 	}
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 
 	if userRes.Avatar == "" {
@@ -237,7 +237,7 @@ func (handler *UserHandler) UpdateCustomer(c echo.Context) error {
 	// Update via user service call
 	userRes, err := handler.userService.UpdateCustomer(userReq, uint(id), "")
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 	if avatar != nil {
 		var filename string
@@ -269,7 +269,7 @@ func (handler *UserHandler) DeleteInternal(c echo.Context) error {
 	}
 	res, err := handler.userService.GetbyID(uint(id))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 	file := strings.Replace(res.Avatar, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
 	handler.s3.DeleteFromS3(file)
@@ -277,7 +277,7 @@ func (handler *UserHandler) DeleteInternal(c echo.Context) error {
 	// call delete service
 	err = handler.userService.DeleteInternal(uint(id))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 
 	// response
@@ -294,7 +294,7 @@ func (handler *UserHandler) DeleteCustomer(c echo.Context) error {
 	}
 	res, err := handler.userService.GetbyID(uint(id))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 	file := strings.Replace(res.Avatar, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
 	handler.s3.DeleteFromS3(file)
@@ -302,7 +302,7 @@ func (handler *UserHandler) DeleteCustomer(c echo.Context) error {
 	// call delete service
 	err = handler.userService.DeleteCustomer(uint(id))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("User By ID Not Found"))
 	}
 
 	// response

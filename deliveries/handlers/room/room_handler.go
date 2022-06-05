@@ -74,8 +74,9 @@ func (h *HandlersRoom) CreateRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
+		result.Images, _ = h.image.GetImage(result.ID)
 
-		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create Facility", result))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create room", result))
 	}
 }
 
@@ -89,9 +90,9 @@ func (h *HandlersRoom) GetAllRoom() echo.HandlerFunc {
 		result, err := h.service.GetAllRoom(uint(id))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get room", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get Room", result))
 	}
 }
 
@@ -106,9 +107,9 @@ func (h *HandlersRoom) GetIDRoom() echo.HandlerFunc {
 		result, err := h.service.GetIDRoom(uint(id))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data room", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data room", result))
 	}
 }
 
@@ -154,9 +155,9 @@ func (h *HandlersRoom) UpdateRoom() echo.HandlerFunc {
 		result, err := h.service.UpdateRoom(uint(id), update)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update room", result))
 	}
 }
 
@@ -175,12 +176,12 @@ func (h *HandlersRoom) DeleteRoom() echo.HandlerFunc {
 		}
 		err = h.image.DeleteImage(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
 
 		err = h.service.DeleteRoom(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}
@@ -205,7 +206,7 @@ func (h *HandlersRoom) DeleteImageUpdate() echo.HandlerFunc {
 
 		err = h.image.DeleteImagebyID(Insert.Id)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}

@@ -26,13 +26,9 @@ func NewHandlersReminder(auth reminder.ReminderService) *HandlerReminder {
 
 func (h *HandlerReminder) OauthLogin() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		role := middlewares.ExtractTokenRole(c)
-		if role == "customer" {
-			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
-		}
-		authUrl := h.auth.GetLoginUrl("oauthstate")
-		return c.Redirect(http.StatusTemporaryRedirect, authUrl)
 
+		authUrl := h.auth.GetLoginUrl("state-token")
+		return c.Redirect(http.StatusTemporaryRedirect, authUrl)
 	}
 }
 
@@ -40,13 +36,13 @@ func (h *HandlerReminder) OauthCallback() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		code := c.FormValue("code")
 		fmt.Println(code)
-		if c.QueryParam("state") != "oauthstate" {
+		if c.QueryParam("state") != "state-token" {
 			log.Warn("invalid oauth google state")
 			return c.JSON(http.StatusBadRequest, "Error Oauth")
 		}
 		codeOauth = code
 
-		return c.JSON(http.StatusOK, "Oke")
+		return c.JSON(http.StatusOK, "Success Access Google")
 	}
 }
 
@@ -71,6 +67,6 @@ func (h *HandlerReminder) CreateReminder() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, "Error Create Event")
 		}
-		return c.JSON(http.StatusOK, helpers.StatusOK("Create Event Berhasil", data))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Create Event Berhasil", data))
 	}
 }

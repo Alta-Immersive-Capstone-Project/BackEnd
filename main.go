@@ -10,6 +10,7 @@ import (
 	"kost/repositories/city"
 	"kost/repositories/facility"
 	"kost/repositories/image"
+	"kost/repositories/invoice"
 	"kost/repositories/room"
 	cAmenities "kost/services/amenities"
 	cFacility "kost/services/facility"
@@ -28,6 +29,7 @@ import (
 	midtrans "kost/utils/midtrans"
 	utils "kost/utils/rds"
 	"kost/utils/s3"
+	"kost/utils/unipdf"
 
 	"github.com/labstack/echo/v4"
 
@@ -74,6 +76,9 @@ func main() {
 	s3Client := s3.NewS3Client(config)
 	gcal := gcalendar.NewAuthConfig(config)
 
+	// Init Unipdf
+	lisence := unipdf.NewInitPdf(config)
+
 	// Migrate
 	// utils.Migrate(DB)
 
@@ -91,6 +96,8 @@ func main() {
 	imageRepo := image.NewImageDB(DB)
 	districtRepo := districtRepo.NewDistrictRepo(DB)
 	houseRepo := houseRepo.NewHouseRepo(DB)
+	invoiceRepo := invoice.NewInvoiceModel(lisence)
+
 	// Validation
 	validation := validations.NewValidation(validator.New())
 
@@ -100,11 +107,11 @@ func main() {
 	facilityService := cFacility.NewServiceFacility(facilityRepo)
 	amenitiesService := cAmenities.NewServiceAmenities(amenitiesRepo)
 	reviewsService := reviewService.NewReviewService(reviewsRepo)
-	transactionsService := transactionService.NewTransactionService(transactionsRepo)
+	transactionsService := transactionService.NewTransactionService(transactionsRepo, invoiceRepo, s3Client)
 	cityService := citesService.NewServiceCity(cityRepo)
 	roomService := roomsService.NewServiceRoom(roomRepo)
 	districtService := districtServices.NewDistService(districtRepo)
-	houseService := houseServices.NewHouseService(houseRepo, roomRepo)
+	houseService := houseServices.NewHouseService(houseRepo, roomRepo, s3Client)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
 	forgotService := forgotService.NewforgotService(userRepository, validator.New())
@@ -120,7 +127,7 @@ func main() {
 	forgotHandler := forgotHandler.NewForgotHandler(forgotService, *emailService, validation)
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
-	houseHandler := houseHandlers.NewHouseHandler(houseService, validation)
+	houseHandler := houseHandlers.NewHouseHandler(houseService, validation, s3Client)
 	reminderHandler := reminderHandlers.NewHandlersReminder(reminderService)
 
 	// Middlewares

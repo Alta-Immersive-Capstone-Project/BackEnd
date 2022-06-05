@@ -11,6 +11,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type transactionHandler struct {
@@ -59,7 +60,7 @@ func (th *transactionHandler) GetAllTransactionbyConsultant(c echo.Context) erro
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
+	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
@@ -84,10 +85,10 @@ func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
 
 	response, err := th.ts.UpdateTransaction(user_id, booking_id, request)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
+		log.Warn(err)
+		return c.JSON(http.StatusBadRequest, helpers.StatusBadRequestTrans(err.Error()))
 	}
-
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Transaction", response))
+	return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Transaction", response))
 }
 
 func (th *transactionHandler) UpdateCallback(c echo.Context) error {
@@ -108,7 +109,7 @@ func (th *transactionHandler) UpdateCallback(c echo.Context) error {
 		return c.JSON(http.StatusForbidden, helpers.StatusUnauthorized(err))
 	}
 
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Update Status", response))
+	return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update Status", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyUser(c echo.Context) error {
@@ -124,7 +125,7 @@ func (th *transactionHandler) GetAllTransactionbyUser(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
+	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
@@ -132,6 +133,7 @@ func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 	status := c.QueryParam("status")
 	duration, _ := strconv.Atoi(c.QueryParam("duration"))
 	name := c.QueryParam("name")
+	generate := c.QueryParam("generate")
 
 	if role == "customer" {
 		return c.JSON(http.StatusForbidden, helpers.StatusForbidden("You are not allowed to access this resource"))
@@ -142,5 +144,10 @@ func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
-	return c.JSON(http.StatusOK, helpers.StatusOK("Success Get All Transaction", response))
+	if generate == "true" {
+		link := th.ts.GetReport(response)
+		return c.JSON(http.StatusOK, helpers.StatusOKReport("Success Get All Transaction", response, link))
+	}
+
+	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))
 }

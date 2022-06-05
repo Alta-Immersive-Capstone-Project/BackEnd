@@ -49,6 +49,8 @@ type AppConfig struct {
 		RedirectUrl  string
 	}
 
+	UniPdfLicense string
+
 	Email struct {
 		Domain string
 		ApiKey string
@@ -107,6 +109,8 @@ func initConfig() *AppConfig {
 	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
 	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "")
 	config.GCalendar.RedirectUrl = GetEnv("GCAL_REDIRECT_URL", "")
+
+	config.UniPdfLicense = GetEnv("UNIPDF_LICENSE", "")
 	// Info
 	fmt.Println(config.App)
 	fmt.Println(config.Database)
