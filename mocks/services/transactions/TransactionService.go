@@ -82,6 +82,20 @@ func (_m *TransactionService) GetAllTransactionbyUser(role string, user uint, st
 	return r0
 }
 
+// GetReport provides a mock function with given fields: _a0
+func (_m *TransactionService) GetReport(_a0 []entities.TransactionKost) string {
+	ret := _m.Called(_a0)
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func([]entities.TransactionKost) string); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}
+
 // UpdateCallback provides a mock function with given fields: req
 func (_m *TransactionService) UpdateCallback(req entities.Callback) (entities.Callback, error) {
 	ret := _m.Called(req)

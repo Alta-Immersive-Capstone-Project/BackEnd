@@ -82,11 +82,9 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 	// s3 Client
 	uploader := manager.NewUploader(s.s3)
 	dir, err := os.Getwd()
-	fmt.Println("CEEEEEEKK", dir, url)
 	file, err := os.Open(fmt.Sprintf("%s/%s", dir, url))
 	if err != nil {
 		log.Warn(err)
-		fmt.Println("OPEN ERROR")
 		return "", err
 	}
 
@@ -107,7 +105,6 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 	}
 	err = os.Remove(fmt.Sprintf("%s/%s", dir, url))
 	if err != nil {
-		fmt.Println("DELETE ERROR")
 		log.Warn(err)
 		return "", err
 	}
