@@ -19,7 +19,6 @@ var MockUser = []entities.User{
 		Name:     "kiki",
 		Gender:   "girl",
 		Phone:    "0811345456",
-		Avatar:   "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png",
 		Role:     "admin",
 	},
 	{
@@ -51,10 +50,18 @@ func TestCreateUser(t *testing.T) {
 		Phone:    "0811345456",
 		Role:     "admin",
 	}
+	var NewCustomer = entities.CreateUserRequest{
+		Email:    "kiki@gmail.com",
+		Password: "#$%$$$!!#@",
+		Name:     "kiki",
+		Gender:   "girl",
+		Phone:    "0811345456",
+		Role:     "",
+	}
 
 	Url := "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png"
 
-	t.Run("Success", func(t *testing.T) {
+	t.Run("Success Admin", func(t *testing.T) {
 
 		userRepo := repo.NewUserRepositoryInterface(t)
 		userRepo.On("InsertUser", mock.Anything).Return(MockUser[0], nil).Once()
@@ -62,9 +69,21 @@ func TestCreateUser(t *testing.T) {
 		UserService := user.NewUserService(userRepo)
 		res, err := UserService.CreateUser(NewUser, Url)
 		assert.NoError(t, err)
-		assert.NotEqual(t, "", res.Token)
-		assert.Equal(t, MockUser[0].Email, res.User.Email)
-		assert.Equal(t, MockUser[0].Name, res.User.Name)
+		assert.Equal(t, MockUser[0].Email, res.Email)
+		assert.Equal(t, MockUser[0].Name, res.Name)
+		userRepo.AssertExpectations(t)
+
+	})
+	t.Run("Success Costumer", func(t *testing.T) {
+
+		userRepo := repo.NewUserRepositoryInterface(t)
+		userRepo.On("InsertUser", mock.Anything).Return(MockUser[0], nil).Once()
+
+		UserService := user.NewUserService(userRepo)
+		res, err := UserService.CreateUser(NewCustomer, Url)
+		assert.NoError(t, err)
+		assert.Equal(t, MockUser[0].Email, res.Email)
+		assert.Equal(t, MockUser[0].Name, res.Name)
 		userRepo.AssertExpectations(t)
 
 	})
@@ -75,11 +94,8 @@ func TestCreateUser(t *testing.T) {
 		userRepo.On("InsertUser", mock.Anything).Return(entities.User{}, errors.New("Error Access Database")).Once()
 
 		UserService := user.NewUserService(userRepo)
-		res, err := UserService.CreateUser(NewUser, Url)
+		_, err := UserService.CreateUser(NewCustomer, Url)
 		assert.Error(t, err)
-		assert.NotEqual(t, MockUser[0].Name, res.User.Name)
-		assert.NotEqual(t, MockUser[0].Email, res.User.Email)
-		assert.Equal(t, "", res.Token)
 
 		userRepo.AssertExpectations(t)
 

@@ -103,7 +103,6 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 			Finish: configs.Get().App.FrontURL,
 		},
 	}
-	fmt.Println(snapRequest)
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
 		log.Warn(err)

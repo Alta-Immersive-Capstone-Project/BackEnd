@@ -3,6 +3,6 @@ package forgot
 import "kost/entities"
 
 type ForgotInterface interface {
-	GetToken(email string) (entities.InternalAuthResponse, error)
-	ResetPassword(id int, password string) (entities.CustomerResponse, error)
+	FindUserByEmail(email string) (entities.User, error)
+	ResetPassword(id int, password string) (entities.User, error)
 }

@@ -146,7 +146,8 @@ func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 
 	if generate == "true" {
 		link := th.ts.GetReport(response)
-		return c.JSON(http.StatusOK, helpers.StatusOKReport("Success Get All Transaction", response, link))
+		fmt.Println(link)
+		return c.JSON(http.StatusOK, helpers.StatusOKReport("Success Get All Transaction", link))
 	}
 
 	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))

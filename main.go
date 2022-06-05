@@ -60,8 +60,8 @@ import (
 	userHandlers "kost/deliveries/handlers/user"
 
 	forgotHandler "kost/deliveries/handlers/forgot"
-	emailService "kost/services/email"
 	forgotService "kost/services/forgot"
+	emailService "kost/utils/email"
 )
 
 func main() {
@@ -114,7 +114,7 @@ func main() {
 	houseService := houseServices.NewHouseService(houseRepo, roomRepo, s3Client)
 	imageService := ImageService.NewServiceImage(roomRepo, imageRepo, s3Client)
 	emailService := emailService.NewEmailConfig()
-	forgotService := forgotService.NewforgotService(userRepository, validator.New())
+	forgotService := forgotService.NewforgotService(userRepository)
 	reminderService := reminderService.NewReminderServices(gcal, transactionsRepo)
 	// Handlers
 	authHandler := handlers.NewAuthHandler(authService, validation)
@@ -124,7 +124,7 @@ func main() {
 	reviewsHandler := reviewHandlers.NewReviewHandler(reviewsService, validation)
 	transactionsHandler := transactionHandlers.NewTransactionHandler(transactionsService, validation)
 	cityHandler := cityHandlers.NewHandlersCity(cityService, validator.New())
-	forgotHandler := forgotHandler.NewForgotHandler(forgotService, *emailService, validation)
+	forgotHandler := forgotHandler.NewForgotHandler(forgotService, emailService, validation)
 	roomHandler := roomHandlers.NewHandlersRoom(roomService, *imageService, validator.New())
 	districtHandler := districtHandlers.NewDistrictHandler(districtService, validation)
 	houseHandler := houseHandlers.NewHouseHandler(houseService, validation, s3Client)

@@ -13,15 +13,15 @@ type ForgotInterface struct {
 	mock.Mock
 }
 
-// GetToken provides a mock function with given fields: email
-func (_m *ForgotInterface) GetToken(email string) (entities.InternalAuthResponse, error) {
+// FindUserByEmail provides a mock function with given fields: email
+func (_m *ForgotInterface) FindUserByEmail(email string) (entities.User, error) {
 	ret := _m.Called(email)
 
-	var r0 entities.InternalAuthResponse
-	if rf, ok := ret.Get(0).(func(string) entities.InternalAuthResponse); ok {
+	var r0 entities.User
+	if rf, ok := ret.Get(0).(func(string) entities.User); ok {
 		r0 = rf(email)
 	} else {
-		r0 = ret.Get(0).(entities.InternalAuthResponse)
+		r0 = ret.Get(0).(entities.User)
 	}
 
 	var r1 error
@@ -35,14 +35,14 @@ func (_m *ForgotInterface) GetToken(email string) (entities.InternalAuthResponse
 }
 
 // ResetPassword provides a mock function with given fields: id, password
-func (_m *ForgotInterface) ResetPassword(id int, password string) (entities.CustomerResponse, error) {
+func (_m *ForgotInterface) ResetPassword(id int, password string) (entities.User, error) {
 	ret := _m.Called(id, password)
 
-	var r0 entities.CustomerResponse
-	if rf, ok := ret.Get(0).(func(int, string) entities.CustomerResponse); ok {
+	var r0 entities.User
+	if rf, ok := ret.Get(0).(func(int, string) entities.User); ok {
 		r0 = rf(id, password)
 	} else {
-		r0 = ret.Get(0).(entities.CustomerResponse)
+		r0 = ret.Get(0).(entities.User)
 	}
 
 	var r1 error

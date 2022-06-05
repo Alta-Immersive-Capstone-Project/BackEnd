@@ -14,14 +14,14 @@ type UserServiceInterface struct {
 }
 
 // CreateUser provides a mock function with given fields: internalRequest, url
-func (_m *UserServiceInterface) CreateUser(internalRequest entities.CreateUserRequest, url string) (entities.InternalAuthResponse, error) {
+func (_m *UserServiceInterface) CreateUser(internalRequest entities.CreateUserRequest, url string) (entities.User, error) {
 	ret := _m.Called(internalRequest, url)
 
-	var r0 entities.InternalAuthResponse
-	if rf, ok := ret.Get(0).(func(entities.CreateUserRequest, string) entities.InternalAuthResponse); ok {
+	var r0 entities.User
+	if rf, ok := ret.Get(0).(func(entities.CreateUserRequest, string) entities.User); ok {
 		r0 = rf(internalRequest, url)
 	} else {
-		r0 = ret.Get(0).(entities.InternalAuthResponse)
+		r0 = ret.Get(0).(entities.User)
 	}
 
 	var r1 error
