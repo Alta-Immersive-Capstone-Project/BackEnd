@@ -76,7 +76,7 @@ func (h *HandlersAmenities) GetAmenitiesID() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data Amenities By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data Amenities", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data Amenities", result))
 	}
 }
 

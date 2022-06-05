@@ -42,7 +42,7 @@ func (h *HandlerReminder) OauthCallback() echo.HandlerFunc {
 		}
 		codeOauth = code
 
-		return c.JSON(http.StatusOK, "Oke")
+		return c.JSON(http.StatusOK, "Success Access Google")
 	}
 }
 
@@ -67,6 +67,6 @@ func (h *HandlerReminder) CreateReminder() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusBadRequest, "Error Create Event")
 		}
-		return c.JSON(http.StatusOK, helpers.StatusOK("Create Event Berhasil", data))
+		return c.JSON(http.StatusCreated, helpers.StatusCreate("Create Event Berhasil", data))
 	}
 }

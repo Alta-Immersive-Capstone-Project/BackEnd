@@ -147,7 +147,7 @@ func (hh *HouseHandler) Delete() echo.HandlerFunc {
 
 		errDelete := hh.Service.DeleteHouse(uint(houseID))
 		if errDelete != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}
@@ -163,9 +163,9 @@ func (hh *HouseHandler) GetAllByDist() echo.HandlerFunc {
 		result, err := hh.Service.GetAllHouseByDistrict(uint(DistrictID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Houses by District", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Houses by District", result))
 	}
 }
 func (hh *HouseHandler) Show() echo.HandlerFunc {
@@ -180,9 +180,9 @@ func (hh *HouseHandler) Show() echo.HandlerFunc {
 		result, err := hh.Service.GetHouseID(uint(houseID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data House", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data House", result))
 	}
 }
 
@@ -191,9 +191,9 @@ func (hh *HouseHandler) Index() echo.HandlerFunc {
 		result, err := hh.Service.SelectAllHouse()
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success get all data houses", result))
 	}
 }
 
@@ -208,9 +208,9 @@ func (hh *HouseHandler) SelectHouseByDistrict() echo.HandlerFunc {
 		result, err := hh.Service.FindAllHouseByDistrict(uint(DistrictID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Data Houses", result))
 	}
 }
 func (hh *HouseHandler) SelectHouseByCities() echo.HandlerFunc {
@@ -224,9 +224,9 @@ func (hh *HouseHandler) SelectHouseByCities() echo.HandlerFunc {
 		result, err := hh.Service.FindAllHouseByCities(uint(CityID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Data Houses", result))
 	}
 }
 func (hh *HouseHandler) SelectHouseByCtyAndDst() echo.HandlerFunc {
@@ -246,9 +246,9 @@ func (hh *HouseHandler) SelectHouseByCtyAndDst() echo.HandlerFunc {
 		result, err := hh.Service.FindAllHouseByCtyAndDst(uint(CityID), uint(DistrictID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Data Houses", result))
 	}
 }
 func (hh *HouseHandler) SearchByTitle() echo.HandlerFunc {
@@ -258,9 +258,9 @@ func (hh *HouseHandler) SearchByTitle() echo.HandlerFunc {
 		result, err := hh.Service.FindHouseByTitle(title)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Data Houses", result))
 	}
 }
 

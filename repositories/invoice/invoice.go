@@ -40,8 +40,8 @@ func (m *invoiceModel) CreateInvoice(path string, transaction entities.Transacti
 	// Note: without explicit zone, returns time in given location.
 	// Set invoice information
 	invoice.SetNumber(transaction.BookingID)
-	invoice.SetDate(transaction.UpdatedAt.Format("time.RFC3339"))
-	invoice.SetDueDate(time.Date(now.Year(), now.Month(), now.Day()+1, now.Hour(), now.Minute(), 0, 0, loc).Format("time.RFC3339"))
+	invoice.SetDate(transaction.UpdatedAt.Format(time.RFC3339))
+	invoice.SetDueDate(time.Date(now.Year(), now.Month(), now.Day()+1, now.Hour(), now.Minute(), 0, 0, loc).Format(time.RFC3339))
 	invoice.AddInfo("Payment terms", "Due on receipt")
 	invoice.AddInfo("Paid", "No")
 

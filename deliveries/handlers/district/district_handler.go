@@ -77,7 +77,7 @@ func (dh *DistrictHandler) Update() echo.HandlerFunc {
 		result, err := dh.Service.UpdateDist(uint(districtID), update)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusUpdate("Success Update District", result))
 	}
@@ -99,7 +99,7 @@ func (dh *DistrictHandler) Delete() echo.HandlerFunc {
 
 		errDelete := dh.Service.DeleteDist(uint(districtID))
 		if errDelete != nil {
-			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
 		return c.JSON(http.StatusOK, helpers.StatusDelete())
 	}
@@ -115,9 +115,9 @@ func (dh *DistrictHandler) GetAllByCity() echo.HandlerFunc {
 		result, err := dh.Service.GetAllDist(uint(CityID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All District by Cities", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All District by Cities", result))
 	}
 }
 
@@ -133,9 +133,9 @@ func (dh *DistrictHandler) Show() echo.HandlerFunc {
 		result, err := dh.Service.GetDistID(uint(districtID))
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data District", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data District", result))
 	}
 }
 
@@ -144,8 +144,8 @@ func (dh *DistrictHandler) Index() echo.HandlerFunc {
 		result, err := dh.Service.SelectAllDistrict()
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.ErrorNotFound())
+			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Select All District", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Select All District", result))
 	}
 }

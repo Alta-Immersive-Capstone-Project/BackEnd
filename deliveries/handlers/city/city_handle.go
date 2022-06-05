@@ -63,9 +63,10 @@ func (h *HandlersCity) GetAllCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusCreated, helpers.StatusGetAll("Success get city", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All City", result))
 	}
 }
+
 func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id, err := strconv.Atoi(c.Param("id"))
@@ -79,7 +80,7 @@ func (h *HandlersCity) GetIDCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data City By ID Not Found"))
 		}
-		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data city", result))
+		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data city", result))
 	}
 }
 

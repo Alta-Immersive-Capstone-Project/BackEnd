@@ -179,7 +179,7 @@ func StatusCreate(message string, data interface{}) map[string]interface{} {
 
 func StatusGetAll(message string, data interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		"code":    http.StatusOK,
+		"code":    http.StatusFound,
 		"message": message,
 		"data":    data,
 	}
@@ -187,7 +187,7 @@ func StatusGetAll(message string, data interface{}) map[string]interface{} {
 
 func StatusGetDataID(message string, data interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		"code":    http.StatusOK,
+		"code":    http.StatusFound,
 		"message": message,
 		"data":    data,
 	}
@@ -202,6 +202,13 @@ func StatusUpdate(message string, data interface{}) map[string]interface{} {
 }
 
 func StatusBadRequestTrans(message string) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    http.StatusBadRequest,
+		"message": message,
+	}
+}
+
+func ErrorRegister(message string) map[string]interface{} {
 	return map[string]interface{}{
 		"code":    http.StatusBadRequest,
 		"message": message,
