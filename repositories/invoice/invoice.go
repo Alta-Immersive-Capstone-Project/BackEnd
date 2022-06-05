@@ -9,6 +9,7 @@ import (
 
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
+	"github.com/labstack/gommon/log"
 	"github.com/paimanbandi/rupiah"
 	"github.com/unidoc/unipdf/v3/creator"
 	"github.com/unidoc/unipdf/v3/model"
@@ -234,6 +235,7 @@ func (m *invoiceModel) CreateReport(path string, transactions []entities.Transac
 	m.c.SetPageMargins(50, 50, 100, 70)
 
 	// Generate the table of contents.
+
 	m.c.AddTOC = true
 	toc := m.c.TOC()
 	hstyle := m.c.NewTextStyle()
@@ -287,10 +289,10 @@ func (m *invoiceModel) CreateReport(path string, transactions []entities.Transac
 	time := time.Now().UTC().Format("20060102-150405")
 	output := m.c.WriteToFile("LOWKOST-" + time + ".pdf")
 	if output != nil {
-		fmt.Println(err)
+		log.Warn(output)
 	}
-
-	return "LOWKOST-" + time + ".pdf"
+	m.c.Finalize()
+	return "LOWKOST-" + time
 }
 
 // Generates the front page.

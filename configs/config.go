@@ -83,11 +83,11 @@ func initConfig() *AppConfig {
 	config.App.FrontURL = GetEnv("APP_FRONT_URL", "http://localhost:3000/transactions/finish")
 	config.App.ENV = GetEnv("APP_ENV", "development")
 
-	config.Database.Host = GetEnv("DB_HOST", "localhost")
-	config.Database.Port = GetEnv("DB_PORT", "3306")
-	config.Database.Username = GetEnv("DB_USERNAME", "root")
+	config.Database.Host = GetEnv("DB_HOST", "")
+	config.Database.Port = GetEnv("DB_PORT", "")
+	config.Database.Username = GetEnv("DB_USERNAME", "")
 	config.Database.Password = GetEnv("DB_PASSWORD", "")
-	config.Database.Name = GetEnv("DB_NAME", "NewSewa")
+	config.Database.Name = GetEnv("DB_NAME", "")
 
 	config.Email.Domain = GetEnv("EMAIL", "")
 	config.Email.ApiKey = GetEnv("API_KEY", "")

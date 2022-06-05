@@ -7,8 +7,8 @@ import (
 	"kost/deliveries/middlewares"
 	validation "kost/deliveries/validations"
 	"kost/entities"
-	emailService "kost/services/email"
 	forgotService "kost/services/forgot"
+	emailService "kost/utils/email"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -17,12 +17,11 @@ import (
 
 type ForgotHandler struct {
 	forgotService forgotService.ForgotInterface
-	emailService  emailService.EmailService
-
-	valid validation.Validation
+	emailService  emailService.EmailControl
+	valid         validation.Validation
 }
 
-func NewForgotHandler(service forgotService.ForgotInterface, emailService emailService.EmailService, Valid validation.Validation) *ForgotHandler {
+func NewForgotHandler(service forgotService.ForgotInterface, emailService emailService.EmailControl, Valid validation.Validation) *ForgotHandler {
 	return &ForgotHandler{
 		forgotService: service,
 		emailService:  emailService,
@@ -33,14 +32,15 @@ func NewForgotHandler(service forgotService.ForgotInterface, emailService emailS
 func (h *ForgotHandler) SendEmail() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		email := c.QueryParams().Get("email")
+		user, err := h.forgotService.FindUserByEmail(email)
 
-		token, err := h.forgotService.GetToken(email)
+		token, err := middlewares.CreateToken(int(user.ID), user.Name, user.Role)
 		if err != nil {
 			log.Warn(err)
-			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Token Email Not Found"))
+			return c.JSON(http.StatusBadRequest, helpers.StatusBadRequest(err))
 		}
 
-		id, err := h.emailService.SendEmail("admin@sewakost.com", "reset password", generateBodyEmailForgotPassword(token.User.Name, token.Token), email)
+		id, err := h.emailService.SendEmail("admin@sewakost.com", "reset password", generateBodyEmailForgotPassword(user.Name, token), email)
 
 		if err != nil {
 			log.Warn(err)
@@ -62,7 +62,8 @@ func (h *ForgotHandler) ResetPassword() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusUnauthorized, helpers.ErrorAuthorize())
 		}
-		res, err := h.forgotService.ResetPassword(id, resetReq.Password)
+		hashedPassword, _ := helpers.HashPassword(resetReq.Password)
+		res, err := h.forgotService.ResetPassword(id, hashedPassword)
 
 		if err != nil {
 			log.Warn(err)

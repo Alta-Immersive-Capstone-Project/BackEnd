@@ -6,9 +6,11 @@ import (
 	mocks "kost/mocks/repositories/house"
 	roomMock "kost/mocks/repositories/room"
 	s3mock "kost/mocks/utils/s3"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/jinzhu/copier"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"gorm.io/gorm"
@@ -106,15 +108,14 @@ func TestCreateHouse(t *testing.T) {
 	})
 
 	t.Run("Error Create House", func(t *testing.T) {
+
 		HouseRepo := mocks.NewIRepoHouse(t)
 		HouseRepo.On("CreateHouse", mock.Anything).Return(entities.House{}, errors.New("error create house")).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
-		result, err := HouseService.CreateHouse(NewHouse, "url")
+		_, err := HouseService.CreateHouse(NewHouse, "")
 		assert.Error(t, err)
-		assert.NotEqual(t, MockHouse[1].Title, result.Title)
-		assert.NotEqual(t, MockHouse[1].OwnerName, result.OwnerName)
 
 		HouseRepo.AssertExpectations(t)
 	})
@@ -177,11 +178,18 @@ func TestUpdateHouse(t *testing.T) {
 }
 
 func TestDeleteHouse(t *testing.T) {
+	var res entities.HouseResponseGetByID
+	res.Image = "https://belajar-be.s3.ap-southeast-1.amazonaws.com/room/16539738.png"
+	copier.Copy(&res, MockHouse[0])
+	file := strings.Replace(res.Image, "https://belajar-be.s3.ap-southeast-1.amazonaws.com/", "", 1)
+
 	t.Run("Success Delete House", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
+		s3 := s3mock.NewS3Control(t)
+		HouseRepo.On("GetHouseID", uint(2)).Return(res, nil).Once()
+		s3.On("DeleteFromS3", file).Return(nil).Once()
 		HouseRepo.On("DeleteHouse", uint(2)).Return(nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
-		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
 		err := HouseService.DeleteHouse(uint(2))
 		assert.NoError(t, err)
@@ -191,9 +199,34 @@ func TestDeleteHouse(t *testing.T) {
 
 	t.Run("Error Delete House", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
+		s3 := s3mock.NewS3Control(t)
+		HouseRepo.On("GetHouseID", uint(2)).Return(res, nil).Once()
+		s3.On("DeleteFromS3", file).Return(nil).Once()
 		HouseRepo.On("DeleteHouse", uint(2)).Return(errors.New("error access database")).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
+		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
+		err := HouseService.DeleteHouse(uint(2))
+		assert.Error(t, err)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Delete S3", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
 		s3 := s3mock.NewS3Control(t)
+		HouseRepo.On("GetHouseID", uint(2)).Return(res, nil).Once()
+		s3.On("DeleteFromS3", file).Return(errors.New("Error Delete")).Once()
+		RoomRepo := roomMock.NewRoomRepo(t)
+		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
+		err := HouseService.DeleteHouse(uint(2))
+		assert.Error(t, err)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Error Get ID", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		s3 := s3mock.NewS3Control(t)
+		HouseRepo.On("GetHouseID", uint(2)).Return(res, errors.New("Error Access Database")).Once()
+		RoomRepo := roomMock.NewRoomRepo(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
 		err := HouseService.DeleteHouse(uint(2))
 		assert.Error(t, err)
@@ -203,9 +236,12 @@ func TestDeleteHouse(t *testing.T) {
 }
 
 func TestGetAllHouseByDist(t *testing.T) {
+	var res []entities.HouseResponseGet
+	copier.Copy(&res, MockHouse)
+
 	t.Run("Success Get All Houses By Dist", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetAllHouseByDist", uint(1)).Return(MockHouse, nil).Once()
+		HouseRepo.On("GetAllHouseByDist", uint(1)).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
@@ -230,38 +266,59 @@ func TestGetAllHouseByDist(t *testing.T) {
 }
 
 func TestGetHouseID(t *testing.T) {
+	var res entities.HouseResponseGetByID
+	copier.Copy(&res, MockHouse[0])
+	var join []entities.RespondRoomJoin
+	copier.Copy(&join, MockHouse[0])
 	t.Run("Success Get House ID", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetHouseID", uint(1)).Return(MockHouse[0], nil).Once()
+		HouseRepo.On("GetHouseID", uint(1)).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
+		RoomRepo.On("GetbyHouse", uint(1)).Return(join, nil).Once()
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
 
 		result, err := HouseService.GetHouseID(uint(1))
 		assert.NoError(t, err)
-		assert.Equal(t, MockHouse[0].OwnerName, result.OwnerName)
+		assert.Equal(t, res.OwnerName, result.OwnerName)
 
 		HouseRepo.AssertExpectations(t)
 	})
 	t.Run("Error Get House ID", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetHouseID", uint(1)).Return(entities.House{}, errors.New("error access database")).Once()
+		HouseRepo.On("GetHouseID", uint(1)).Return(res, errors.New("error access database")).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
 
 		result, err := HouseService.GetHouseID(uint(1))
 		assert.Error(t, err)
-		assert.NotEqual(t, MockHouse[0].OwnerName, result.OwnerName)
+		assert.NotEqual(t, res.OwnerName, result.OwnerName)
+
+		HouseRepo.AssertExpectations(t)
+	})
+	t.Run("Success Get Get By House ID", func(t *testing.T) {
+		HouseRepo := mocks.NewIRepoHouse(t)
+		HouseRepo.On("GetHouseID", uint(1)).Return(res, nil).Once()
+		RoomRepo := roomMock.NewRoomRepo(t)
+		RoomRepo.On("GetbyHouse", uint(1)).Return(join, errors.New("Error Access Database")).Once()
+		s3 := s3mock.NewS3Control(t)
+		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
+
+		result, err := HouseService.GetHouseID(uint(1))
+		assert.Error(t, err)
+		assert.NotEqual(t, res.OwnerName, result.OwnerName)
 
 		HouseRepo.AssertExpectations(t)
 	})
 }
 
 func TestFindAllHouseByDistrict(t *testing.T) {
+	var res []entities.HouseResponseGet
+	copier.Copy(&res, MockHouse)
 	t.Run("Success Find All Houses By Dist", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetAllHouseByDistrict", uint(1)).Return(MockHouseJoin, nil).Once()
+		HouseRepo.On("GetAllHouseByDistrict", uint(1)).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
@@ -288,9 +345,11 @@ func TestFindAllHouseByDistrict(t *testing.T) {
 }
 
 func TestFindAllHouseByCities(t *testing.T) {
+	var res []entities.HouseResponseGet
+	copier.Copy(&res, MockHouse)
 	t.Run("Success Find All Houses By Cities", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetAllHouseByCities", uint(1)).Return(MockHouseJoin, nil).Once()
+		HouseRepo.On("GetAllHouseByCities", uint(1)).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
@@ -308,18 +367,19 @@ func TestFindAllHouseByCities(t *testing.T) {
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
 
-		result, err := HouseService.FindAllHouseByCities(uint(1))
+		_, err := HouseService.FindAllHouseByCities(uint(1))
 		assert.Error(t, err)
-		assert.NotNil(t, result)
 
 		HouseRepo.AssertExpectations(t)
 	})
 }
 
 func TestFindAllHouseByCtyAndDst(t *testing.T) {
+	var res []entities.HouseResponseGet
+	copier.Copy(&res, MockHouse)
 	t.Run("Success Find All Houses By Cities And District", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("GetAllHouseByDstAndCty", uint(1), uint(2)).Return(MockHouseJoin, nil).Once()
+		HouseRepo.On("GetAllHouseByDstAndCty", uint(1), uint(2)).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
@@ -345,9 +405,11 @@ func TestFindAllHouseByCtyAndDst(t *testing.T) {
 }
 
 func TestSelectAllHouse(t *testing.T) {
+	var res []entities.HouseResponseGet
+	copier.Copy(&res, MockHouse)
 	t.Run("Success Find All Houses By Cities", func(t *testing.T) {
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("SelectAllHouse", mock.Anything).Return(MockHouseJoin, nil).Once()
+		HouseRepo.On("SelectAllHouse", mock.Anything).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
@@ -374,10 +436,12 @@ func TestSelectAllHouse(t *testing.T) {
 }
 
 func TestFindHouseByTitle(t *testing.T) {
+	var res []entities.HouseResponseGet
+	copier.Copy(&res, MockHouse)
 	t.Run("Success Find House By Title", func(t *testing.T) {
 		title := "Maguwo"
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("FindHouseByTitle", title).Return(MockHouseJoin, nil).Once()
+		HouseRepo.On("FindHouseByTitle", title).Return(res, nil).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
@@ -391,14 +455,13 @@ func TestFindHouseByTitle(t *testing.T) {
 	t.Run("Error Get All Houses By Cities", func(t *testing.T) {
 		title := "Maguwo"
 		HouseRepo := mocks.NewIRepoHouse(t)
-		HouseRepo.On("FindHouseByTitle", title).Return([]entities.HouseResponseJoin{}, errors.New("Error Access Database")).Once()
+		HouseRepo.On("FindHouseByTitle", title).Return([]entities.HouseResponseGet{}, errors.New("Error Access Database")).Once()
 		RoomRepo := roomMock.NewRoomRepo(t)
 		s3 := s3mock.NewS3Control(t)
 		HouseService := NewHouseService(HouseRepo, RoomRepo, s3)
 
-		result, err := HouseService.FindHouseByTitle(title)
+		_, err := HouseService.FindHouseByTitle(title)
 		assert.Error(t, err)
-		assert.Nil(t, result)
 
 		HouseRepo.AssertExpectations(t)
 	})

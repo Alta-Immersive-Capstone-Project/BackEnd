@@ -103,7 +103,6 @@ func (ts *transactionService) UpdateTransaction(customer_id uint, booking_id str
 			Finish: configs.Get().App.FrontURL,
 		},
 	}
-	fmt.Println(snapRequest)
 	snap, err := ts.tm.CreateSnap(snapRequest)
 	if err != nil {
 		log.Warn(err)
@@ -182,5 +181,11 @@ func (ts *transactionService) GetReport(transactions []entities.TransactionKost)
 	if generate == "" {
 		return "GAGAL GENERATE REPORT"
 	}
-	return generate
+	urlS3, err := ts.s3.UploadInvoiceToS3(generate, generate+".pdf")
+	if err != nil {
+		log.Warn(err)
+		return ""
+	}
+
+	return urlS3
 }

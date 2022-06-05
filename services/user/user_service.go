@@ -1,9 +1,7 @@
 package user
 
 import (
-	"fmt"
 	"kost/deliveries/helpers"
-	"kost/deliveries/middlewares"
 	"kost/entities"
 	userRepository "kost/repositories/user"
 
@@ -22,48 +20,21 @@ func NewUserService(repository userRepository.UserRepositoryInterface) *UserServ
 
 var linkUrl string = "https://belajar-be.s3.ap-southeast-1.amazonaws.com/Avatar/1653973235.png"
 
-func (us *UserService) CreateUser(internalRequest entities.CreateUserRequest, url string) (entities.InternalAuthResponse, error) {
+func (us *UserService) CreateUser(internalRequest entities.CreateUserRequest, url string) (entities.User, error) {
 
 	// Konversi user request menjadi domain untuk diteruskan ke repository
 	user := entities.User{}
 	copier.Copy(&user, &internalRequest)
-
-	// Password hashing menggunakan bcrypt
-	hashedPassword, _ := helpers.HashPassword(user.Password)
-	user.Password = hashedPassword
-
-	if user.Role == "" {
-		user.Role = "customer"
-	}
 	if url != "" {
 		user.Avatar = url
 	}
 	// Insert ke sistem melewati repository
-	user, err := us.userRepo.InsertUser(user)
+	respond, err := us.userRepo.InsertUser(user)
 	if err != nil {
-		return entities.InternalAuthResponse{}, err
+		return user, err
 	}
 
-	// Konversi hasil repository menjadi user response
-	userRes := entities.InternalResponse{}
-	copier.Copy(&userRes, &user)
-	fmt.Println(user)
-	if userRes.Avatar == "" {
-		userRes.Avatar = linkUrl
-	}
-
-	// generate token
-	token, err := middlewares.CreateToken(int(user.ID), user.Name, user.Role)
-	if err != nil {
-		return entities.InternalAuthResponse{}, err
-	}
-
-	// Buat auth response untuk dimasukkan token dan user
-	authRes := entities.InternalAuthResponse{
-		Token: token,
-		User:  userRes,
-	}
-	return authRes, nil
+	return respond, nil
 }
 
 func (us *UserService) GetbyID(id uint) (entities.CustomerResponse, error) {
@@ -74,9 +45,6 @@ func (us *UserService) GetbyID(id uint) (entities.CustomerResponse, error) {
 	}
 	userRes := entities.CustomerResponse{}
 	copier.Copy(&userRes, &user)
-	if userRes.Avatar == "" {
-		userRes.Avatar = linkUrl
-	}
 
 	return userRes, err
 }

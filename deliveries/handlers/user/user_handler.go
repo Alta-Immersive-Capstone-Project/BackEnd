@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"kost/deliveries/helpers"
+	"kost/deliveries/middlewares"
 	validation "kost/deliveries/validations"
 	"kost/utils/s3"
 	"strconv"
@@ -13,6 +15,7 @@ import (
 	userService "kost/services/user"
 	"net/http"
 
+	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 )
@@ -74,15 +77,32 @@ func (handler *UserHandler) CreateInternal(c echo.Context) error {
 		filename := "Avatar/" + userReq.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
 		url, _ = handler.s3.UploadFileToS3(filename, *avatar)
 	}
-
+	hashedPassword, _ := helpers.HashPassword(userReq.Password)
+	userReq.Password = hashedPassword
 	// registrasi user via call user service
-	userRes, err := handler.userService.CreateUser(userReq, url)
+	user, err := handler.userService.CreateUser(userReq, url)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.ErrorRegister("Email Be Registered"))
 	}
+	// Konversi hasil repository menjadi user response
+	userRes := entities.InternalResponse{}
+	copier.Copy(&userRes, &user)
+
+	// generate token
+	Token, err := middlewares.CreateToken(int(user.ID), user.Name, user.Role)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+	}
+
+	// Buat auth response untuk dimasukkan token dan user
+	authRes := entities.InternalAuthResponse{
+		Token: Token,
+		User:  userRes,
+	}
 
 	// response
-	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+userRes.User.Role, userRes))
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+user.Role, authRes))
 }
 
 func (handler *UserHandler) CreateCustomer(c echo.Context) error {
@@ -114,15 +134,40 @@ func (handler *UserHandler) CreateCustomer(c echo.Context) error {
 		filename := "Avatar/" + userReq.Name + strconv.Itoa(int(time.Now().Unix())) + ".png"
 		url, _ = handler.s3.UploadFileToS3(filename, *avatar)
 	}
+	hashedPassword, _ := helpers.HashPassword(userReq.Password)
+	userReq.Password = hashedPassword
+
+	if userReq.Role == "" {
+		userReq.Role = "customer"
+	}
 
 	// registrasi user via call user service
-	userRes, err := handler.userService.CreateUser(userReq, url)
+	user, err := handler.userService.CreateUser(userReq, url)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helpers.ErrorRegister("Email Be Registered"))
 	}
+	// Konversi hasil repository menjadi user response
+	userRes := entities.InternalResponse{}
+	copier.Copy(&userRes, &user)
+	fmt.Println(user)
+	if userRes.Avatar == "" {
+		userRes.Avatar = url
+	}
 
+	// generate token
+	token, err := middlewares.CreateToken(int(user.ID), user.Name, user.Role)
+	if err != nil {
+		log.Warn(err)
+		return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
+	}
+
+	// Buat auth response untuk dimasukkan token dan user
+	authRes := entities.InternalAuthResponse{
+		Token: token,
+		User:  userRes,
+	}
 	// response
-	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+userRes.User.Role, userRes))
+	return c.JSON(http.StatusCreated, helpers.StatusCreate("Success Create "+userRes.Role, authRes))
 }
 
 func (handler *UserHandler) GetByID(c echo.Context) error {

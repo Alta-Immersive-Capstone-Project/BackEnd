@@ -133,7 +133,7 @@ func (hs *HouseService) FindAllHouseByCities(cid uint) ([]entities.HouseResponse
 	res, err := hs.repo.GetAllHouseByCities(cid)
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseGetAll{}, err
+		return nil, err
 	}
 	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)
@@ -153,7 +153,7 @@ func (hs *HouseService) SelectAllHouse() ([]entities.HouseResponseGetAll, error)
 	res, err := hs.repo.SelectAllHouse()
 	if err != nil {
 		log.Warn(err)
-		return []entities.HouseResponseGetAll{}, err
+		return nil, err
 	}
 	var result []entities.HouseResponseGetAll
 	copier.Copy(&result, &res)

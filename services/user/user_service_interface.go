@@ -5,7 +5,7 @@ import (
 )
 
 type UserServiceInterface interface {
-	CreateUser(internalRequest entities.CreateUserRequest, url string) (entities.InternalAuthResponse, error)
+	CreateUser(internalRequest entities.CreateUserRequest, url string) (entities.User, error)
 	GetbyID(id uint) (entities.CustomerResponse, error)
 	GetAllMember() ([]entities.GetAll, error)
 	UpdateInternal(customerRequest entities.UpdateInternalRequest, id uint, url string) (entities.InternalResponse, error)

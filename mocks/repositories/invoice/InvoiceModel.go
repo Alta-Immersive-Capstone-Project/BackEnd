@@ -27,6 +27,20 @@ func (_m *InvoiceModel) CreateInvoice(path string, transaction entities.Transact
 	return r0
 }
 
+// CreateReport provides a mock function with given fields: path, transactions
+func (_m *InvoiceModel) CreateReport(path string, transactions []entities.TransactionKost) string {
+	ret := _m.Called(path, transactions)
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func(string, []entities.TransactionKost) string); ok {
+		r0 = rf(path, transactions)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}
+
 type NewInvoiceModelT interface {
 	mock.TestingT
 	Cleanup(func())
