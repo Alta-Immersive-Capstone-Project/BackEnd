@@ -60,7 +60,7 @@ func (th *transactionHandler) GetAllTransactionbyConsultant(c echo.Context) erro
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
-	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))
+	return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) UpdateTransaction(c echo.Context) error {
@@ -125,7 +125,7 @@ func (th *transactionHandler) GetAllTransactionbyUser(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Data transaction not found"))
 	}
 
-	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))
+	return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Transaction", response))
 }
 
 func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
@@ -150,5 +150,5 @@ func (th *transactionHandler) GetAllTransactionbyKost(c echo.Context) error {
 		return c.JSON(http.StatusOK, helpers.StatusOKReport("Success Get All Transaction", link))
 	}
 
-	return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Transaction", response))
+	return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Transaction", response))
 }

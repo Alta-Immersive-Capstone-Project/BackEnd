@@ -92,7 +92,7 @@ func (h *HandlersRoom) GetAllRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get Room", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get Room", result))
 	}
 }
 
@@ -109,7 +109,7 @@ func (h *HandlersRoom) GetIDRoom() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Room By ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data room", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data room", result))
 	}
 }
 

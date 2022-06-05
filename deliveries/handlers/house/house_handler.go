@@ -165,7 +165,7 @@ func (hh *HouseHandler) GetAllByDist() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Houses by District", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Houses by District", result))
 	}
 }
 func (hh *HouseHandler) Show() echo.HandlerFunc {
@@ -182,7 +182,7 @@ func (hh *HouseHandler) Show() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data House", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data House", result))
 	}
 }
 
@@ -193,7 +193,7 @@ func (hh *HouseHandler) Index() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success get all data houses", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success get all data houses", result))
 	}
 }
 
@@ -210,7 +210,7 @@ func (hh *HouseHandler) SelectHouseByDistrict() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Data Houses", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Data Houses", result))
 	}
 }
 func (hh *HouseHandler) SelectHouseByCities() echo.HandlerFunc {
@@ -226,7 +226,7 @@ func (hh *HouseHandler) SelectHouseByCities() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("House With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Data Houses", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Data Houses", result))
 	}
 }
 func (hh *HouseHandler) SelectHouseByCtyAndDst() echo.HandlerFunc {

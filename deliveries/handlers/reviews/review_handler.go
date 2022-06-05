@@ -58,5 +58,5 @@ func (rh *reviewHandler) GetByHouseID(c echo.Context) error {
 
 	count, total := rh.rs.GetRating(uint(HouseID))
 
-	return c.JSON(http.StatusFound, helpers.StatusOKReview("Success Get By House ID", response, count, total))
+	return c.JSON(http.StatusOK, helpers.StatusOKReview("Success Get By House ID", response, count, total))
 }

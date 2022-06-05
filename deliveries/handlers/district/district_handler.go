@@ -117,7 +117,7 @@ func (dh *DistrictHandler) GetAllByCity() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All District by Cities", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All District by Cities", result))
 	}
 }
 
@@ -135,7 +135,7 @@ func (dh *DistrictHandler) Show() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data District", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data District", result))
 	}
 }
 
@@ -146,6 +146,6 @@ func (dh *DistrictHandler) Index() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("District With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Select All District", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Select All District", result))
 	}
 }
