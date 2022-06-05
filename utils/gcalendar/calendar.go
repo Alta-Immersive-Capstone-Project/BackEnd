@@ -55,11 +55,12 @@ func (a *AuthConfig) CreateReminder(code string, data entities.DataReminder) (ca
 		return calendar.Event{}, err
 	}
 	var now = time.Now()
+	loc, _ := time.LoadLocation("Asia/Jakarta")
 	newEvent := &calendar.Event{
 		Summary:     fmt.Sprintf("Reminder Pembayaran Sewa Kost %s", data.Title),
 		Description: fmt.Sprintf("Harap Segera Membayar Tagihan dengan kode Booking ID %s, Total Tagihan %d, Silahkan Klik Link Diberikut untuk Melakukan Pembayaran %s", data.BookingID, data.Price, data.RedirectURL),
-		Start:       &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 2, 0, time.UTC).Format(time.RFC3339)},
-		End:         &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day()+1, now.Hour(), 0, 2, 0, time.UTC).Format(time.RFC3339)},
+		Start:       &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 2, 0, loc).Format(time.RFC3339)},
+		End:         &calendar.EventDateTime{DateTime: time.Date(now.Year(), now.Month(), now.Day()+1, now.Hour(), 0, 2, 0, loc).Format(time.RFC3339)},
 		Attendees: []*calendar.EventAttendee{
 			{Email: data.Email},
 		},
