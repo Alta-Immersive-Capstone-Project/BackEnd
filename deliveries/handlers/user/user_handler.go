@@ -135,7 +135,7 @@ func (handler *UserHandler) GetByID(c echo.Context) error {
 	}
 
 	// response
-	return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data"+userRes.Name, userRes))
+	return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data"+userRes.Name, userRes))
 
 }
 

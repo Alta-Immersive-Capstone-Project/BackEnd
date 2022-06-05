@@ -70,7 +70,7 @@ func (h *HandlersFacility) GetAllFacility() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusInternalServerError, helpers.InternalServerError())
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get All Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get All Facility", result))
 	}
 }
 
@@ -89,7 +89,7 @@ func (h *HandlersFacility) GetFacilityID() echo.HandlerFunc {
 			log.Warn(err)
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Facility With ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetDataID("Success Get Data Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetDataID("Success Get Data Facility", result))
 	}
 }
 
@@ -161,6 +161,6 @@ func (h *HandlersFacility) GetNearFacility() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusNotFound, helpers.StatusNotFound("Facility With House ID Not Found"))
 		}
-		return c.JSON(http.StatusFound, helpers.StatusGetAll("Success Get Near Facility", result))
+		return c.JSON(http.StatusOK, helpers.StatusGetAll("Success Get Near Facility", result))
 	}
 }
