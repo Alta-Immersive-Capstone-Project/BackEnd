@@ -45,12 +45,14 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 ![Gorm](https://img.shields.io/badge/-Gorm-05122A?style=flat&logo=go)&nbsp;
 ![AWS](https://img.shields.io/badge/-AWS-05122A?style=flat&logo=amazon)&nbsp;
 ![Insomnia](https://img.shields.io/badge/-Insomnia-05122A?style=flat&logo=insomnia)&nbsp;
+![Google Maps](https://img.shields.io/badge/-Google_Maps-05122A?style=flat&logo=google)&nbsp;
 ![Docker](https://img.shields.io/badge/-Docker-05122A?style=flat&logo=docker)&nbsp;
 ![Ubuntu](https://img.shields.io/badge/-Ubuntu-05122A?style=flat&logo=ubuntu)&nbsp;
 ![Midtrans](https://img.shields.io/badge/-Midtrans-05122A?style=flat&logo=midtrans)&nbsp;
 ![JWT](https://img.shields.io/badge/-JWT-05122A?style=flat&logo=jwt)&nbsp;
 ![Swagger](https://img.shields.io/badge/-Swagger-05122A?style=flat&logo=swagger)&nbsp;
 ![Mailgun](https://img.shields.io/badge/-mailgun-05122A?style=flat&logo=mailgun)&nbsp;
+![Google Calender](https://img.shields.io/badge/-Google_Calender-05122A?style=flat&logo=google)&nbsp;
 </details>
 
 <details>
