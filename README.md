@@ -77,6 +77,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
   | | Available various choices of payment methods |
    | | Discover list of customer's booking history|
   | | Review and rate about customer's experience after renting |
+   | | Reminder invoice of payment via email  |
   |Admin |Manage the management's profile include upload or update profile picture|
  | | Manage the Kost's data and transaction's data|
  | | Interaction with customer about dealing price or just reply message|
