@@ -53,7 +53,7 @@ func (h *HandlerReminder) CreateReminder() echo.HandlerFunc {
 			return c.JSON(http.StatusForbidden, helpers.ErrorAuthorize())
 		}
 		if codeOauth == "" {
-			authUrl := h.auth.GetLoginUrl("oauthstate")
+			authUrl := h.auth.GetLoginUrl("state-token")
 			return c.Redirect(http.StatusTemporaryRedirect, authUrl)
 		}
 		var request entities.AddReminderPay

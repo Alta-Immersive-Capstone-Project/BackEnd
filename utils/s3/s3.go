@@ -87,7 +87,6 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 		log.Warn(err)
 		return "", err
 	}
-
 	upFileInfo, _ := file.Stat()
 	var fileSize int64 = upFileInfo.Size()
 	fileBuffer := make([]byte, fileSize)
@@ -108,5 +107,7 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 		log.Warn(err)
 		return "", err
 	}
+	file.Close()
+
 	return result.Location, nil
 }

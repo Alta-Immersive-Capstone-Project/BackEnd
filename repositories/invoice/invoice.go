@@ -136,6 +136,7 @@ func (m *invoiceModel) CustomizeColor(i *creator.Invoice) {
 		Font:     fontHelvetica,
 		FontSize: 16,
 	})
+	m.c.Finalize()
 }
 
 var (
@@ -227,7 +228,6 @@ func (m *invoiceModel) DoFeatureOverview(transactions []entities.TransactionKost
 	img.SetWidth(40)
 	img.SetHeight(40)
 	sc.Add(img)
-
 	m.c.Draw(ch)
 }
 
