@@ -82,16 +82,21 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 	// s3 Client
 	uploader := manager.NewUploader(s.s3)
 	dir, err := os.Getwd()
+
 	file, err := os.Open(fmt.Sprintf("%s/%s", dir, url))
+	file.Close()
+
 	if err != nil {
 		log.Warn(err)
 		return "", err
 	}
+
 	upFileInfo, _ := file.Stat()
 	var fileSize int64 = upFileInfo.Size()
 	fileBuffer := make([]byte, fileSize)
 	file.Read(fileBuffer)
 
+	file.Close()
 	result, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
 		Bucket:      aws.String(configs.Get().AwsS3.Bucket),
 		ContentType: aws.String(http.DetectContentType(fileBuffer)),
@@ -107,7 +112,6 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 		log.Warn(err)
 		return "", err
 	}
-	file.Close()
 
 	return result.Location, nil
 }
