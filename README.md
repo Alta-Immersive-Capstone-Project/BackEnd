@@ -24,7 +24,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. Furthermore, this's the last project in our program towards graduation and placement section. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
+LOW KOST is a collaborative project between Backend and Frontend in Immersive Alterra Academy Batch 8. Furthermore, this's the last project in our program towards graduation and placement section. However, this repo specifically contains cases which have accomplished by Backend's team. Backend's team has done such as:
 * Designing Entity Relation Design (ERD)'s together
 * Finishing OPEN API's carried out by division of tasks
 * Resolving from coding endpoint to unit test's carried out by division of tasks
