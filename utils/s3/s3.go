@@ -96,7 +96,6 @@ func (s *S3Client) UploadInvoiceToS3(filename string, url string) (string, error
 	fileBuffer := make([]byte, fileSize)
 	file.Read(fileBuffer)
 
-	file.Close()
 	result, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
 		Bucket:      aws.String(configs.Get().AwsS3.Bucket),
 		ContentType: aws.String(http.DetectContentType(fileBuffer)),
