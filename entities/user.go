@@ -17,7 +17,7 @@ type User struct {
 	Role         string
 	Rooms        []Room        `gorm:"foreingkey:UserID"`
 	Transactions []Transaction `gorm:"foreingkey:UserID"`
-	Review       Review
+	Review       []Review
 }
 
 type CreateUserRequest struct {
