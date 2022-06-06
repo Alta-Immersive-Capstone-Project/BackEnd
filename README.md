@@ -50,7 +50,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 ![Midtrans](https://img.shields.io/badge/-Midtrans-05122A?style=flat&logo=midtrans)&nbsp;
 ![JWT](https://img.shields.io/badge/-JWT-05122A?style=flat&logo=jwt)&nbsp;
 ![Swagger](https://img.shields.io/badge/-Swagger-05122A?style=flat&logo=swagger)&nbsp;
- 
+![Mailgun](https://img.shields.io/badge/-mailgun-05122A?style=flat&logo=mailgun)&nbsp;
 </details>
 
 <details>
