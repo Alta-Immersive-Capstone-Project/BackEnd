@@ -53,6 +53,8 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 ![Swagger](https://img.shields.io/badge/-Swagger-05122A?style=flat&logo=swagger)&nbsp;
 ![Mailgun](https://img.shields.io/badge/-mailgun-05122A?style=flat&logo=mailgun)&nbsp;
 ![Google Calender](https://img.shields.io/badge/-Google_Calender-05122A?style=flat&logo=google)&nbsp;
+![UniDoc](https://img.shields.io/badge/-unidoc-05122A?style=flat&logo=unidoc)&nbsp;
+      
 </details>
 
 <details>
