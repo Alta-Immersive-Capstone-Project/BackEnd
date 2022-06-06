@@ -8,8 +8,8 @@
  </div>
  
 
-  <h1 align="center">SEWA KOST
-<p align="center"> "cari,booking,nego kost gampang banget"
+  <h1 align="center">
+<p align="center"> "Affordable Kost for Millenial "
  </h1>
   <p align="center">
    :collision: Capstone Project  in Immersive Alterra Academy Batch 8 :collision:
