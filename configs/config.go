@@ -34,11 +34,6 @@ type AppConfig struct {
 		MidtransStatus    string
 	}
 
-	DistanceMatrix struct {
-		DistanceMatrixAPIKey  string
-		DistanceMatrixBaseURL string
-	}
-
 	GCalendar struct {
 		ClientID     string
 		ClientSecret string
@@ -102,9 +97,6 @@ func initConfig() *AppConfig {
 
 	config.Payment.MidtransServerKey = GetEnv("MIDTRANS_SERVER_KEY", "")
 	config.Payment.MidtransStatus = GetEnv("MIDTRANS_STATUS", "")
-
-	config.DistanceMatrix.DistanceMatrixAPIKey = GetEnv("DISTANCE_MATRIX_API_KEY", "")
-	config.DistanceMatrix.DistanceMatrixBaseURL = GetEnv("DISTANCE_MATRIX_BASE_URL", "")
 
 	config.GCalendar.ClientID = GetEnv("GCAL_OAUTH_CLIENT_ID", "")
 	config.GCalendar.ClientSecret = GetEnv("GCAL_OAUTH_CLIENT_SECRET", "")
