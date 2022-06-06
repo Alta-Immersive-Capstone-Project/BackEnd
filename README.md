@@ -95,7 +95,7 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 <details>
  <summary>🏃Use Case Diagram</summary>
     <div align="center">
- <img src="https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/usecase2.png" />
+ <img src="https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/usecase2%20(1).png" />
  <div>
 </details>
 <details>
