@@ -54,10 +54,13 @@ This project is a collaborative project between Backend and Frontend in Immersiv
 ![Mailgun](https://img.shields.io/badge/-mailgun-05122A?style=flat&logo=mailgun)&nbsp;
 ![Google Calender](https://img.shields.io/badge/-Google_Calender-05122A?style=flat&logo=google)&nbsp;
 ![UniDoc](https://img.shields.io/badge/-UniDoc-05122A?style=flat&logo=unidoc)&nbsp;
-       
-       <div align="center">
- <img src=" https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/download.png" />
- <div>
+ 
+
+ <div align="center">
+ <img src="https://github.com/Alta-Immersive-Capstone-Project/BackEnd/blob/main/images/download.png" />
+  <div>
+  
+  
 </details>
             
 </details>
