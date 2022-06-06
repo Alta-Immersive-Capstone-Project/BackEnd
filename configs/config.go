@@ -109,7 +109,6 @@ func initConfig() *AppConfig {
 	fmt.Println(config.Email)
 	fmt.Println(config.AwsS3)
 	fmt.Println(config.Payment)
-	fmt.Println(config.DistanceMatrix)
 
 	return &config
 }
